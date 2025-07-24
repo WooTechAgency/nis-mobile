@@ -34,7 +34,7 @@ export default function Login() {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      accountEmail: '',
+      accountEmail: 'trung@wootech.co',
       password: 'Password123*',
     },
     mode: 'onChange',
@@ -67,9 +67,8 @@ export default function Login() {
       const response = await loginApi({ email: data.accountEmail, password: data.password });
       console.log('response ', response)
       // storage.set('email', data.accountEmail)
-
       dispatch(setUserInfo({ access_token: response.data.access_token, ...response.data.user_information }));
-      // navigation.navigate('MainStack');
+      navigate(ScreenName.MainNavigator);
     } catch (error) {
       // if (error?.data?.isWrongInfo) {
       //   toggleLoginError();
@@ -147,3 +146,4 @@ export default function Login() {
     </View>
   );
 }
+

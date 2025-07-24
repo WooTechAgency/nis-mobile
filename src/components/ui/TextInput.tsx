@@ -56,11 +56,9 @@ export function TextInput(props: Props) {
   return (
     <View className={`${classNameWrap}`}>
       {label &&
-        <View className='absolute left-3 top-[-8] bg-white z-50'>
-          <Text className={`text-[12px] px-1 text-gray ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
-        </View>
+        <Text className={`text-[12px] px-1  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
       }
-      <View className=''>
+      <View className='mt-1'>
         <TextInputComponent
           value={field.value}
           autoCorrect={false}

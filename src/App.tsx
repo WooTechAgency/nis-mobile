@@ -28,9 +28,7 @@ function App() {
         <SafeAreaProvider>
           <QueryClientProvider client={queryClient}>
             <GestureHandlerRootView className='flex-1'>
-              {/* <SafeAreaView> */}
               <RootNavigator />
-              {/* </SafeAreaView> */}
             </GestureHandlerRootView>
           </QueryClientProvider>
         </SafeAreaProvider>

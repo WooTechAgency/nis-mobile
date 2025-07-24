@@ -7,3 +7,4 @@ export const getMessageError = (errors: any, name: string) => {
   const message = result && result.message;
   return message || '';
 };
+

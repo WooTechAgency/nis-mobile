@@ -13,9 +13,12 @@ export enum ScreenName{
   // daily
   DailyAssessmentNavigator = 'DailyAssessmentNavigator',
   DailyAssessment = 'DailyAssessment',
+  CreateDailyAssessment = 'CreateDailyAssessment',
+
   // job
   JobsNavigator = 'JobsNavigator',
   Jobs = 'Jobs',
+
   // Incidents
   IncidentsNavigator = 'IncidentsNavigator',
   Incidents = 'Incidents',

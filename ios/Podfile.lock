@@ -12,6 +12,9 @@ PODS:
   - hermes-engine (0.80.1):
     - hermes-engine/Pre-built (= 0.80.1)
   - hermes-engine/Pre-built (0.80.1)
+  - MMKV (2.2.2):
+    - MMKVCore (~> 2.2.2)
+  - MMKVCore (2.2.2)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1656,6 +1659,35 @@ PODS:
     - react-native-config/App (= 1.5.5)
   - react-native-config/App (1.5.5):
     - React-Core
+  - react-native-date-picker (5.0.13):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - react-native-keyboard-controller (1.18.1):
     - boost
     - DoubleConversion
@@ -1715,13 +1747,14 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-mmkv (3.3.0):
+  - react-native-mmkv (2.12.2):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
+    - MMKV (>= 1.3.3)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2716,6 +2749,7 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-config (from `../node_modules/react-native-config`)
+  - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -2765,6 +2799,8 @@ SPEC REPOS:
     - APNGKit
     - Delegate
     - Gifu
+    - MMKV
+    - MMKVCore
     - SocketRocket
     - SwiftSVG
 
@@ -2852,6 +2888,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
   react-native-config:
     :path: "../node_modules/react-native-config"
+  react-native-date-picker:
+    :path: "../node_modules/react-native-date-picker"
   react-native-keyboard-controller:
     :path: "../node_modules/react-native-keyboard-controller"
   react-native-mmkv:
@@ -2948,6 +2986,8 @@ SPEC CHECKSUMS:
   Gifu: 9f7e52357d41c0739709019eb80a71ad9aab1b6d
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
+  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
+  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe
   RCTRequired: bbc4cf999ddc4a4b076e076c74dd1d39d0254630
@@ -2982,8 +3022,9 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 0c045c844ce6d85cde53e85ab163294c6adad349
   React-microtasksnativemodule: d9499269ad1f484ae71319bac1d9231447f2094e
   react-native-config: 644074ab88db883fcfaa584f03520ec29589d7df
+  react-native-date-picker: 57e53359ec8d6cbd6abd7bd07890dc2e1a411af2
   react-native-keyboard-controller: a8d3f8e0b8c9a6563525b26c795409d9bd37340f
-  react-native-mmkv: 7fb4729ad5cb787a4394e6c4bd48e4b8ec30f25c
+  react-native-mmkv: f87e0c4ca886aabf99e010e8b62040add176d613
   react-native-safe-area-context: 68d1363b8354472a961aa6861ba8451beaf9a810
   react-native-turbo-image: 1d6d48d526069fd6d6accc23ba7ea0a72f2ca9e9
   react-native-voice: 908a0eba96c8c3d643e4f98b7232c6557d0a6f9c
