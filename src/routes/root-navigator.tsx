@@ -7,7 +7,7 @@ import { useLoadingZ } from '@zustand/useLoadingZ';
 import { JSX } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { navigationRef } from './navigationRef';
-import { RootStackParamList, ScreenName, } from './types';
+import { RootStackParamList, RouteName, } from './types';
 import { useAppSelector } from '@hooks/common';
 import { MainNavigator } from './main-mavigator';
 import EnterNewPassword from '@screens/auth/enter-new-password';
@@ -25,9 +25,9 @@ function RootNavigator(): JSX.Element {
 
   const handleRouteInitScreen = () => {
     if (userInfo) {
-      return ScreenName.MainNavigator
+      return RouteName.MainNavigator
     }
-    return ScreenName.Login
+    return RouteName.Login
     // if (cache) {
     //   return 'MainNavigator';
     // } else if (isSeenWelcome) {
@@ -40,11 +40,11 @@ function RootNavigator(): JSX.Element {
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName={handleRouteInitScreen()} screenOptions={{ headerShown: false }}>
-        <Stack.Screen name={ScreenName.Login} component={Login} />
-        <Stack.Screen name={ScreenName.ForgotPassword} component={ForgotPassword} />
-        <Stack.Screen name={ScreenName.EnterCode} component={EnterCode} />
-        <Stack.Screen name={ScreenName.EnterNewPassword} component={EnterNewPassword} />
-        <Stack.Screen name={ScreenName.MainNavigator} component={MainNavigator} />
+        <Stack.Screen name={RouteName.Login} component={Login} />
+        <Stack.Screen name={RouteName.ForgotPassword} component={ForgotPassword} />
+        <Stack.Screen name={RouteName.EnterCode} component={EnterCode} />
+        <Stack.Screen name={RouteName.EnterNewPassword} component={EnterNewPassword} />
+        <Stack.Screen name={RouteName.MainNavigator} component={MainNavigator} />
         {/* <Stack.Screen
           name='MainNavigator'
           component={MainStackNavigator}

@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import Animated, { Easing, ReduceMotion, SharedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 import { Button, Image, SafeAreaView, Text } from '@components/ui';
-import { ScreenName } from '@routes/types';
+import { RouteName } from '@routes/types';
 
 interface Props {
   title: string;
@@ -99,7 +99,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
 
   const onClickLogo = () => {
     navigation.dispatch(StackActions.popToTop());
-    navigation.navigate(ScreenName.DashboardNavigator);
+    navigation.navigate(RouteName.DashboardNavigator);
   };
 
   const width = useSharedValue(264);

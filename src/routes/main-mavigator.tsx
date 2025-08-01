@@ -5,7 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react';
 import { DailyAssessmentNavigator } from './daily-assessment-navigator';
 import { DashboardNavigator } from './dashboard-navigator';
-import { ScreenName } from './types';
+import { RouteName } from './types';
 import { JobsNavigator } from './jobs-navigator';
 import { IncidentsNavigator } from './incidents-navigator';
 import { AccountNavigator } from './account-navigator';
@@ -38,27 +38,27 @@ export function MainNavigator() {
       )}
     >
       <Parent.Screen
-        name={ScreenName.DashboardNavigator}
+        name={RouteName.DashboardNavigator}
         component={DashboardNavigator}
         options={{ headerShown: false, title: 'Dashboard' }}
       />
       <Parent.Screen
-        name={ScreenName.JobsNavigator}
+        name={RouteName.JobsNavigator}
         component={JobsNavigator}
         options={{ headerShown: false, title: 'Jobs' }}
       />
       <Parent.Screen
-        name={ScreenName.DailyAssessmentNavigator}
+        name={RouteName.DailyAssessmentNavigator}
         component={DailyAssessmentNavigator}
         options={{ headerShown: false, title: 'Daily assessment' }}
       />
       <Parent.Screen
-        name={ScreenName.IncidentsNavigator}
+        name={RouteName.IncidentsNavigator}
         component={IncidentsNavigator}
         options={{ headerShown: false, title: 'Incidents' }}
       />
       <Parent.Screen
-        name={ScreenName.AccountNavigator}
+        name={RouteName.AccountNavigator}
         component={AccountNavigator}
         options={{ headerShown: false, title: 'Account' }}
       />

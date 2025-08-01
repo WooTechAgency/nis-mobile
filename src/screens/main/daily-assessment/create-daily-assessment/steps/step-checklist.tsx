@@ -12,11 +12,10 @@ export interface CheckListForm {
 }
 const formSchema = yup.object().shape({
   checklist: yup.array().notRequired(),
-
 });
 
 export default function StepCheckList() {
-  const { setAssessment } = useAssessmentContext()
+  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext()
   const {
     control,
     handleSubmit,
@@ -27,16 +26,19 @@ export default function StepCheckList() {
     mode: 'onChange',
     resolver: yupResolver(formSchema),
   });
-  console.log('dcmmmmm123231')
-
-  const [haveHazards, setHaveHazards] = useState(false)
 
   const onBack = () => {
     setAssessment((prev) => ({ ...prev, selectedIndex: 1 }))
 
   }
   const onSubmit = (form: CheckListForm) => {
-    setAssessment((prev) => ({ ...prev, checkList: form, selectedIndex: DailyAssessmentSteps.Signing }))
+    const newCompletedSteps = new Set([DailyAssessmentSteps.FirstAid, ...(completedSteps || [])]);
+    setAssessment((prev) => ({
+      ...prev,
+      checkList: form,
+      selectedIndex: DailyAssessmentSteps.Signing,
+      completedSteps: Array.from(newCompletedSteps)
+    }))
   }
 
   return (

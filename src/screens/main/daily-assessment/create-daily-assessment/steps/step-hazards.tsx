@@ -1,4 +1,4 @@
-import { Button, SelectOption, SelectRating } from '@components/ui';
+import { Button, SelectOption, SelectRating, YesNoForm } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
@@ -22,10 +22,11 @@ const formSchema = yup.object().shape({
   initialRiskRating: yup.string().notRequired(),
   controlMeasure: yup.string().notRequired(),
   residualRiskRating: yup.string().notRequired(),
+  haveHazards: yup.boolean().notRequired(),
 });
 
 export default function StepHazards() {
-  const { setAssessment } = useAssessmentContext()
+  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext()
   const {
     control,
     handleSubmit,
@@ -37,38 +38,33 @@ export default function StepHazards() {
     resolver: yupResolver(formSchema),
   });
 
-  const [haveHazards, setHaveHazards] = useState(false)
-
   const onBack = () => {
-    setAssessment((prev) => ({ ...prev, selectedIndex: 1 }))
-
+    setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.General }))
   }
+
   const onSubmit = (form: HazardForm) => {
-    setAssessment((prev) => ({ ...prev, hazard: form, selectedIndex: DailyAssessmentSteps.FirstAid }))
+    const newCompletedSteps = new Set([DailyAssessmentSteps.Hazards, ...(completedSteps || [])]);
+    setAssessment((prev) => ({
+      ...prev,
+      hazard: form,
+      selectedIndex: DailyAssessmentSteps.FirstAid,
+      completedSteps: Array.from(newCompletedSteps)
+    }))
   }
 
   return (
     <View className=' mt-6'>
-      {/* <View className='self-center'>
+      <View className='self-center'>
         <View className='w-[468px] h-[60px] justify-center items-center bg-violet rounded-[10px]'>
           <Text className='text-[20px] font-bold text-white'>Check SWMS-001</Text>
         </View>
         <Text className='text-[25px] font-semibold mt-8'>Are there any additional site hazards?</Text>
-        <View className='flex-row self-center gap-x-6 mt-8'>
-          <Button
-            className='w-[100px] h-[60px] rounded-[10px] justify-center items-center border'
-            onPress={() => setHaveHazards(false)}
-          >
-            <Text className='text-[20px] font-bold'>No</Text>
-          </Button>
-          <Button
-            className='w-[100px] h-[60px] rounded-[10px] justify-center items-center border'
-            onPress={() => setHaveHazards(true)}
-          >
-            <Text className='text-[20px] font-bold'>Yes</Text>
-          </Button>
-        </View>
-      </View> */}
+        <YesNoForm
+          control={control}
+          name='haveHazards'
+          setValue={setValue}
+        />
+      </View>
       {/* Hazard */}
       <Text className='text-[25px] font-semibold'>{'Hazard 1'}</Text>
       <TextInput

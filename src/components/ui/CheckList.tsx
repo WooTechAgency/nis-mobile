@@ -15,7 +15,7 @@ interface Props {
   listValue?: any[];
 }
 
-const checkList = [
+export const checkListTemp = [
   { key: 'low', title: 'Site Induction completed by all personnel', },
   { key: 'medium', title: 'SWMS reviewed and understood', },
   { key: '1', title: 'PPE worn (hi-vis, boots, gloves, glasses)', },
@@ -44,7 +44,7 @@ export function CheckList(props: Props) {
   return (
     <View className={` ${classNameWrap}`}>
       <View className='gap-y-2'>
-        {checkList.map((option, index) => {
+        {checkListTemp.map((option, index) => {
           const selected = selectedList.some((item) => item === option.key)
           return (
             <Button

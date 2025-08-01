@@ -1,6 +1,6 @@
 import {StackNavigationProp, StackScreenProps} from "@react-navigation/stack";
 
-export enum ScreenName{
+export enum RouteName{
   Login = 'Login',
   ForgotPassword = 'ForgotPassword',
   EnterCode = 'EnterCode',
@@ -14,6 +14,7 @@ export enum ScreenName{
   DailyAssessmentNavigator = 'DailyAssessmentNavigator',
   DailyAssessment = 'DailyAssessment',
   CreateDailyAssessment = 'CreateDailyAssessment',
+  Preview = 'Preview',
 
   // job
   JobsNavigator = 'JobsNavigator',
@@ -28,24 +29,24 @@ export enum ScreenName{
 }
 
 export type RootStackParamList = {
-  [ScreenName.Login]: undefined;
-  [ScreenName.ForgotPassword]: undefined;
-  [ScreenName.EnterCode]: {email: string};
-  [ScreenName.EnterNewPassword]: { code: string};
+  [RouteName.Login]: undefined;
+  [RouteName.ForgotPassword]: undefined;
+  [RouteName.EnterCode]: {email: string};
+  [RouteName.EnterNewPassword]: { code: string};
 };
 
 // type
 export type EnterCodeProps = StackScreenProps<
   RootStackParamList,
-  ScreenName.EnterCode
+  RouteName.EnterCode
 >;
 
 export type EnterNewPasswordProps = StackScreenProps<
   RootStackParamList,
-  ScreenName.EnterNewPassword
+  RouteName.EnterNewPassword
 >;
 
 export type ForgotPasswordProps = StackScreenProps<
   RootStackParamList,
-  ScreenName.ForgotPassword
+  RouteName.ForgotPassword
 >;

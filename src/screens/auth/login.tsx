@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '@hooks/common';
 import { useNavigation } from '@react-navigation/native';
 import { navigate } from '@routes/navigationRef';
-import { ScreenName } from '@routes/types';
+import { RouteName } from '@routes/types';
 import { loginApi } from '@services/authentication.service';
 import { storage } from '@store/mkkv';
 import { setUserInfo } from '@store/slices/authenticationSlice';
@@ -69,7 +69,7 @@ export default function Login() {
       console.log('response ', response)
       // storage.set('email', data.accountEmail)
       dispatch(setUserInfo({ access_token: response.data.access_token, ...response.data.user_information }));
-      navigate(ScreenName.MainNavigator);
+      navigate(RouteName.MainNavigator);
     } catch (error) {
       // if (error?.data?.isWrongInfo) {
       //   toggleLoginError();
@@ -84,7 +84,7 @@ export default function Login() {
   };
 
   const onForgotPassword = () => {
-    navigate(ScreenName.ForgotPassword);
+    navigate(RouteName.ForgotPassword);
   };
 
   return (

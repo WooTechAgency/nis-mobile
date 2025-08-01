@@ -20,12 +20,12 @@ const steps = {
 }
 
 export default function CreateDailyAssessment() {
-  const { assessment, setAssessment } = useAssessmentContext();
-
+  const { assessment: { selectedIndex, enableScroll, completedSteps }, setAssessment } = useAssessmentContext();
+  console.log('completedSteps ', completedSteps)
   const renderSteps = () => {
-    switch (assessment?.selectedIndex) {
+    switch (selectedIndex) {
       case DailyAssessmentSteps.General:
-        return <StepCheckList />
+        return <StepHazards />
       case DailyAssessmentSteps.Hazards:
         return <StepHazards />
       case DailyAssessmentSteps.FirstAid:
@@ -40,7 +40,7 @@ export default function CreateDailyAssessment() {
   }
 
   const onBack = () => {
-    if (assessment?.selectedIndex === DailyAssessmentSteps.General) {
+    if (selectedIndex === DailyAssessmentSteps.General) {
       goBack()
     } else {
       setAssessment((prev) => ({
@@ -52,17 +52,18 @@ export default function CreateDailyAssessment() {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView scrollEnabled={enableScroll}>
         <Header title='DSRA-001' isBack onCustomBack={onBack} />
         <View className='flex-row self-center mt-4'>
           {Object.entries(steps).map(([key, value]) => {
-            const selected = key === String(assessment?.selectedIndex)
+            const selected = key === String(selectedIndex)
             const lastItem = key === String(DailyAssessmentSteps.Signing)
+            const completed = completedSteps?.includes(Number(key))
             return (
               <View key={key} className='flex-row items-center'>
                 <View className=' items-center'>
-                  <View className={`w-10 h-10 rounded-full border justify-center items-center ${selected && 'border-primary'}`}>
-                    <Text className={`${selected && 'text-primary'}`}>{key}</Text>
+                  <View className={`w-10 h-10 rounded-full border justify-center items-center ${completed && 'bg-primary border-0'} ${selected && 'border-primary'}`}>
+                    <Text className={`${completed && 'text-white'} ${selected && 'text-primary'}`}>{key}</Text>
                   </View>
                   <Text className='mt-1'>{value}</Text>
                 </View>

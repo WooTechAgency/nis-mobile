@@ -3,7 +3,7 @@ import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ForgotPasswordProps, ScreenName } from '@routes/types';
+import { ForgotPasswordProps, RouteName } from '@routes/types';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
@@ -31,11 +31,11 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
   });
 
   const onNext = (data: any) => {
-    navigation.navigate(ScreenName.EnterCode, { email: data.accountEmail });
+    navigation.navigate(RouteName.EnterCode, { email: data.accountEmail });
     // setLoading(true);
     // forgotPasswordApi({ email: data.accountEmail })
     //   .then(() => {
-    //     navigation.navigate(ScreenName.EnterCode, { email: data.accountEmail });
+    //     navigation.navigate(RouteName.EnterCode, { email: data.accountEmail });
     //   })
     //   .catch(() => { })
     //   .finally(() => setLoading(false));

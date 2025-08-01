@@ -13,3 +13,4 @@ export * from './Back';
 export * from './SelectOption';
 export * from './SelectRating';
 export * from './CheckList';
+export * from './YesNoForm';

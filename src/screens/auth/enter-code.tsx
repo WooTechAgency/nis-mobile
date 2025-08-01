@@ -3,7 +3,7 @@ import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { EnterCodeProps, ScreenName } from '@routes/types';
+import { EnterCodeProps, RouteName } from '@routes/types';
 import { enterCodedApi, forgotPasswordApi } from '@services/authentication.service';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -32,11 +32,11 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
   });
 
   const onResetPassword = (data: any) => {
-    navigation.navigate(ScreenName.EnterNewPassword, { code: data.code });
+    navigation.navigate(RouteName.EnterNewPassword, { code: data.code });
     // setLoading(true);
     // enterCodedApi({ token: data.code })
     //   .then(() => {
-    //     navigation.navigate(ScreenName.EnterNewPassword, { code: data.code });
+    //     navigation.navigate(RouteName.EnterNewPassword, { code: data.code });
     //   })
     //   .finally(() => setLoading(false));
   };

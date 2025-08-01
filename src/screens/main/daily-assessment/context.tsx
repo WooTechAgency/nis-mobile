@@ -4,6 +4,7 @@ import { HazardForm } from './create-daily-assessment/steps/step-hazards';
 import { GeneralForm } from './create-daily-assessment/steps/step-general-info';
 import { FirstAidForm } from './create-daily-assessment/steps/step-first-aid';
 import { CheckListForm } from './create-daily-assessment/steps/step-checklist';
+import { SigningForm } from './create-daily-assessment/steps/step-signing';
 
 interface GeneralInformation extends GeneralForm {
 }
@@ -25,11 +26,14 @@ export type DailyAssessment = {
   hazard?: Hazard | undefined
   firstAid?: FirstAid | undefined
   checkList?: CheckListForm | undefined
+  singing?: SigningForm | undefined
   selectedIndex: number;
+  enableScroll?: boolean
+  completedSteps?: number[]
 };
 
 type DailyAssessmentContextType = {
-  assessment: DailyAssessment | null;
+  assessment: DailyAssessment;
   setAssessment: React.Dispatch<React.SetStateAction<DailyAssessment | null>>;
 };
 
@@ -38,7 +42,11 @@ const DailyAssessmentContext = createContext<DailyAssessmentContextType | undefi
 const initialAssessment: DailyAssessment = {
   generalInfo: undefined,
   hazard: undefined,
+  firstAid: undefined,
+  checkList: undefined,
   selectedIndex: DailyAssessmentSteps.General,
+  enableScroll: true,
+  completedSteps: []
 }
 
 export const DailyAssessmentProvider = ({ children }: { children: ReactNode }) => {

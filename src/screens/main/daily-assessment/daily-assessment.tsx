@@ -58,7 +58,7 @@ export default function DailyAssessment() {
       {/* <Button
         className='mt-4'
         label='Create Daily Assessment'
-        onPress={() => navigate(ScreenName.CreateDailyAssessment)}
+        onPress={() => navigate(RouteName.CreateDailyAssessment)}
       /> */}
     </SafeAreaView>
   )

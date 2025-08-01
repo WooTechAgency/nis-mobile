@@ -8,6 +8,7 @@ import { Button } from '@components/ui';
 import { DailyAssessment, DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { DatePickerInput } from '@components/ui/DatePickerInput';
+import { IDropdown } from '@constants/interface';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -17,10 +18,10 @@ export const currentEmploymentStatus = [
 export interface GeneralForm {
   location: string
   date: Date
-  leader: string
+  leader: IDropdown
   project: string
   contractor: string
-  methodStatement: object
+  methodStatement: IDropdown
   description: string
 }
 
@@ -34,7 +35,7 @@ const formSchema = yup.object().shape({
   description: yup.string().required('Description is required'),
 });
 export default function StepGeneralInformation() {
-  const { setAssessment } = useAssessmentContext();
+  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext();
   const {
     control,
     handleSubmit,
@@ -47,7 +48,13 @@ export default function StepGeneralInformation() {
   });
 
   const onSubmit = (form: GeneralForm) => {
-    setAssessment((prev) => ({ ...prev, generalInfo: form, selectedIndex: DailyAssessmentSteps.Hazards }))
+    const newCompletedSteps = new Set<number>([DailyAssessmentSteps.General, ...(completedSteps || [])]);
+    setAssessment((prev) => ({
+      ...prev,
+      generalInfo: form,
+      selectedIndex: DailyAssessmentSteps.Hazards,
+      completedSteps: Array.from(newCompletedSteps)
+    }))
   }
 
   return (

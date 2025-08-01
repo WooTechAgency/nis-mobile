@@ -2,14 +2,14 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { Button, Image } from '@components/ui'
 import { images } from '@assets/images'
-import { ScreenName } from '@routes/types'
+import { RouteName } from '@routes/types'
 import { navigate } from '@routes/navigationRef'
 const steps = [1, 2, 3, 4, 5]
 const location = 'Pier 26, Darling Harbour'
 
 export default function DailySite() {
   return (
-    <Button className='mt-4' onPress={() => navigate(ScreenName.CreateDailyAssessment)}>
+    <Button className='mt-4' onPress={() => navigate(RouteName.CreateDailyAssessment)}>
       <Text className='text-[20px]'>Today</Text>
       <View className='border rounded-[20px] p-5 border-primary mt-6'>
         <View className='flex-row items-center justify-between '>
