@@ -21,12 +21,11 @@ const steps = {
 
 export default function CreateDailyAssessment() {
   const { assessment, setAssessment } = useAssessmentContext();
-  console.log('assessment ', assessment)
 
   const renderSteps = () => {
     switch (assessment?.selectedIndex) {
       case DailyAssessmentSteps.General:
-        return <StepGeneralInformation />
+        return <StepCheckList />
       case DailyAssessmentSteps.Hazards:
         return <StepHazards />
       case DailyAssessmentSteps.FirstAid:
@@ -54,20 +53,20 @@ export default function CreateDailyAssessment() {
   return (
     <SafeAreaView>
       <ScrollView>
-        <Header title='DSRA-001' onCustomBack={onBack} />
+        <Header title='DSRA-001' isBack onCustomBack={onBack} />
         <View className='flex-row self-center mt-4'>
           {Object.entries(steps).map(([key, value]) => {
             const selected = key === String(assessment?.selectedIndex)
             const lastItem = key === String(DailyAssessmentSteps.Signing)
             return (
-              <View key={key}>
-                <View className='flex-row items-center'>
+              <View key={key} className='flex-row items-center'>
+                <View className=' items-center'>
                   <View className={`w-10 h-10 rounded-full border justify-center items-center ${selected && 'border-primary'}`}>
                     <Text className={`${selected && 'text-primary'}`}>{key}</Text>
                   </View>
-                  {!lastItem && <View className='h-[1px] w-[60px] bg-red mx-4' />}
+                  <Text className='mt-1'>{value}</Text>
                 </View>
-                <Text>{value}</Text>
+                {!lastItem && <View className='h-[1px] w-[60px] bg-red mx-4' />}
               </View>
             )
           })}

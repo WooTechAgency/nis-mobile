@@ -13,6 +13,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
+import Logo from './components/logo';
+import BackToLogin from './components/back-to-login';
+import { showSuccess } from '@lib/toast';
 
 
 const formSchema = yup.object().shape({
@@ -20,30 +23,28 @@ const formSchema = yup.object().shape({
     .string()
     .matches(
       PATTERN.PASSWORD,
-      'Password must have at least 1 upper case letter, 1 lower case letter, 1 numeric character and 1 special character'
+      'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
     ),
+  confirmPassword: yup.string()
+    .oneOf([yup.ref('newPassword'), null], 'Password confirmation does not match the new password.')
+
 });
 
 export default function EnterNewPassword({ navigation, route }: EnterNewPasswordProps) {
   const { code } = route.params;
   const [loading, setLoading] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showNewPassword, toggleNewPassword] = useState(false);
+  const [showConfirmPassword, toggleConfirmPassword] = useState(false);
   const [visibleSuccessPopup, setVisibleSuccessPopup] = useState(false);
   const {
     control,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    defaultValues: {
-      newPassword: '',
-    },
     mode: 'onBlur',
     resolver: yupResolver(formSchema),
   });
 
-  const toggleNewPassword = () => {
-    setShowNewPassword(!showNewPassword);
-  };
 
   const toggleSuccessPopup = () => {
     setVisibleSuccessPopup(!visibleSuccessPopup);
@@ -60,7 +61,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
       new_password_confirmation: data.newPassword,
     })
       .then(() => {
-        toggleSuccessPopup();
+        showSuccess({ title: 'Your password has been reset', message: 'You can now use your new password to log in' })
       })
       .finally(() => setLoading(false));
   };
@@ -73,38 +74,52 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
 
   return (
     <View className='flex-1 bg-white '>
-      <Back />
-      <ScrollView isContentCenter={isIpad} className='pt-[182] sm:pt-[216]'>
-        <View className='px-5 sm:w-[416] sm:px-0 '>
-          <Image source={images.logo} className='sm:h-[62] sm:w-[268] h-[49] w-[186] self-center' />
+      <ScrollView isContentCenter={isIpad} className='pt-[20%]'>
+        <View className='px-5 sm:w-[525] sm:px-0  '>
+          <Logo />
           <TextInput
-            classNameWrap='mt-[73]'
+            classNameWrap='mt-8'
             errors={errors}
             control={control}
             isShowError={false}
             name='newPassword'
             label='New password'
-            placeholder='Choose a new password'
+            placeholder='Enter your new password'
             secureTextEntry={!showNewPassword}
+            labelOverlap
             iconRight={
               <Button className='flex-row items-center absolute right-[9] top-0 bottom-0' onPress={toggleNewPassword}>
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={errors.newPassword?.message ? '#E80000' : showNewPassword ? '#6F63FF' : undefined}
+                  tintColor={!!errors.newPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
                 />
               </Button>
             }
           />
-          {isPasswordError && (
-            <>
-              <Text className={`text-[12px] text-neutral70 mt-1 ml-4 ${isPasswordError && 'text-red'}`}>
-                Must contain a combination of a lowercase letter, uppercase letter, numeral, and a special character.
-              </Text>
-            </>
-          )}
-
+          <Text className={`ml-4 mt-1 ${isPasswordError && 'text-red'}`}>Password must be at least 8 characters and include uppercase, lowercase, number, and special character.</Text>
+          <TextInput
+            classNameWrap='mt-8'
+            errors={errors}
+            control={control}
+            isShowError={true}
+            name='confirmPassword'
+            label='Confirm Password'
+            placeholder='Enter your new password'
+            secureTextEntry={!showConfirmPassword}
+            labelOverlap
+            iconRight={
+              <Button className='flex-row items-center absolute right-[9] top-0 bottom-0' onPress={toggleConfirmPassword}>
+                <Image
+                  source={images.eye}
+                  className='w-[32] h-[32]'
+                  tintColor={!!errors.confirmPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                />
+              </Button>
+            }
+          />
           <Button label='Reset password' className='mt-6' onPress={handleSubmit(onSavePassword)} disabled={!isValid} />
+          <BackToLogin className='mt-8' />
         </View>
       </ScrollView>
       <Loading loading={loading} />

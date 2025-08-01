@@ -6,4 +6,8 @@ export const images = {
   eye: require('./sources/eye.png'),
   arrowLeftCircle: require('./sources/arrow-left-circle.png'),
   arrowRightCircle: require('./sources/arrow-right-circle.png'),
+  error: require('./sources/error.png'),
+  success: require('./sources/success.png'),
+  checked: require('./sources/checked.png'),
+  checkbox: require('./sources/checkbox.png'),
 };

@@ -1,16 +1,15 @@
-import { View } from 'react-native';
-import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { forgotPasswordApi } from '@services/authentication.service';
-import { Back, Button, Image, ScrollView } from '@components/ui';
-import { isIpad } from '@constants/app.constants';
-import { images } from '@assets/images';
-import { TextInput } from '@components/ui/TextInput';
+import { Button, ScrollView } from '@components/ui';
 import Loading from '@components/ui/Loading';
+import { TextInput } from '@components/ui/TextInput';
+import { isIpad } from '@constants/app.constants';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { ForgotPasswordProps, ScreenName } from '@routes/types';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { View } from 'react-native';
+import * as yup from 'yup';
+import BackToLogin from './components/back-to-login';
+import Logo from './components/logo';
 
 const formSchema = yup.object().shape({
   accountEmail: yup.string().required('Email address is required!').email('Email address is invalid'),
@@ -27,40 +26,42 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
     defaultValues: {
       accountEmail: '',
     },
-    mode: 'onBlur',
+    mode: 'all',
     resolver: yupResolver(formSchema),
   });
 
   const onNext = (data: any) => {
-    setLoading(true);
-    forgotPasswordApi({ email: data.accountEmail })
-      .then(() => {
-        navigation.navigate(ScreenName.EnterCode, { email: data.accountEmail });
-      })
-      .catch(() => { })
-      .finally(() => setLoading(false));
+    navigation.navigate(ScreenName.EnterCode, { email: data.accountEmail });
+    // setLoading(true);
+    // forgotPasswordApi({ email: data.accountEmail })
+    //   .then(() => {
+    //     navigation.navigate(ScreenName.EnterCode, { email: data.accountEmail });
+    //   })
+    //   .catch(() => { })
+    //   .finally(() => setLoading(false));
   };
+
 
   return (
     <View className='flex-1 bg-white'>
-      <Back />
-      <ScrollView isContentCenter={isIpad} className='pt-[182] sm:pt-[216]'>
-        <View className='px-5 sm:w-[416] sm:px-0 '>
-          <Image source={images.logo} className='sm:h-[62] sm:w-[268] h-[49] w-[186] self-center' />
-          <View className='mt-[94] '>
+      <ScrollView isContentCenter={isIpad} className='pt-[20%]'>
+        <View className='px-5 sm:w-[525] sm:px-0  '>
+          <Logo />
+          <View className='gap-y-6 mt-8'>
             <TextInput
               errors={errors}
               control={control}
               name='accountEmail'
               label='Email address'
               placeholder='Enter your email address'
+              labelOverlap
             />
             <Button
-              label='Get password reset code'
-              className='mt-6'
+              label='Next'
               disabled={!isValid}
               onPress={handleSubmit(onNext)}
             />
+            <BackToLogin className='' />
           </View>
         </View>
       </ScrollView>

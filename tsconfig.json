@@ -12,7 +12,8 @@
         "@zustand/*": ["zustand/*"],
         "@utils/*": ["utils/*"],
         "@services/*": ["services/*"],
-        "@routes/*": ["routes/*"]
+        "@routes/*": ["routes/*"],
+        "@lib/*": ["lib/*"]
       }
     }
 }

@@ -1,11 +1,16 @@
 // UserContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { HazardForm } from './create-daily-assessment/steps/step-hazards';
+import { GeneralForm } from './create-daily-assessment/steps/step-general-info';
+import { FirstAidForm } from './create-daily-assessment/steps/step-first-aid';
+import { CheckListForm } from './create-daily-assessment/steps/step-checklist';
 
-interface GeneralInformation {
-  location: string;
-  // date: string;
+interface GeneralInformation extends GeneralForm {
 }
-
+interface Hazard extends HazardForm {
+}
+interface FirstAid extends FirstAidForm {
+}
 
 export enum DailyAssessmentSteps {
   General = 1,
@@ -16,7 +21,10 @@ export enum DailyAssessmentSteps {
 }
 
 export type DailyAssessment = {
-  generalInfo: GeneralInformation | undefined
+  generalInfo?: GeneralInformation | undefined
+  hazard?: Hazard | undefined
+  firstAid?: FirstAid | undefined
+  checkList?: CheckListForm | undefined
   selectedIndex: number;
 };
 
@@ -29,6 +37,7 @@ const DailyAssessmentContext = createContext<DailyAssessmentContextType | undefi
 
 const initialAssessment: DailyAssessment = {
   generalInfo: undefined,
+  hazard: undefined,
   selectedIndex: DailyAssessmentSteps.General,
 }
 

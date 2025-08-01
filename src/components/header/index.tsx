@@ -7,14 +7,16 @@ import { goBack } from '@routes/navigationRef'
 interface Props {
   title: string
   onCustomBack?: () => void
+  isBack?: boolean
 }
-export default function Header({ title, onCustomBack }: Props) {
+export default function Header({ title, onCustomBack, isBack }: Props) {
   return (
     <View className='flex-row items-center justify-between h-[69px]'>
-      <Image source={images.arrowLeft} className='w-10 h-10' onPress={onCustomBack || goBack} />
+      {isBack && <Image source={images.arrowLeft} className='w-10 h-10' onPress={onCustomBack || goBack} />}
       <Text className='text-[35px] font-semibold'>{title}</Text>
       {/* width is equal with Image */}
-      <View className='w-10 h-10' />
+      {isBack && <View className='w-10 h-10' />}
+
     </View>
   )
 }

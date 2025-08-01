@@ -7,6 +7,8 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import "../global.css";
 import { persistor, store } from './store';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '@lib/toast';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +31,7 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <GestureHandlerRootView className='flex-1'>
               <RootNavigator />
+              <Toast config={toastConfig} />
             </GestureHandlerRootView>
           </QueryClientProvider>
         </SafeAreaProvider>

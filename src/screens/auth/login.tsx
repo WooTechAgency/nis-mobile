@@ -14,6 +14,7 @@ import { setUserInfo } from '@store/slices/authenticationSlice';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 import * as yup from 'yup';
 
 const formSchema = yup.object().shape({
@@ -105,6 +106,7 @@ export default function Login() {
             keyboardType='email-address'
             label='Email address'
             placeholder='Enter your email address'
+            labelOverlap
           />
           <TextInput
             name='password'
@@ -114,6 +116,7 @@ export default function Login() {
             placeholder='Enter your password'
             classNameWrap='mt-6'
             secureTextEntry={!visiblePassword}
+            labelOverlap
             iconRight={
               <Button
                 className='flex-row items-center absolute right-[9] top-0 bottom-0'
@@ -122,12 +125,13 @@ export default function Login() {
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={errors.password?.message ? '#E80000' : visiblePassword ? '#6F63FF' : undefined}
+                  // tintColor={'red'}
+                  tintColor={!!errors.password?.message ? 'red' : (visiblePassword ? '#6F63FF' : 'gray')}
                 />
               </Button>
             }
           />
-          <Button label='Log in' className='mt-6' onPress={handleSubmit(onLogin)} />
+          <Button label='Log in' className='mt-6' disabled={!isValid} onPress={handleSubmit(onLogin)} />
           <Button onPress={onForgotPassword}>
             <Text className='mt-[8] text-[12px]'>Forgot password?</Text>
           </Button>

@@ -10,6 +10,8 @@ import { navigationRef } from './navigationRef';
 import { RootStackParamList, ScreenName, } from './types';
 import { useAppSelector } from '@hooks/common';
 import { MainNavigator } from './main-mavigator';
+import EnterNewPassword from '@screens/auth/enter-new-password';
+import EnterCode from '@screens/auth/enter-code';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -40,6 +42,8 @@ function RootNavigator(): JSX.Element {
       <Stack.Navigator initialRouteName={handleRouteInitScreen()} screenOptions={{ headerShown: false }}>
         <Stack.Screen name={ScreenName.Login} component={Login} />
         <Stack.Screen name={ScreenName.ForgotPassword} component={ForgotPassword} />
+        <Stack.Screen name={ScreenName.EnterCode} component={EnterCode} />
+        <Stack.Screen name={ScreenName.EnterNewPassword} component={EnterNewPassword} />
         <Stack.Screen name={ScreenName.MainNavigator} component={MainNavigator} />
         {/* <Stack.Screen
           name='MainNavigator'

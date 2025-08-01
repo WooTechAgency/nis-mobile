@@ -7,12 +7,14 @@ import { isAndroid } from '@constants/app.constants';
 import { getMessageError } from '@utils/common';
 import { Image } from './Image';
 import { images } from '@assets/images';
+import { Button } from './Button';
 
 interface Props extends TextInputProps {
   label?: string;
   labelCls?: string;
   placeholder?: string;
   inputCls?: string;
+  iconLeft?: ReactNode;
   iconRight?: ReactNode;
   className?: string;
   classNameWrap?: string;
@@ -24,8 +26,9 @@ interface Props extends TextInputProps {
   multiline?: boolean;
   isShowError?: boolean;
   isShowClose?: boolean;
+  labelOverlap?: boolean;
   setValue?: UseFormSetValue<any>;
-
+  hasVoice?: boolean
 }
 
 export function TextInput(props: Props) {
@@ -39,11 +42,14 @@ export function TextInput(props: Props) {
     className,
     errors,
     disabled,
+    iconLeft,
     iconRight,
     multiline,
     autoCapitalize,
     isShowError = true,
-    isShowClose = false,
+    isShowClose,
+    labelOverlap,
+    hasVoice,
     setValue
   } = props;
   const { field } = useController({ control: control, name: name });
@@ -53,12 +59,16 @@ export function TextInput(props: Props) {
     setValue && setValue(name, '');
   };
 
+  const onUseVoice = () => { }
+
+  const onEnhanceAI = () => { }
+
   return (
     <View className={`${classNameWrap}`}>
       {label &&
-        <Text className={`text-[12px] px-1  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
+        <Text className={`text-[12px] px-1 mb-1 ${labelOverlap && 'absolute left-4 -top-1 bg-white z-10'}  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
       }
-      <View className='mt-1'>
+      <View className=''>
         <TextInputComponent
           value={field.value}
           autoCorrect={false}
@@ -67,19 +77,43 @@ export function TextInput(props: Props) {
           onBlur={field.onBlur}
           placeholder={placeholder || ''}
           autoCapitalize={name?.toLowerCase().includes('email') ? 'none' : autoCapitalize}
-          className={`text-black h-[56] border font-regular px-4 py-0 rounded-lg text-[16px] border-border  w-full ${multiline && 'h-[112] sm:h-[144] py-4'
-            } ${disabled && 'text-neutral40'} ${iconRight || isShowClose && 'pr-10'} ${className} ${messageError && 'border-red text-red'}`}
+
           placeholderTextColor={disabled ? '#BEBEBE' : messageError ? '#E80000' : '#666666'}
           editable={!disabled}
           multiline={multiline}
           style={isAndroid && multiline && { textAlignVertical: 'top' }}
-          {...props}
+          // {...props}
+          className={`text-black h-[56] border font-regular px-4 py-0 rounded-[8px] text-[16px] border-border w-full
+           ${multiline && 'h-[112] sm:h-[144] py-4'}
+            ${disabled && 'text-neutral40'} 
+            ${iconRight || isShowClose && 'pr-10'} 
+            ${className}
+            ${messageError && 'border-red text-red'}`
+          }
         />
+        {iconLeft && iconLeft}
         {iconRight && iconRight}
         {isShowClose && field.value && <Image onPress={resetInput} source={images.close} className='w-12 h-12 ' classNameButton='absolute right-1 top-1' />}
-
       </View>
       {isShowError && messageError && <Text className='text-red text-[12px] mt-2 ml-4'>{messageError}</Text>}
+      {hasVoice &&
+        <View className='flex-row mt-2 gap-x-4'>
+          <Button
+            className='flex-row items-center p-2.5 bg-primary gap-x-2 rounded-[8px] '
+            onPress={onUseVoice}
+          >
+            <Image source={images.success} className='w-5 h-5' />
+            <Text className='text-[12px] font-medium text-white'>Use Voice</Text>
+          </Button>
+          <Button
+            className='flex-row items-center p-2.5 bg-violet gap-x-2 rounded-[8px] '
+            onPress={onEnhanceAI}
+          >
+            <Image source={images.success} className='w-5 h-5' />
+            <Text className='text-[12px] font-medium text-white'>AI enhance</Text>
+          </Button>
+        </View>
+      }
     </View>
   );
 }

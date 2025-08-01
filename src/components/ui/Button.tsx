@@ -6,19 +6,27 @@ interface Props extends TouchableOpacityProps {
   label?: string;
   classNameLabel?: string;
   iconButton?: ReactNode;
+  type?: 'default' | 'outlined'
 }
 
+const MappingBtn = {
+  default: 'bg-primary',
+  outlined: 'border border-primary bg-white',
+}
+const MappingLabel = {
+  default: 'text-white',
+  outlined: 'text-primary',
+}
 export function Button(props: Props) {
-  const { label, classNameLabel, disabled, iconButton } = props;
+  const { label, classNameLabel, disabled, type = 'default' } = props;
+
   if (label) {
     return (
       <TouchableOpacity
         {...props}
-        className={`justify-center items-center bg-primary h-[56] rounded-lg ${props.className} ${disabled && 'bg-disable'}`}
+        className={`justify-center items-center  h-[56] rounded-lg  ${disabled ? 'bg-btnDisable' : MappingBtn[type]} ${props.className} `}
       >
-        <Text
-          className={`text-[16px] text-white  ${classNameLabel}`}
-        >
+        <Text className={`font-semibold text-[16px] ${MappingLabel[type]} ${classNameLabel}`} >
           {label}
         </Text>
       </TouchableOpacity>

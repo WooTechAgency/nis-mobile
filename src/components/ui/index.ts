@@ -10,3 +10,6 @@ export * from './Loading';
 export * from './Indicator';
 export * from './Loading';
 export * from './Back';
+export * from './SelectOption';
+export * from './SelectRating';
+export * from './CheckList';

@@ -1,5 +1,4 @@
-import { images } from '@assets/images';
-import { Back, Button, Image, ScrollView } from '@components/ui';
+import { Back, Button, ScrollView } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
@@ -10,6 +9,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
+import BackToLogin from './components/back-to-login';
+import Logo from './components/logo';
 
 const formSchema = yup.object().shape({
   code: yup.string().required('Code is required!'),
@@ -26,17 +27,18 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
     defaultValues: {
       code: '',
     },
-    mode: 'onBlur',
+    mode: 'all',
     resolver: yupResolver(formSchema),
   });
 
   const onResetPassword = (data: any) => {
-    setLoading(true);
-    enterCodedApi({ token: data.code })
-      .then(() => {
-        navigation.navigate(ScreenName.EnterNewPassword, { code: data.code });
-      })
-      .finally(() => setLoading(false));
+    navigation.navigate(ScreenName.EnterNewPassword, { code: data.code });
+    // setLoading(true);
+    // enterCodedApi({ token: data.code })
+    //   .then(() => {
+    //     navigation.navigate(ScreenName.EnterNewPassword, { code: data.code });
+    //   })
+    //   .finally(() => setLoading(false));
   };
 
   const onResendCode = () => {
@@ -46,25 +48,26 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
 
   return (
     <View className='flex-1 bg-white '>
-      <Back />
-      <ScrollView isContentCenter={isIpad} className='pt-[182] sm:pt-[216]'>
+      <ScrollView isContentCenter={isIpad} className='pt-[18%]'>
         <View className='px-5 sm:w-[416] sm:px-0 '>
-          <Image source={images.logo} className='sm:h-[62] sm:w-[268] h-[49] w-[186] self-center' />
+          <Logo />
           <TextInput
-            classNameWrap='mt-[73]'
+            classNameWrap='mt-8'
             errors={errors}
             control={control}
             name='code'
             label='Code sent to your email'
             placeholder='Enter the code'
+            labelOverlap
           />
-          <Button label='Reset password' className='mt-6' disabled={!isValid} onPress={handleSubmit(onResetPassword)} />
+          <Button label='Verify' className='mt-6' disabled={!isValid} onPress={handleSubmit(onResetPassword)} />
           <Button
             label='Resend code'
-            className='mt-3 sm:mt-6'
-            classNameLabel='text-violet'
+            className='mt-4'
             onPress={onResendCode}
+            type='outlined'
           />
+          <BackToLogin className='mt-4' />
         </View>
       </ScrollView>
       <Loading loading={loading} />
