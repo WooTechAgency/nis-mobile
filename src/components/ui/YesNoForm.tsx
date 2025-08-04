@@ -3,6 +3,8 @@ import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form
 import { View } from 'react-native';
 import { Button } from './Button';
 import { Text } from './Text';
+import { Image } from './Image';
+import { images } from '@assets/images';
 
 interface Props {
   setValue: UseFormSetValue<any>;
@@ -12,12 +14,13 @@ interface Props {
   label?: string;
   classNameWrap?: string;
   errors?: FieldErrors;
+  isRadio?: boolean;
 
 }
 const commonWrapCls = 'w-[100px] h-[60px] rounded-[10px] justify-center items-center border'
 const commonLabelCls = 'font-bold text-[20px]'
 export function YesNoForm(props: Props) {
-  const { setValue, name, control, label, classNameWrap } = props;
+  const { setValue, name, control, label, classNameWrap, isRadio } = props;
   const value = useWatch({ name, control, });
   console.log('value ', value)
 
@@ -28,6 +31,28 @@ export function YesNoForm(props: Props) {
   const onNo = () => {
     setValue(name, false, { shouldDirty: true });
   };
+  if (isRadio) {
+    return (
+      <View className={`flex-row items-center gap-x-6 ${classNameWrap}`}>
+        <Text>{label}</Text>
+        {/* Yes */}
+        <Button
+          className='flex-row items-center gap-x-2'
+          onPress={onYes}
+        >
+          <Image source={value ? images.radioChecked : images.radio} className='w-5 h-5' />
+          <Text className='text-base'>{'Yes'}</Text>
+        </Button>
+        <Button
+          className='flex-row items-center gap-x-2'
+          onPress={onNo}
+        >
+          <Image source={!value ? images.radioChecked : images.radio} className='w-5 h-5' />
+          <Text className='text-base'>{'No'}</Text>
+        </Button>
+      </View>
+    )
+  }
 
   return (
     <View className={`self-center ${classNameWrap}`}>

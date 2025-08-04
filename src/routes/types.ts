@@ -23,6 +23,8 @@ export enum RouteName{
   // Incidents
   IncidentsNavigator = 'IncidentsNavigator',
   Incidents = 'Incidents',
+  CreateIncident = 'CreateIncident',
+  PreviewIncident = 'PreviewIncident',
   // account
   AccountNavigator = 'AccountNavigator',
   Account = 'Account',

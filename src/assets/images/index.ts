@@ -10,4 +10,6 @@ export const images = {
   success: require('./sources/success.png'),
   checked: require('./sources/checked.png'),
   checkbox: require('./sources/checkbox.png'),
+  radio: require('./sources/radio.png'),
+  radioChecked: require('./sources/radioChecked.png'),
 };

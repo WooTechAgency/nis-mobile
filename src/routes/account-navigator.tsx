@@ -1,8 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Incidents from '@screens/main/incidents';
+import Account from '@screens/main/account';
 import React from 'react';
 import { RouteName } from './types';
-import Account from '@screens/main/account';
 
 const AccountStack = createNativeStackNavigator();
 

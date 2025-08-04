@@ -24,7 +24,7 @@ export function Button(props: Props) {
     return (
       <TouchableOpacity
         {...props}
-        className={`justify-center items-center  h-[56] rounded-lg  ${disabled ? 'bg-btnDisable' : MappingBtn[type]} ${props.className} `}
+        className={`justify-center items-center px-4 h-[56] rounded-lg  ${disabled ? 'bg-btnDisable' : MappingBtn[type]} ${props.className} `}
       >
         <Text className={`font-semibold text-[16px] ${MappingLabel[type]} ${classNameLabel}`} >
           {label}
