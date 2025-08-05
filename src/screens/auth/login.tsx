@@ -5,8 +5,8 @@ import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '@hooks/common';
-import { useNavigation } from '@react-navigation/native';
-import { navigate } from '@routes/navigationRef';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import { navigate, navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { loginApi } from '@services/authentication.service';
 import { storage } from '@store/mkkv';
@@ -69,7 +69,7 @@ export default function Login() {
       console.log('response ', response)
       // storage.set('email', data.accountEmail)
       dispatch(setUserInfo({ access_token: response.data.access_token, ...response.data.user_information }));
-      navigate(RouteName.MainNavigator);
+      navigationRef.dispatch(StackActions.replace(RouteName.MainNavigator));
     } catch (error) {
       // if (error?.data?.isWrongInfo) {
       //   toggleLoginError();

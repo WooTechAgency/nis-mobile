@@ -1,4 +1,5 @@
 import React from 'react';
+// import {SafeAreaViewComponent} from 'react-native'
 import { SafeAreaView as SafeAreaViewComponent, SafeAreaViewProps } from 'react-native-safe-area-context';
 
 interface Props extends SafeAreaViewProps {

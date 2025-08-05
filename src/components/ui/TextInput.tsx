@@ -8,7 +8,6 @@ import { getMessageError } from '@utils/common';
 import { Image } from './Image';
 import { images } from '@assets/images';
 import { Button } from './Button';
-
 interface Props extends TextInputProps {
   label?: string;
   labelCls?: string;
@@ -61,12 +60,29 @@ export function TextInput(props: Props) {
 
   const onUseVoice = () => { }
 
-  const onEnhanceAI = () => { }
+  const onEnhanceAI = () => {
+    //   const prompt = `Viết lại câu sau bằng tiếng Việt có dấu câu đầy đủ, tự nhiên và lịch sự:\n\n"${rawText}"\n\nChỉ trả về câu đã chỉnh sửa.`;
+    // const res = await fetch("https://api.openai.com/v1/chat/completions", {
+    //   method: "POST",
+    //   headers: {
+    //     "Authorization": `Bearer ${openAiKey}`,
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     model: "gpt-3.5-turbo",
+    //     messages: [{ role: "user", content: prompt }],
+    //     temperature: 0.2,
+    //     max_tokens: 100,
+    //   }),
+    // });
+    // const data = await res.json();
+    // return data?.choices?.[0]?.message?.content?.trim();
+  }
 
   return (
     <View className={`${classNameWrap}`}>
       {label &&
-        <Text className={`text-[12px] px-1 mb-1 ${labelOverlap && 'absolute left-4 -top-1 bg-white z-10'}  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
+        <Text className={`text-[12px] px-1 mb-1 ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'}  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
       }
       <View className=''>
         <TextInputComponent

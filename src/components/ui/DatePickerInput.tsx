@@ -8,6 +8,8 @@ import { Text } from './Text';
 import { Button } from './Button';
 import { getMessageError } from '@utils/common';
 import { convertUTCDate, convertUTCDay } from '@utils/date';
+import { Image } from './Image';
+import { images } from '@assets/images';
 
 interface Props {
   label?: string;
@@ -92,14 +94,14 @@ export function DatePickerInput(props: Props) {
       <Button
         onPress={onClickPicker}
         disabled={!editable}
-        className={`bg-white px-3 border border-borderGray mt-[6] min-h-[50] sm:min-h-[64] justify-center rounded ${className}`}
+        className={`flex-row items-center gap-x-3 bg-white px-3 border border-border mt-[6] h-[54]  rounded ${className}`}
       >
+        <Image source={images.success} className='w-5 h-5' />
         {placeholder && !field.value ? (
-          <Text className="text-[14px] sm:text-[16px]  text-blueLight2">{placeholder}</Text>
+          <Text className="text-[14px] sm:text-[16px]  text-gray">{placeholder}</Text>
         ) : (
           <Text
-            className={`text-[14px] sm:text-[16px] text-blueBold  ${!field.value && renderMode === 'dob' && 'text-blueLight2'
-              } ${classNameText} ${isTextCenter && 'text-center'}`}
+            className={`text-[14px] sm:text-[16px] text-blueBold  ${classNameText} ${isTextCenter && 'text-center'}`}
             numberOfLines={1}
           >
             {customDisplayValue ? customDisplayValue : renderDefault()}

@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
-export default function Account() {
+export default function UpdateAccount() {
   const dispatch = useDispatch()
   const query = useQueryClient()
   const {
@@ -29,15 +29,10 @@ export default function Account() {
     // resolver: yupResolverr(formSchema),
   });
   const [visibleLogout, toggleVisibleLogout] = useToggle()
+  const [isEditing, toggleEditing] = useToggle(false);
 
-  const onChangePassword = () => {
-    navigate(RouteName.ChangePassword)
-  }
+  const onUpdateProfile = (data: any) => {
 
-  const onLogout = () => {
-    dispatch(setUserInfo(null));
-    navigationRef.dispatch(StackActions.replace(RouteName.Login))
-    query.clear();
   }
 
   return (
@@ -48,10 +43,6 @@ export default function Account() {
           <Text className='text-[28px] font-semibold text-white'>JW</Text>
         </View>
         <View className='flex-1'>
-          <View className='flex-row items-center justify-between'>
-            <Text className='font-medium text-[20px]'>Profile</Text>
-            <Button label='Edit' className='px-4' onPress={() => navigate(RouteName.UpdateAccount)} />
-          </View>
           <TextInput
             classNameWrap='mt-6'
             control={control}
@@ -98,25 +89,15 @@ export default function Account() {
             className='text-[#000000]'
           />
           <View className='mt-6 flex-row gap-x-6'>
-            <Button label='Change Password' onPress={onChangePassword} type='outlined' className='flex-1' classNameLabel='' />
+            <Button label='Cancel' onPress={toggleEditing} type='outlined' className='flex-1' classNameLabel='' />
             <Button
-              label='Logout'
-              onPress={toggleVisibleLogout}
-              type='outlined'
-              className='flex-1 border-red '
-              classNameLabel='text-red '
+              label='Save'
+              onPress={handleSubmit(onUpdateProfile)}
+              className='flex-1'
             />
           </View>
         </View>
-        <CommonModal
-          visible={visibleLogout}
-          toggleModal={toggleVisibleLogout}
-          title='Log out'
-          des='Are you sure you want to log out?'
-          btnNegativeText='No'
-          btnPositiveText='Yes'
-          onPositive={onLogout}
-        />
+
       </View>
 
     </SafeAreaView>

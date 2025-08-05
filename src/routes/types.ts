@@ -28,6 +28,8 @@ export enum RouteName{
   // account
   AccountNavigator = 'AccountNavigator',
   Account = 'Account',
+  ChangePassword = 'ChangePassword',
+  UpdateAccount = 'UpdateAccount',
 }
 
 export type RootStackParamList = {

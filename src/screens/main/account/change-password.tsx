@@ -1,6 +1,6 @@
 import { images } from '@assets/images';
 import { CommonModal } from '@components/modal';
-import { Back, Button, Image, ScrollView, Text } from '@components/ui';
+import { Back, Button, Image, SafeAreaView, ScrollView, Text } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
@@ -13,13 +13,20 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
-import Logo from './components/logo';
-import BackToLogin from './components/back-to-login';
+
 import { showSuccess } from '@lib/toast';
+import Header from '@components/header';
 import { useToggle } from '@hooks/useToggle';
+import { goBack } from '@routes/navigationRef';
 
 
+interface Form {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
 const formSchema = yup.object().shape({
+  currentPassword: yup.string().required('Current password is required!'),
   newPassword: yup
     .string()
     .matches(
@@ -31,9 +38,9 @@ const formSchema = yup.object().shape({
 
 });
 
-export default function EnterNewPassword({ navigation, route }: EnterNewPasswordProps) {
-  const { code } = route.params;
+export default function ChangePassword() {
   const [loading, setLoading] = useState(false);
+  const [showCurrentPassword, toggleCurrentPassword] = useToggle(false);
   const [showNewPassword, toggleNewPassword] = useToggle(false);
   const [showConfirmPassword, toggleConfirmPassword] = useToggle(false);
   const [visibleSuccessPopup, setVisibleSuccessPopup] = useState(false);
@@ -54,30 +61,59 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
     }
   };
 
-  const onSavePassword = (data: any) => {
-    setLoading(true);
-    resetPasswordApi({
-      token: code,
-      new_password: data.newPassword,
-      new_password_confirmation: data.newPassword,
-    })
-      .then(() => {
-        showSuccess({ title: 'Your password has been reset', message: 'You can now use your new password to log in' })
-      })
-      .finally(() => setLoading(false));
+  const onSavePassword = (data: Form) => {
+    // setLoading(true);
+    // resetPasswordApi({
+    //   token: code,
+    //   new_password: data.newPassword,
+    //   new_password_confirmation: data.newPassword,
+    // })
+    //   .then(() => {
+    //     showSuccess({ title: 'Your password has been reset', message: 'You can now use your new password to log in' })
+    //   })
+    //   .finally(() => setLoading(false));
   };
 
+
   const onBackToLogin = () => {
-    navigation.dispatch(StackActions.popToTop());
   };
 
   const isPasswordError = errors.newPassword?.message;
 
   return (
-    <View className='flex-1 bg-white '>
-      <ScrollView isContentCenter={isIpad} className='pt-[20%]'>
-        <View className='px-5 sm:w-[525] sm:px-0  '>
-          <Logo />
+    <SafeAreaView className='flex-1 bg-white '>
+      <ScrollView>
+        <Header
+          isBack
+          title='Change password'
+          rightComponent={
+            <View className='flex-row gap-x-4'>
+              <Button label='Cancel' type='outlined' onPress={goBack} />
+              <Button label='Save' onPress={handleSubmit(onSavePassword)} />
+            </View>
+          }
+        />
+        <View className='px-5'>
+          <TextInput
+            classNameWrap='mt-8'
+            errors={errors}
+            control={control}
+            isShowError={false}
+            name='currentPassword'
+            label='Current Password'
+            placeholder='Enter your current password'
+            secureTextEntry={!showCurrentPassword}
+            labelOverlap
+            iconRight={
+              <Button className='flex-row items-center absolute right-[9] top-0 bottom-0' onPress={toggleCurrentPassword}>
+                <Image
+                  source={images.eye}
+                  className='w-[32] h-[32]'
+                  tintColor={!!errors.newPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                />
+              </Button>
+            }
+          />
           <TextInput
             classNameWrap='mt-8'
             errors={errors}
@@ -119,8 +155,6 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
               </Button>
             }
           />
-          <Button label='Reset password' className='mt-6' onPress={handleSubmit(onSavePassword)} disabled={!isValid} />
-          <BackToLogin className='mt-8' />
         </View>
       </ScrollView>
       <Loading loading={loading} />
@@ -131,6 +165,6 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
         des='You can now use your new password to log in'
         wrapperClassName='py-[40] px-[32] sm:py-[32] sm:px-[28] '
       />
-    </View>
+    </SafeAreaView>
   );
 }
