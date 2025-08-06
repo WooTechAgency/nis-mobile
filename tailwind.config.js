@@ -18,7 +18,7 @@ module.exports = {
         zIndex: -1, // Đặt zIndex để nó nằm dưới modal
       },
       colors: {
-        primary: '#4188E3',
+        primary: '#61DCDD',
         secondary: '#122132',
         secondary2: '#171717',
         secondary3: '#121212',
@@ -29,11 +29,10 @@ module.exports = {
         gray: '#666666',
         neutral2: 'rgba(250, 250, 250, 1)',
         neutral5: '#F1F1F1',
-        neutral10: '#E4E4E4',
+        neutral10: '#FAFAFA',
         neutral20: '#DFDFDF',
         neutral25: '#D3D3D3',
-        neutral40: '#BEBEBE',
-        neutral50: '#9F9F9F',
+        neutral50: '#BEBEBE',
         neutral70: '#666666',
         gray100: '#BEBEBE',
         gray200: '#DFDFDF',
@@ -69,17 +68,27 @@ module.exports = {
     },
   },
   plugins: [
-    plugin(({ addUtilities }) => {
-      addUtilities({
-        center: {
-          justifyContent: 'center',
-          alignItems: 'center',
+    plugin(({ matchUtilities }) => {
+      matchUtilities(
+        {
+          'common-shadow': () => ({
+            shadowColor: '#000',
+            shadowOffset: { width: 1, height: 2 },
+            shadowOpacity: 0.05,
+            shadowRadius: 11,
+            elevation: 2,
+          }),
+          center: () => ({
+            justifyContent: 'center',
+            alignItems: 'center',
+          }),
+          'row-center': () => ({
+            flexDirection: 'row',
+            alignItems: 'center',
+          }),
         },
-        'row-center': {
-          flexDirection: 'row',
-          alignItems: 'center',
-        },
-      });
+        { values: { DEFAULT: '' } }
+      );
     }),
   ],
 }

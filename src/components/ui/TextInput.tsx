@@ -82,7 +82,7 @@ export function TextInput(props: Props) {
   return (
     <View className={`${classNameWrap}`}>
       {label &&
-        <Text className={`text-[12px] px-1 mb-1 ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'}  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
+        <Text className={`text-[12px] text-neutral70 px-1 mb-1 ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'}  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
       }
       <View className=''>
         <TextInputComponent
@@ -93,13 +93,12 @@ export function TextInput(props: Props) {
           onBlur={field.onBlur}
           placeholder={placeholder || ''}
           autoCapitalize={name?.toLowerCase().includes('email') ? 'none' : autoCapitalize}
-
           placeholderTextColor={disabled ? '#BEBEBE' : messageError ? '#E80000' : '#666666'}
           editable={!disabled}
           multiline={multiline}
           style={isAndroid && multiline && { textAlignVertical: 'top' }}
-          // {...props}
-          className={`text-black h-[56] border font-regular px-4 py-0 rounded-[8px] text-[16px] border-border w-full
+          {...props}
+          className={`text-black h-[56] border font-regular px-4 py-0 rounded-[14px] text-[16px] border-border w-full
            ${multiline && 'h-[112] sm:h-[144] py-4'}
             ${disabled && 'text-neutral40'} 
             ${iconRight || isShowClose && 'pr-10'} 

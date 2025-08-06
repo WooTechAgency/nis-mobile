@@ -11,6 +11,7 @@ import { View } from 'react-native';
 import * as yup from 'yup';
 import BackToLogin from './components/back-to-login';
 import Logo from './components/logo';
+import { AuthWrapCls } from './login';
 
 const formSchema = yup.object().shape({
   code: yup.string().required('Code is required!'),
@@ -48,11 +49,14 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
 
   return (
     <View className='flex-1 bg-white '>
-      <ScrollView isContentCenter={isIpad} className='pt-[18%]'>
-        <View className='px-5 sm:w-[416] sm:px-0 '>
+      <ScrollView contentContainerStyle={[
+        { flexGrow: 1 },
+        isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+      ]}>
+        <View className={AuthWrapCls}>
           <Logo />
           <TextInput
-            classNameWrap='mt-8'
+            classNameWrap='mt-12'
             errors={errors}
             control={control}
             name='code'
@@ -63,11 +67,11 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
           <Button label='Verify' className='mt-6' disabled={!isValid} onPress={handleSubmit(onResetPassword)} />
           <Button
             label='Resend code'
-            className='mt-4'
+            className='mt-3'
             onPress={onResendCode}
             type='outlined'
           />
-          <BackToLogin className='mt-4' />
+          <BackToLogin />
         </View>
       </ScrollView>
       <Loading loading={loading} />

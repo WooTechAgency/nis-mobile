@@ -12,4 +12,5 @@ export const images = {
   checkbox: require('./sources/checkbox.png'),
   radio: require('./sources/radio.png'),
   radioChecked: require('./sources/radioChecked.png'),
+  edit: require('./sources/edit.png'),
 };

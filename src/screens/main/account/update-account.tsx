@@ -11,6 +11,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import AccountLogo from './components/account-logo';
+import { shadowStyle } from '@constants/config.constants';
 
 export default function UpdateAccount() {
   const dispatch = useDispatch()
@@ -38,10 +40,11 @@ export default function UpdateAccount() {
   return (
     <SafeAreaView className='bg-neutral-100'>
       <Header title='Account details' />
-      <View className='flex-row items-start gap-x-8 mt-6 bg-white p-6 rounded-[8px]'>
-        <View className='w-[108px] h-[108px] rounded-full bg-green-300 justify-center items-center'>
-          <Text className='text-[28px] font-semibold text-white'>JW</Text>
-        </View>
+      <View
+        className='flex-row items-start gap-x-8 mt-6 bg-white p-5 rounded-[20px] '
+        style={shadowStyle}
+      >
+        <AccountLogo />
         <View className='flex-1'>
           <TextInput
             classNameWrap='mt-6'

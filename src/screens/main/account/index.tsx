@@ -1,7 +1,9 @@
+import { images } from '@assets/images';
 import Header from '@components/header';
 import { CommonModal } from '@components/modal';
-import { Button, SafeAreaView, Text, View } from '@components/ui';
+import { Button, Image, SafeAreaView, Text, View } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
+import { shadowStyle } from '@constants/config.constants';
 import { useToggle } from '@hooks/useToggle';
 import { StackActions } from '@react-navigation/native';
 import { navigate, navigationRef } from '@routes/navigationRef';
@@ -11,6 +13,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import AccountLogo from './components/account-logo';
 
 export default function Account() {
   const dispatch = useDispatch()
@@ -43,14 +46,22 @@ export default function Account() {
   return (
     <SafeAreaView className='bg-neutral-100'>
       <Header title='Account details' />
-      <View className='flex-row items-start gap-x-8 mt-6 bg-white p-6 rounded-[8px]'>
-        <View className='w-[108px] h-[108px] rounded-full bg-green-300 justify-center items-center'>
-          <Text className='text-[28px] font-semibold text-white'>JW</Text>
-        </View>
+      <View
+        className='flex-row items-start gap-x-8 mt-6 bg-white p-5 rounded-[20px] '
+        style={shadowStyle}
+      >
+        <AccountLogo />
         <View className='flex-1'>
           <View className='flex-row items-center justify-between'>
-            <Text className='font-medium text-[20px]'>Profile</Text>
-            <Button label='Edit' className='px-4' onPress={() => navigate(RouteName.UpdateAccount)} />
+            <Text className='font-semibold text-[16px]'>Profile</Text>
+            <Button
+              className='w-[135px] h-[36px] flex-row center border border-black rounded-[8px]'
+              onPress={() => navigate(RouteName.UpdateAccount)}
+            >
+              <Image source={images.edit} className='w-8 h-8' />
+              <Text className='text-[12px] font-semibold '>Edit</Text>
+            </Button>
+            {/* <Button label='Edit' className='px-4' onPress={() => navigate(RouteName.UpdateAccount)} /> */}
           </View>
           <TextInput
             classNameWrap='mt-6'
@@ -59,7 +70,6 @@ export default function Account() {
             label='Name'
             labelOverlap
             disabled
-            className='text-[#000000]'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -68,7 +78,6 @@ export default function Account() {
             label='Company'
             labelOverlap
             disabled
-            className='text-[#000000]'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -77,7 +86,6 @@ export default function Account() {
             label='Role'
             labelOverlap
             disabled
-            className='text-[#000000]'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -86,7 +94,6 @@ export default function Account() {
             label='Email Address'
             labelOverlap
             disabled
-            className='text-[#000000]'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -95,7 +102,6 @@ export default function Account() {
             label='Phone Number'
             labelOverlap
             disabled
-            className='text-[#000000]'
           />
           <View className='mt-6 flex-row gap-x-6'>
             <Button label='Change Password' onPress={onChangePassword} type='outlined' className='flex-1' classNameLabel='' />

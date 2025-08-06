@@ -3,6 +3,7 @@ import { Button, Image, ScrollView, Text } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
+import { colors } from '@constants/colors.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '@hooks/common';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -16,12 +17,13 @@ import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 import * as yup from 'yup';
+import Logo from './components/logo';
 
 const formSchema = yup.object().shape({
   accountEmail: yup.string().required('Email address is required').email('Email address is invalid'),
   password: yup.string().required('Password is required'),
 });
-
+export const AuthWrapCls = `px-5 sm:w-[416px] sm:px-0`
 export default function Login() {
   const navigation = useNavigation();
   const dispatch = useAppDispatch()
@@ -31,7 +33,6 @@ export default function Login() {
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -94,18 +95,17 @@ export default function Login() {
           { flexGrow: 1 },
           isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
         ]}
-        className='pt-[5] '
       >
-        <View className='px-5 sm:w-[416] sm:px-0 '>
-          <Image source={images.logo} className='sm:h-[62] sm:w-[268] h-[49] w-[186] self-center' />
+        <View className={AuthWrapCls}>
+          <Logo />
           <TextInput
-            classNameWrap='mt-[116] sm:mt-[73]'
+            classNameWrap='mt-12'
             errors={errors}
             control={control}
             name='accountEmail'
             keyboardType='email-address'
-            label='Email address'
-            placeholder='Enter your email address'
+            label='Account email'
+            placeholder='Enter your account email'
             labelOverlap
           />
           <TextInput
@@ -126,14 +126,14 @@ export default function Login() {
                   source={images.eye}
                   className='w-[32] h-[32]'
                   // tintColor={'red'}
-                  tintColor={!!errors.password?.message ? 'red' : (visiblePassword ? '#6F63FF' : 'gray')}
+                  tintColor={!!errors.password?.message ? 'red' : (visiblePassword ? colors.primary : 'gray')}
                 />
               </Button>
             }
           />
           <Button label='Log in' className='mt-6' disabled={!isValid} onPress={handleSubmit(onLogin)} />
-          <Button onPress={onForgotPassword}>
-            <Text className='mt-[8] text-[12px]'>Forgot password?</Text>
+          <Button onPress={onForgotPassword} className='self-center'>
+            <Text className='mt-3 text-[12px] text-neutral70'>Forgot password?</Text>
           </Button>
         </View>
       </ScrollView>

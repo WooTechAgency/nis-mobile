@@ -10,6 +10,7 @@ import { View } from 'react-native';
 import * as yup from 'yup';
 import BackToLogin from './components/back-to-login';
 import Logo from './components/logo';
+import { AuthWith, AuthWrapCls } from './login';
 
 const formSchema = yup.object().shape({
   accountEmail: yup.string().required('Email address is required!').email('Email address is invalid'),
@@ -44,8 +45,12 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
 
   return (
     <View className='flex-1 bg-white'>
-      <ScrollView isContentCenter={isIpad} className='pt-[20%]'>
-        <View className='px-5 sm:w-[525] sm:px-0  '>
+      <ScrollView
+        contentContainerStyle={[
+          { flexGrow: 1 },
+          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+        ]}>
+        <View className={AuthWrapCls}>
           <Logo />
           <View className='gap-y-6 mt-8'>
             <TextInput
@@ -55,14 +60,16 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
               label='Email address'
               placeholder='Enter your email address'
               labelOverlap
+              keyboardType='decimal-pad'
             />
             <Button
               label='Next'
               disabled={!isValid}
               onPress={handleSubmit(onNext)}
             />
-            <BackToLogin className='' />
+
           </View>
+          <BackToLogin />
         </View>
       </ScrollView>
       <Loading loading={loading} />

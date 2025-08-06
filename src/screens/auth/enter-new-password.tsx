@@ -17,11 +17,14 @@ import Logo from './components/logo';
 import BackToLogin from './components/back-to-login';
 import { showSuccess } from '@lib/toast';
 import { useToggle } from '@hooks/useToggle';
+import { AuthWrapCls } from './login';
+import { colors } from '@constants/colors.constants';
 
 
 const formSchema = yup.object().shape({
   newPassword: yup
     .string()
+    .required('New password is required')
     .matches(
       PATTERN.PASSWORD,
       'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
@@ -42,7 +45,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: yupResolver(formSchema),
   });
 
@@ -75,11 +78,15 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
 
   return (
     <View className='flex-1 bg-white '>
-      <ScrollView isContentCenter={isIpad} className='pt-[20%]'>
-        <View className='px-5 sm:w-[525] sm:px-0  '>
+      <ScrollView
+        contentContainerStyle={[
+          { flexGrow: 1 },
+          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+        ]}>
+        <View className={AuthWrapCls}>
           <Logo />
           <TextInput
-            classNameWrap='mt-8'
+            classNameWrap='mt-12'
             errors={errors}
             control={control}
             isShowError={false}
@@ -93,12 +100,12 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={!!errors.newPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                  tintColor={!!errors.newPassword?.message ? '#E80000' : (showNewPassword ? colors.primary : 'gray')}
                 />
               </Button>
             }
           />
-          <Text className={`ml-4 mt-1 ${isPasswordError && 'text-red'}`}>Password must be at least 8 characters and include uppercase, lowercase, number, and special character.</Text>
+          <Text className={`ml-4 text-neutral70 mt-1 ${isPasswordError && 'text-red'}`}>Password must be at least 8 characters and include uppercase, lowercase, number, and special character.</Text>
           <TextInput
             classNameWrap='mt-8'
             errors={errors}
@@ -114,13 +121,13 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={!!errors.confirmPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                  tintColor={!!errors.confirmPassword?.message ? '#E80000' : (showNewPassword ? colors.primary : 'gray')}
                 />
               </Button>
             }
           />
           <Button label='Reset password' className='mt-6' onPress={handleSubmit(onSavePassword)} disabled={!isValid} />
-          <BackToLogin className='mt-8' />
+          <BackToLogin />
         </View>
       </ScrollView>
       <Loading loading={loading} />

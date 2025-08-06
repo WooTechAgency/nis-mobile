@@ -6,9 +6,9 @@ import { images } from '@assets/images'
 
 export default function BackToLogin({ className }: { className?: string }) {
   return (
-    <Button className={`flex-row items-center self-center ${className}`} onPress={goBack}>
-      <Image source={images.arrowLeft} className='w-8 h-8' />
-      <Text>Back to Log in</Text>
+    <Button className={`flex-row items-center self-center mt-3 ${className}`} onPress={goBack}>
+      {/* <Image source={images.arrowLeft} className='w-8 h-8' /> */}
+      <Text className='text-[12px]'>Back to Log in</Text>
     </Button>
   )
 }
