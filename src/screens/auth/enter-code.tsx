@@ -7,15 +7,19 @@ import { EnterCodeProps, RouteName } from '@routes/types';
 import { enterCodedApi, forgotPasswordApi } from '@services/authentication.service';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import BackToLogin from './components/back-to-login';
 import Logo from './components/logo';
 import { AuthWrapCls } from './login';
 
 const formSchema = yup.object().shape({
-  code: yup.string().required('Code is required!'),
+  code: yup.string().required('Code is required!').length(6, 'Invalid code'),
 });
+
+interface Form {
+  code: string;
+}
 
 export default function EnterCode({ navigation, route }: EnterCodeProps) {
   const [loading, setLoading] = useState(false);
@@ -32,19 +36,19 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
     resolver: yupResolver(formSchema),
   });
 
-  const onResetPassword = (data: any) => {
-    navigation.navigate(RouteName.EnterNewPassword, { code: data.code });
-    // setLoading(true);
-    // enterCodedApi({ token: data.code })
-    //   .then(() => {
-    //     navigation.navigate(RouteName.EnterNewPassword, { code: data.code });
-    //   })
-    //   .finally(() => setLoading(false));
+  const onResetPassword = ({ code }: Form) => {
+    Keyboard.dismiss()
+    setLoading(true);
+    enterCodedApi({ token: code, email })
+      .then(() => {
+        navigation.navigate(RouteName.EnterNewPassword, { code, email });
+      })
+      .finally(() => setLoading(false));
   };
 
   const onResendCode = () => {
     setLoading(true);
-    forgotPasswordApi({ email }).finally(() => setLoading(false));
+    forgotPasswordApi(email).finally(() => setLoading(false));
   };
 
   return (

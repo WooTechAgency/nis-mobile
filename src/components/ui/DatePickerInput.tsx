@@ -6,8 +6,8 @@ import { Keyboard } from 'react-native';
 import { View } from './View';
 import { Text } from './Text';
 import { Button } from './Button';
-import { getMessageError } from '@utils/common';
-import { convertUTCDate, convertUTCDay } from '@utils/date';
+import { getMessageError } from '@utils/common.util';
+import { convertUTCDate, convertUTCDay } from '@utils/date.util';
 import { Image } from './Image';
 import { images } from '@assets/images';
 

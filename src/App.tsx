@@ -9,6 +9,7 @@ import "../global.css";
 import { persistor, store } from './store';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@lib/toast';
+import ErrorModal from '@components/modal/ErrorModal';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,7 +32,8 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <GestureHandlerRootView className='flex-1'>
               <RootNavigator />
-              <Toast config={toastConfig} />
+              <Toast config={toastConfig} position='bottom' />
+              <ErrorModal />
             </GestureHandlerRootView>
           </QueryClientProvider>
         </SafeAreaProvider>

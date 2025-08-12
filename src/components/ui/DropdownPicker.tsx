@@ -5,7 +5,7 @@ import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form
 import { Keyboard, View } from 'react-native';
 import DropDownPickerComponent, { DropDownDirectionType } from 'react-native-dropdown-picker';
 import { Text } from './Text';
-import { getMessageError } from '@utils/common';
+import { getMessageError } from '@utils/common.util';
 
 export type DropDownType = {
   value: string | number;

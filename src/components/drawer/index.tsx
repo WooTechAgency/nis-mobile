@@ -9,6 +9,7 @@ import Animated, { Easing, ReduceMotion, SharedValue, useSharedValue, withTiming
 import { useDispatch } from 'react-redux';
 import { Button, Image, SafeAreaView, Text } from '@components/ui';
 import { RouteName } from '@routes/types';
+import { colors } from '@constants/colors.constants';
 
 interface Props {
   title: string;
@@ -34,7 +35,9 @@ function Item({
   return (
     <Button
       style={{ overflow: 'visible' }}
-      className={`flex-row items-center h-[56] px-[12] ${selectedIndex && 'bg-violet4 rounded-lg'} ${collapsedDrawer && 'w-[56]'
+      className={`flex-row items-center h-[56] px-[12]
+       ${selectedIndex && 'bg-teal20 rounded-[20px]'}
+       ${collapsedDrawer && 'w-[56]'
         }`}
       onPress={onPress}
     >
@@ -53,7 +56,7 @@ function Item({
           <Image
             source={url}
             className='w-full h-full'
-            tintColor={selectedIndex && index !== 4 ? '#6F63FF' : undefined}
+            tintColor={selectedIndex ? 'black' : colors.neutral70}
           />
         )}
       </View>
@@ -65,7 +68,8 @@ function Item({
               position: 'absolute',
               left: 52,
               fontFamily: 'Poppins-Regular',
-              color: selectedIndex ? '#6F63FF' : '#666666',
+              color: selectedIndex ? colors.black : colors.neutral70,
+              fontSize: 16
             },
           ]}
         >
@@ -73,8 +77,7 @@ function Item({
         </Animated.Text>
       ) : (
         <Text
-          className={`font-regular text-neutral70 ml-2 ${selectedIndex && 'text-violet'} ${collapsedDrawer && 'hidden'
-            }`}
+          className={`text-neutral70 ml-2 ${selectedIndex && 'text-black'} ${collapsedDrawer && 'hidden'}`}
         >
           {title}
         </Text>
@@ -135,7 +138,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
             <View className='mt-6'>
               <Item
                 title={'Dashboard'}
-                url={images.logo}
+                url={images.dashboard}
                 onPress={() => onPress(0)}
                 index={0}
                 selectedIndex={state.index === 0}
@@ -144,7 +147,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
               />
               <Item
                 title={'Job'}
-                url={images.logo}
+                url={images.dashboard}
                 onPress={() => onPress(1)}
                 index={1}
                 selectedIndex={state.index === 1}
@@ -153,7 +156,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
               />
               <Item
                 title={'Daily assessment'}
-                url={images.logo}
+                url={images.dailyAssessment}
                 onPress={() => onPress(2)}
                 index={1}
                 selectedIndex={state.index === 2}
@@ -162,7 +165,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
               />
               <Item
                 title={'Incidents'}
-                url={images.logo}
+                url={images.incident}
                 onPress={() => onPress(3)}
                 index={3}
                 selectedIndex={state.index === 3}
@@ -173,7 +176,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
             <View>
               <Item
                 title={'Account'}
-                url={images.logo}
+                url={images.setting}
                 onPress={() => onPress(4)}
                 index={4}
                 selectedIndex={state.index === 4}

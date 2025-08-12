@@ -24,9 +24,14 @@ export function Button(props: Props) {
     return (
       <TouchableOpacity
         {...props}
-        className={`justify-center items-center px-4 h-[56] rounded-[14px]  ${disabled ? 'bg-neutral5' : MappingBtn[type]} ${props.className} `}
+        className={`justify-center items-center px-4 h-[56] rounded-[14px] 
+         ${disabled ? 'bg-neutral5' : MappingBtn[type]} ${props.className} 
+        `}
       >
-        <Text className={`text-[16px] ${disabled ? 'text-neutral50' : MappingLabel[type]} ${classNameLabel}`} >
+        <Text className={`text-[16px] 
+        ${disabled ? 'text-neutral50' : MappingLabel[type]} 
+        ${classNameLabel}`
+        }>
           {label}
         </Text>
       </TouchableOpacity>

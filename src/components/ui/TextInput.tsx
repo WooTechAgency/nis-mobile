@@ -1,13 +1,13 @@
-import { TextInput as TextInputComponent, TextInputProps } from 'react-native';
-import React, { ReactNode, useState } from 'react';
-import { View } from './View';
-import { Text } from './Text';
-import { Control, FieldErrors, UseFormSetValue, useController } from 'react-hook-form';
-import { isAndroid } from '@constants/app.constants';
-import { getMessageError } from '@utils/common';
-import { Image } from './Image';
 import { images } from '@assets/images';
+import { isAndroid } from '@constants/app.constants';
+import { getMessageError } from '@utils/common.util';
+import React, { ReactNode } from 'react';
+import { Control, FieldErrors, UseFormSetValue, useController } from 'react-hook-form';
+import { TextInput as TextInputComponent, TextInputProps } from 'react-native';
 import { Button } from './Button';
+import { Image } from './Image';
+import { Text } from './Text';
+import { View } from './View';
 interface Props extends TextInputProps {
   label?: string;
   labelCls?: string;
@@ -16,6 +16,7 @@ interface Props extends TextInputProps {
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
   className?: string;
+  classNameInput?: string;
   classNameWrap?: string;
   name: string;
   control?: Control<any, any>;
@@ -49,6 +50,7 @@ export function TextInput(props: Props) {
     isShowClose,
     labelOverlap,
     hasVoice,
+    classNameInput,
     setValue
   } = props;
   const { field } = useController({ control: control, name: name });
@@ -79,10 +81,21 @@ export function TextInput(props: Props) {
     // return data?.choices?.[0]?.message?.content?.trim();
   }
 
+  console.log('classNameInput ', classNameInput)
+
   return (
     <View className={`${classNameWrap}`}>
       {label &&
-        <Text className={`text-[12px] text-neutral70 px-1 mb-1 ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'}  ${labelCls} ${messageError && 'text-red'}`}>{label}</Text>
+        <Text className={`text-[12px] text-neutral70 px-1 mb-1
+        ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'} 
+        ${disabled && 'text-neutral40'} 
+        ${labelCls}
+        ${messageError && 'text-red'}
+     
+        `}
+        >
+          {label}
+        </Text>
       }
       <View className=''>
         <TextInputComponent
@@ -100,9 +113,10 @@ export function TextInput(props: Props) {
           {...props}
           className={`text-black h-[56] border font-regular px-4 py-0 rounded-[14px] text-[16px] border-border w-full
            ${multiline && 'h-[112] sm:h-[144] py-4'}
-            ${disabled && 'text-neutral40'} 
+            ${disabled && 'text-neutral40 border-neutral20'} 
             ${iconRight || isShowClose && 'pr-10'} 
             ${className}
+            ${classNameInput}
             ${messageError && 'border-red text-red'}`
           }
         />

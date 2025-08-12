@@ -10,18 +10,23 @@ import { StackActions, useNavigation } from '@react-navigation/native';
 import { navigate, navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { loginApi } from '@services/authentication.service';
-import { storage } from '@store/mkkv';
 import { setUserInfo } from '@store/slices/authenticationSlice';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
-import Toast from 'react-native-toast-message';
 import * as yup from 'yup';
 import Logo from './components/logo';
+import { PATTERN } from '@constants/pattern.constant';
+import { showError, showSuccess } from '@lib/toast';
+import { storage } from '@store/mkkv';
+import { showErrorMessage } from '@utils/functions.util';
 
 const formSchema = yup.object().shape({
-  accountEmail: yup.string().required('Email address is required').email('Email address is invalid'),
-  password: yup.string().required('Password is required'),
+  accountEmail: yup.string().required('Email address is required').email('Invalid email format'),
+  password: yup.string().required('The password you entered is incorrect').matches(
+    PATTERN.PASSWORD,
+    'Password must have at least 8 characters and contain numbers, lowercase and uppercase letters and special characters..'
+  ),
 });
 export const AuthWrapCls = `px-5 sm:w-[416px] sm:px-0`
 export default function Login() {
@@ -36,8 +41,8 @@ export default function Login() {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      accountEmail: 'trung@wootech.co',
-      password: 'Password123*',
+      accountEmail: '',
+      password: '',
     },
     mode: 'onChange',
     resolver: yupResolver(formSchema),
@@ -69,9 +74,10 @@ export default function Login() {
       const response = await loginApi({ email: data.accountEmail, password: data.password });
       console.log('response ', response)
       // storage.set('email', data.accountEmail)
-      dispatch(setUserInfo({ access_token: response.data.access_token, ...response.data.user_information }));
+      dispatch(setUserInfo({ access_token: response.token, ...response.user }));
       navigationRef.dispatch(StackActions.replace(RouteName.MainNavigator));
     } catch (error) {
+      showErrorMessage({ message: error?.message })
       // if (error?.data?.isWrongInfo) {
       //   toggleLoginError();
       // } else if (error?.data?.isAccountPaused) {

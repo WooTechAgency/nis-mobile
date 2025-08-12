@@ -4,7 +4,7 @@ import React from 'react';
 export function Text(props: TextProps) {
   return (
     <ReactText
-      className={`font-regular text-[14px] text-blue900 ${props.className}`}
+      className={`font-regular text-[14px] sm:text-base text-black ${props.className}`}
       allowFontScaling={false}
       {...props}
     >

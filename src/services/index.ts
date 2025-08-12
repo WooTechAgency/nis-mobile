@@ -1,5 +1,6 @@
 import { Config } from '@constants/config.constants';
-import axios, { AxiosHeaders, AxiosRequestConfig, AxiosResponse, HttpStatusCode, RawAxiosRequestHeaders } from 'axios';
+import { store } from '@store/index';
+import axios, { AxiosHeaders, AxiosResponse, HttpStatusCode, RawAxiosRequestHeaders } from 'axios';
 
 export const api = axios.create({
   baseURL: Config.BASE_URL,
@@ -10,8 +11,8 @@ export const api = axios.create({
 
 api.interceptors.request.use(function (config) {
   const token = config.headers?.Authorization?.toString().replace('Bearer ', '')
-  if (token) {
-    // const token = store.getState().profileReducer.profile?.token;
+  if (!token) {
+    const token = store.getState().authentication.userInfo?.access_token;
     config.headers.Authorization = 'Bearer ' + token;
   }
   return config;

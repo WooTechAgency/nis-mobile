@@ -1,70 +1,103 @@
+import { showErrorMessage } from '@utils/functions.util';
 import baseApi from './index';
 
-export interface IPostApi {
-  status: string;
-  message: string;
-  data: any;
+const BASE_SERVICE = '/api/auth';
+
+const ApiName={
+  Login: `${BASE_SERVICE}/login`,
+  ForgotPassword: `${BASE_SERVICE}/forgot-password`,
+  CheckToken: `${BASE_SERVICE}/check-token`,
+  ResetPassword: `${BASE_SERVICE}/reset-password`,
+  Logout: `${BASE_SERVICE}/logout`,
+  CurrentUser: `${BASE_SERVICE}/me`,
 }
 
+export enum IRole{
+  SuperAdmin = 'Super Admin'
+}
+export interface IUser {
+  id: number
+  name: string
+  email:string
+  role: IRole
+  permissions: string
+  access_token: string
+}
 export interface LoginApiRequest {
   email: string;
   password: string;
 }
-export async function loginApi(request: LoginApiRequest): Promise<IPostApi> {
+export interface LoginResponse {
+  token: string;
+  user: IUser;
+}
+
+export async function loginApi(request: LoginApiRequest): Promise<LoginResponse> {
   try {
-    const response = await baseApi.post('/api/installer/login', request);
+    const response = await baseApi.post(ApiName.Login, request);
     return response.data;
   } catch (error: any) {
     throw error;
   }
 }
 
-export async function forgotPasswordApi(request: ForgotApiRequest): Promise<IPostApi> {
+export async function forgotPasswordApi(email: string ): Promise<any> {
   try {
-    const response = await baseApi.post('/api/forgot-password', request);
+    const response = await baseApi.post('/api/auth/forgot-password',{email} );
     return response.data;
   } catch (error: any) {
-    // showPopupError(error.message, "Oops! We Couldn't Find That Email", 'Try again');
+    showErrorMessage({message: error.message})
     throw error;
   }
 }
 
-export async function enterCodedApi(request: EnterCodeApiRequest): Promise<IPostApi> {
+interface EnterCodeApiRequest{
+  token: string;
+  email: string
+}
+export async function enterCodedApi(request: EnterCodeApiRequest): Promise<any> {
   try {
-    const response = await baseApi.post('/api/check-forget-token', request);
+    const response = await baseApi.post(ApiName.CheckToken, request);
     return response.data;
   } catch (error: any) {
-    // showPopupError(error.message, 'Incorrect Reset Code', 'Try again');
+    showErrorMessage({message: error.message})
     throw error;
   }
 }
 
-export async function changePasswordApi(request: ChangePasswordApiRequest): Promise<IPostApi> {
+export interface ResetPasswordRequest{
+  email: string;
+  token: string;
+  password: string;
+  password_confirmation: string;
+}
+export async function resetPasswordApi(request: ResetPasswordRequest): Promise<any> {
   try {
-    const response = await baseApi.patch(`/api/users/${request.userId}/change-password`, request.password);
+    const response = await baseApi.post(ApiName.ResetPassword, request);
     return response.data;
   } catch (error: any) {
-    // showPopupError(error.message);
+    showErrorMessage({message: error.message})
     throw error;
   }
 }
 
-export async function resetPasswordApi(request: ResetPasswordApiRequest): Promise<IPostApi> {
+export async function logoutApi(): Promise<any> {
   try {
-    const response = await baseApi.post(`/api/reset-password`, request);
+    const response = await baseApi.post(ApiName.Logout);
     return response.data;
   } catch (error: any) {
-    // showPopupError(error.message);
+    showErrorMessage({message: error.message})
     throw error;
   }
 }
 
-export async function logoutApi(): Promise<ResponseApi> {
+
+export async function getCurrentUserApi(): Promise<IUser> {
   try {
-    const response = await baseApi.post(`/api/logout`);
-    return response.data;
+    const response = await baseApi.get(ApiName.CurrentUser);
+    return response.data?.user;
   } catch (error: any) {
-    showPopupError(error.message);
+    showErrorMessage({message: error.message})
     throw error;
   }
 }

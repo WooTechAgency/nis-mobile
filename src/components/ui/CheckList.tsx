@@ -1,6 +1,6 @@
 import { images } from '@assets/images';
 import { Button, Image, Text } from '@components/ui';
-import { getMessageError } from '@utils/common';
+import { getMessageError } from '@utils/common.util';
 import React from 'react';
 import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { View } from 'react-native';

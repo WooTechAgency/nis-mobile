@@ -6,14 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ForgotPasswordProps, RouteName } from '@routes/types';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import BackToLogin from './components/back-to-login';
 import Logo from './components/logo';
-import { AuthWith, AuthWrapCls } from './login';
+import { AuthWrapCls } from './login';
+import { forgotPasswordApi } from '@services/authentication.service';
 
 const formSchema = yup.object().shape({
-  accountEmail: yup.string().required('Email address is required!').email('Email address is invalid'),
+  accountEmail: yup.string().required('Email address is required!').email('Invalid email format'),
 });
 
 export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
@@ -32,16 +33,15 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
   });
 
   const onNext = (data: any) => {
-    navigation.navigate(RouteName.EnterCode, { email: data.accountEmail });
-    // setLoading(true);
-    // forgotPasswordApi({ email: data.accountEmail })
-    //   .then(() => {
-    //     navigation.navigate(RouteName.EnterCode, { email: data.accountEmail });
-    //   })
-    //   .catch(() => { })
-    //   .finally(() => setLoading(false));
+    Keyboard.dismiss()
+    setLoading(true);
+    forgotPasswordApi(data.accountEmail)
+      .then(() => {
+        navigation.navigate(RouteName.EnterCode, { email: data.accountEmail });
+      })
+      .catch(() => { })
+      .finally(() => setLoading(false));
   };
-
 
   return (
     <View className='flex-1 bg-white'>
@@ -63,7 +63,7 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
               keyboardType='decimal-pad'
             />
             <Button
-              label='Next'
+              label='Send code'
               disabled={!isValid}
               onPress={handleSubmit(onNext)}
             />

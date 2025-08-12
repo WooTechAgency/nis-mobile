@@ -19,12 +19,10 @@ module.exports = {
       },
       colors: {
         primary: '#61DCDD',
-        secondary: '#122132',
-        secondary2: '#171717',
-        secondary3: '#121212',
-        secondary4: '#191919',
+        primary2: '#212B36',
         white: '#FFFFFF',
-        black: '#000000', //neutral100
+        black: '#000000',
+        black2: '#000000',
         black50s: 'rgba(0,0,0,0.5)',
         gray: '#666666',
         neutral2: 'rgba(250, 250, 250, 1)',
@@ -32,31 +30,21 @@ module.exports = {
         neutral10: '#FAFAFA',
         neutral20: '#DFDFDF',
         neutral25: '#D3D3D3',
+        neutral40: '#BEBEBE',
         neutral50: '#BEBEBE',
         neutral70: '#666666',
-        gray100: '#BEBEBE',
-        gray200: '#DFDFDF',
-        grayLight: '#F1F1F1',
-        des: '#9F9F9F',
-        violet: '#6F63FF', //Primary
-        violet1: '#8F86FF', //Primary50
-        violet2: '#BBB6FF', //Primary20
-        violet3: '#DDDAFF', //Primary10
-        violet4: '#F6F5FF', //Primary5
-        violet5: '#7162FF',
+        neutral80: '#000',
+        teal20: '#CAF3F4',
         border: '#BEBEBE',
         red: '#E80000',
         // green: '#2D6617',
-        green2: '#92D1AE',
-        green3: '#EAFAEB',
+        positive10: '#D7F6DD',
+        positive60: '#2FAE48',
+      
         btnDisable: '#DFDFDF',
         disable: '#DFDFDF',
-        bgViolet: '#F6F5FF',
-        orangeBg: '#FFE3BA',
         orange: '#FF9A02',
-        bgArea: 'rgb(250, 250, 250)',
         dropBack: 'rgba(0,0,0,0.1)',
-        alt1: '#FF9400',
       },
       fontFamily: {
         thin: ['Poppins-Thin'],

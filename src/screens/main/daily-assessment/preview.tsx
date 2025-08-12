@@ -3,7 +3,7 @@ import React from 'react'
 import { Button, Image, SafeAreaView, ScrollView, checkListTemp } from '@components/ui'
 import Header from '@components/header'
 import { useAssessmentContext } from './context'
-import { convertUTCDate } from '@utils/date'
+import { convertUTCDate } from '@utils/date.util'
 import { images } from '@assets/images'
 
 function Item({ label, value, classNameWrap }: { label: string, value?: string, classNameWrap?: string }) {

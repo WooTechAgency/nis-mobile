@@ -4,32 +4,33 @@ import { CommonModal } from '@components/modal';
 import { Button, Image, SafeAreaView, Text, View } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
+import { useAppSelector } from '@hooks/common';
 import { useToggle } from '@hooks/useToggle';
 import { StackActions } from '@react-navigation/native';
 import { navigate, navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { logoutApi } from '@services/authentication.service';
+import { useGetCurrentUser } from '@services/hooks/auth/useGetCurrentUser';
 import { setUserInfo } from '@store/slices/authenticationSlice';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AccountLogo from './components/account-logo';
 
 export default function Account() {
   const dispatch = useDispatch()
+
+  const { userInfo: cachedUser } = useAppSelector((state) => state.authentication)
+  const { data: latestUser } = useGetCurrentUser()
+  const userInfo = latestUser || cachedUser
   const query = useQueryClient()
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    formState: { errors, },
-  } = useForm({
+  const { control } = useForm({
     defaultValues: {
-      name: 'John',
-      company: 'NIS'
+      name: userInfo?.name,
+      role: userInfo?.role,
+      email: userInfo?.email,
     },
-    mode: 'onChange',
-    // resolver: yupResolverr(formSchema),
   });
   const [visibleLogout, toggleVisibleLogout] = useToggle()
 
@@ -37,10 +38,11 @@ export default function Account() {
     navigate(RouteName.ChangePassword)
   }
 
-  const onLogout = () => {
+  const onLogout = async () => {
+    logoutApi()
     dispatch(setUserInfo(null));
-    navigationRef.dispatch(StackActions.replace(RouteName.Login))
     query.clear();
+    navigationRef.dispatch(StackActions.replace(RouteName.Login))
   }
 
   return (
@@ -61,7 +63,6 @@ export default function Account() {
               <Image source={images.edit} className='w-8 h-8' />
               <Text className='text-[12px] font-semibold '>Edit</Text>
             </Button>
-            {/* <Button label='Edit' className='px-4' onPress={() => navigate(RouteName.UpdateAccount)} /> */}
           </View>
           <TextInput
             classNameWrap='mt-6'
@@ -70,6 +71,8 @@ export default function Account() {
             label='Name'
             labelOverlap
             disabled
+            labelCls='text-neutral70'
+            className='text-neutral80'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -78,6 +81,8 @@ export default function Account() {
             label='Company'
             labelOverlap
             disabled
+            labelCls='text-neutral70'
+            className='text-neutral80'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -86,6 +91,8 @@ export default function Account() {
             label='Role'
             labelOverlap
             disabled
+            labelCls='text-neutral70'
+            className='text-neutral80'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -94,6 +101,8 @@ export default function Account() {
             label='Email Address'
             labelOverlap
             disabled
+            labelCls='text-neutral70'
+            className='text-neutral80'
           />
           <TextInput
             classNameWrap='mt-6'
@@ -102,6 +111,8 @@ export default function Account() {
             label='Phone Number'
             labelOverlap
             disabled
+            labelCls='text-neutral70'
+            className='text-neutral80'
           />
           <View className='mt-6 flex-row gap-x-6'>
             <Button label='Change Password' onPress={onChangePassword} type='outlined' className='flex-1' classNameLabel='' />
@@ -124,7 +135,6 @@ export default function Account() {
           onPositive={onLogout}
         />
       </View>
-
     </SafeAreaView>
   )
 }

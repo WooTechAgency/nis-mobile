@@ -11,7 +11,7 @@ import { EnterNewPasswordProps } from '@routes/types';
 import { resetPasswordApi } from '@services/authentication.service';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import Logo from './components/logo';
 import BackToLogin from './components/back-to-login';
@@ -20,6 +20,10 @@ import { useToggle } from '@hooks/useToggle';
 import { AuthWrapCls } from './login';
 import { colors } from '@constants/colors.constants';
 
+interface Form {
+  newPassword: string;
+  confirmPassword: string;
+}
 
 const formSchema = yup.object().shape({
   newPassword: yup
@@ -35,7 +39,7 @@ const formSchema = yup.object().shape({
 });
 
 export default function EnterNewPassword({ navigation, route }: EnterNewPasswordProps) {
-  const { code } = route.params;
+  const { code, email } = route.params;
   const [loading, setLoading] = useState(false);
   const [showNewPassword, toggleNewPassword] = useToggle(false);
   const [showConfirmPassword, toggleConfirmPassword] = useToggle(false);
@@ -49,7 +53,6 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
     resolver: yupResolver(formSchema),
   });
 
-
   const toggleSuccessPopup = () => {
     setVisibleSuccessPopup(!visibleSuccessPopup);
     if (visibleSuccessPopup) {
@@ -57,15 +60,18 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
     }
   };
 
-  const onSavePassword = (data: any) => {
+  const onSavePassword = (data: Form) => {
+    Keyboard.dismiss()
     setLoading(true);
     resetPasswordApi({
       token: code,
-      new_password: data.newPassword,
-      new_password_confirmation: data.newPassword,
+      email,
+      password: data.newPassword,
+      password_confirmation: data.newPassword,
     })
       .then(() => {
-        showSuccess({ title: 'Your password has been reset', message: 'You can now use your new password to log in' })
+        showSuccess({ title: 'Your password has been reset' })
+        navigation.dispatch(StackActions.popToTop());
       })
       .finally(() => setLoading(false));
   };

@@ -13,4 +13,8 @@ export const images = {
   radio: require('./sources/radio.png'),
   radioChecked: require('./sources/radioChecked.png'),
   edit: require('./sources/edit.png'),
+  dailyAssessment: require('./sources/dailyAssessment.png'),
+  dashboard: require('./sources/dashboard.png'),
+  incident: require('./sources/incident.png'),
+  setting: require('./sources/setting.png'),
 };

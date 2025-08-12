@@ -36,7 +36,7 @@ export type RootStackParamList = {
   [RouteName.Login]: undefined;
   [RouteName.ForgotPassword]: undefined;
   [RouteName.EnterCode]: {email: string};
-  [RouteName.EnterNewPassword]: { code: string};
+  [RouteName.EnterNewPassword]: { code: string,email: string};
 };
 
 // type
