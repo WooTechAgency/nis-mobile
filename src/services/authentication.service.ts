@@ -112,7 +112,6 @@ export async function logoutApi(): Promise<any> {
   }
 }
 
-
 export async function getCurrentUserApi(): Promise<IUser> {
   try {
     const response = await baseApi.get(ApiName.CurrentUser);

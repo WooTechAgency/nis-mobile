@@ -1,5 +1,9 @@
 import { Config } from '@constants/config.constants';
+import { showError, showSuccess } from '@lib/toast';
+import { navigationRef } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import { store } from '@store/index';
+import { setUserInfo } from '@store/slices/authenticationSlice';
 import axios, { AxiosHeaders, AxiosResponse, HttpStatusCode, RawAxiosRequestHeaders } from 'axios';
 
 export const api = axios.create({
@@ -13,6 +17,7 @@ api.interceptors.request.use(function (config) {
   const token = config.headers?.Authorization?.toString().replace('Bearer ', '')
   if (!token) {
     const token = store.getState().authentication.userInfo?.token;
+    console.log('token231321 ',token)
     config.headers.Authorization = 'Bearer ' + token;
   }
   return config;
@@ -85,7 +90,9 @@ const handlingResponse = (response: AxiosResponse): Promise<ResponseApi> =>
 const handleError = (data: any): Promise<ResponseApi> =>
   new Promise((resolve, reject) => {
     if (axios.isAxiosError(data) && data.response?.status === HttpStatusCode.Unauthorized) {
-      // return store.dispatch(setAccessToken(''));
+       store.dispatch(setUserInfo(null));
+       showError({title: 'Session expired, please login again.'});
+       navigationRef.reset({index: 0, routes: [{ name: RouteName.Login }]})
     } else {
       // isShowError && showPopupError(data.response?.data.message);
       return reject(data.response?.data);

@@ -13,27 +13,29 @@ import { logoutApi } from '@services/authentication.service';
 import { useGetCurrentUser } from '@services/hooks/auth/useGetCurrentUser';
 import { setUserInfo } from '@store/slices/authenticationSlice';
 import { useQueryClient } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AccountLogo from './components/account-logo';
 
 export default function Account() {
   const dispatch = useDispatch()
-
   const { userInfo: cachedUser } = useAppSelector((state) => state.authentication)
   const { data: latestUser } = useGetCurrentUser()
-  const userInfo = latestUser || cachedUser
   const query = useQueryClient()
-  const { control } = useForm({
-    defaultValues: {
-      name: userInfo?.name,
-      role: userInfo?.role.name,
-      email: userInfo?.email,
-      phone: userInfo?.phone,
-      company: userInfo?.company?.name,
-    },
-  });
+  const { control, setValue } = useForm();
+
+  useEffect(() => {
+    if (latestUser || cachedUser) {
+      const userInfo = latestUser || cachedUser
+      setValue('name', userInfo?.name)
+      setValue('role', userInfo?.role?.name)
+      setValue('email', userInfo?.email)
+      setValue('phone', userInfo?.phone)
+      setValue('company', userInfo?.company?.name)
+    }
+  }, [latestUser, cachedUser])
+
   const [visibleLogout, toggleVisibleLogout] = useToggle()
 
   const onChangePassword = () => {

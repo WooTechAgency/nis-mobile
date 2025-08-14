@@ -40,7 +40,7 @@ export default function Login() {
     defaultValues: {
       email: mmkv.getString(MMKV_KEY.EMAIL),
     },
-    mode: 'onChange',
+    mode: 'onBlur',
     resolver: yupResolver(formSchema),
   });
 
@@ -103,8 +103,7 @@ export default function Login() {
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  // tintColor={'red'}
-                  tintColor={!!errors.password?.message ? 'red' : (visiblePassword ? colors.primary : 'gray')}
+                  tintColor={(visiblePassword ? colors.primary : 'gray')}
                 />
               </Button>
             }

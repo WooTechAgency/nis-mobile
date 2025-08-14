@@ -3,7 +3,7 @@ import { Button, Image, SafeAreaView, ScrollView, Text, View } from '@components
 import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { goBack } from '@routes/navigationRef';
+import { goBack, navigate } from '@routes/navigationRef';
 import { useGetCurrentUser } from '@services/hooks/auth/useGetCurrentUser';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
@@ -12,6 +12,11 @@ import * as yup from 'yup';
 import AccountLogo from './components/account-logo';
 import { images } from '@assets/images';
 import { updateUserApi } from '@services/user.service';
+import Loading from '@components/ui/Loading';
+import { showSuccess } from '@lib/toast';
+import { useAppDispatch, useAppSelector } from '@hooks/common';
+import { setUserInfo } from '@store/slices/authenticationSlice';
+import { QUERY_KEY } from '@constants/keys.constants';
 
 interface Form {
   name: string;
@@ -25,14 +30,16 @@ const formSchema = yup.object().shape({
   company: yup.string().notRequired(),
   role: yup.string().notRequired(),
   phone: yup.string().notRequired(),
-  email: yup.string().required('Email address is required').email('Invalid email format'),
+  email: yup.string().notRequired(),
 });
 
 export default function UpdateAccount() {
+  const { userInfo: cachedUser } = useAppSelector((state) => state.authentication)
+
   const { data: userInfo } = useGetCurrentUser()
-  console.log('userInfo ', userInfo)
   const [loading, setLoading] = useState(false)
   const query = useQueryClient()
+  const dispatch = useAppDispatch()
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: userInfo?.name,
@@ -46,21 +53,19 @@ export default function UpdateAccount() {
   });
 
 
-  const onUpdateProfile = (data: Form) => {
+  const onUpdateProfile = async (data: Form) => {
     if (!userInfo?.id) return;
     try {
       const payload = {
-        _method: 'PUT',
         name: data?.name?.trim(),
         phone: data?.phone?.trim(),
-        email: data?.email?.trim() ?? undefined,
-      }
-      // Do not update email if it is the same
-      if (data?.email?.trim() === userInfo?.email.trim()) {
-        delete payload.email;
       }
       setLoading(true);
-      updateUserApi(userInfo?.id, payload)
+      const newUserInfo = await updateUserApi(userInfo?.id, payload)
+      showSuccess({ title: 'Profile updated successfully!' })
+      dispatch(setUserInfo({ ...cachedUser, ...newUserInfo }))
+      query.invalidateQueries({ queryKey: [QUERY_KEY.CURRENT_USER] })
+      goBack()
     } finally {
       setLoading(false)
     }
@@ -113,6 +118,7 @@ export default function UpdateAccount() {
               name='email'
               label='Email Address'
               labelOverlap
+              disabled
             />
             <TextInput
               classNameWrap='mt-6'
@@ -120,6 +126,7 @@ export default function UpdateAccount() {
               name='phone'
               label='Phone Number'
               labelOverlap
+              keyboardType='phone-pad'
             />
             <View className='mt-6 flex-row gap-x-4'>
               <Button label='Cancel' onPress={goBack} type='outlined' className='flex-1' classNameLabel='' />
@@ -130,11 +137,9 @@ export default function UpdateAccount() {
               />
             </View>
           </View>
-
         </View>
       </ScrollView>
-
-
+      <Loading loading={loading} />
     </SafeAreaView>
   )
 }

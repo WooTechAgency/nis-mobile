@@ -18,6 +18,8 @@ import { showSuccess } from '@lib/toast';
 import Header from '@components/header';
 import { useToggle } from '@hooks/useToggle';
 import { goBack } from '@routes/navigationRef';
+import { changePasswordApi } from '@services/user.service';
+import { colors } from '@constants/colors.constants';
 
 
 interface Form {
@@ -43,7 +45,6 @@ export default function ChangePassword() {
   const [showCurrentPassword, toggleCurrentPassword] = useToggle(false);
   const [showNewPassword, toggleNewPassword] = useToggle(false);
   const [showConfirmPassword, toggleConfirmPassword] = useToggle(false);
-  const [visibleSuccessPopup, setVisibleSuccessPopup] = useState(false);
   const {
     control,
     handleSubmit,
@@ -53,29 +54,18 @@ export default function ChangePassword() {
     resolver: yupResolver(formSchema),
   });
 
-
-  const toggleSuccessPopup = () => {
-    setVisibleSuccessPopup(!visibleSuccessPopup);
-    if (visibleSuccessPopup) {
-      onBackToLogin();
-    }
-  };
-
   const onSavePassword = (data: Form) => {
-    // setLoading(true);
-    // resetPasswordApi({
-    //   token: code,
-    //   new_password: data.newPassword,
-    //   new_password_confirmation: data.newPassword,
-    // })
-    //   .then(() => {
-    //     showSuccess({ title: 'Your password has been reset', message: 'You can now use your new password to log in' })
-    //   })
-    //   .finally(() => setLoading(false));
-  };
-
-
-  const onBackToLogin = () => {
+    setLoading(true);
+    changePasswordApi({
+      current_password: data.currentPassword,
+      new_password: data.newPassword,
+      new_password_confirmation: data.confirmPassword,
+    })
+      .then(() => {
+        showSuccess({ title: 'Password updated successfully!' })
+        goBack()
+      })
+      .finally(() => setLoading(false));
   };
 
   const isPasswordError = errors.newPassword?.message;
@@ -86,12 +76,7 @@ export default function ChangePassword() {
         <Header
           isBack
           title='Change password'
-          rightComponent={
-            <View className='flex-row gap-x-4'>
-              <Button label='Cancel' type='outlined' onPress={goBack} />
-              <Button label='Save' onPress={handleSubmit(onSavePassword)} />
-            </View>
-          }
+
         />
         <View className='px-5'>
           <TextInput
@@ -109,7 +94,8 @@ export default function ChangePassword() {
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={!!errors.newPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                  // tintColor={(showNewPassword ? colors.primary : 'gray')}
+                  tintColor={showCurrentPassword ? colors.primary : 'gray'}
                 />
               </Button>
             }
@@ -129,7 +115,7 @@ export default function ChangePassword() {
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={!!errors.newPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                  tintColor={(showNewPassword ? colors.primary : 'gray')}
                 />
               </Button>
             }
@@ -142,7 +128,7 @@ export default function ChangePassword() {
             isShowError={true}
             name='confirmPassword'
             label='Confirm Password'
-            placeholder='Enter your new password'
+            placeholder='Re-enter your new password'
             secureTextEntry={!showConfirmPassword}
             labelOverlap
             iconRight={
@@ -150,21 +136,18 @@ export default function ChangePassword() {
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  tintColor={!!errors.confirmPassword?.message ? '#E80000' : (showNewPassword ? '#6F63FF' : 'gray')}
+                  tintColor={showConfirmPassword ? colors.primary : 'gray'}
                 />
               </Button>
             }
           />
+          <View className='flex-row gap-x-4 mt-6'>
+            <Button label='Cancel' type='outlined' onPress={goBack} className='flex-1' />
+            <Button label='Save' disabled={!isValid} onPress={handleSubmit(onSavePassword)} className='flex-1' />
+          </View>
         </View>
       </ScrollView>
       <Loading loading={loading} />
-      <CommonModal
-        visible={visibleSuccessPopup}
-        toggleModal={toggleSuccessPopup}
-        title='Your password has been reset'
-        des='You can now use your new password to log in'
-        wrapperClassName='py-[40] px-[32] sm:py-[32] sm:px-[28] '
-      />
     </SafeAreaView>
   );
 }
