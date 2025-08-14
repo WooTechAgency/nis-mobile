@@ -19,4 +19,10 @@ export const images = {
   incident: require('./sources/incident.png'),
   setting: require('./sources/setting.png'),
   job: require('./sources/job.png'),
+  date: require('./sources/date.png'),
+  arrowDown: require('./sources/arrowDown.png'),
+  filter: require('./sources/filter.png'),
+  search: require('./sources/search.png'),
+  warning: require('./sources/warning.png'),
+  location: require('./sources/location.png'),
 };

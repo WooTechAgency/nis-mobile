@@ -33,10 +33,13 @@ export interface ChangePasswordRequest {
   new_password: string;
   new_password_confirmation: string;
 }
-export async function changePasswordApi(request: ChangePasswordRequest): Promise<any> {
+export interface ChangePasswordResponse{
+  token: string
+}
+export async function changePasswordApi(request: ChangePasswordRequest): Promise<ChangePasswordResponse> {
   try {
     const response = await baseApi.post(ApiName.ChangePassword, request);
-    return response.data?.data;
+    return response.data;
   } catch (error: any) {
     showErrorMessage({ message: error.message })
     throw error;

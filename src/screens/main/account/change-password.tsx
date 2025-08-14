@@ -1,26 +1,21 @@
 import { images } from '@assets/images';
-import { CommonModal } from '@components/modal';
-import { Back, Button, Image, SafeAreaView, ScrollView, Text } from '@components/ui';
+import { Button, Image, SafeAreaView, ScrollView, Text } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
-import { isIpad } from '@constants/app.constants';
 import { PATTERN } from '@constants/pattern.constant';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { StackActions } from '@react-navigation/native';
-import { EnterNewPasswordProps } from '@routes/types';
-import { resetPasswordApi } from '@services/authentication.service';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
-
-import { showSuccess } from '@lib/toast';
 import Header from '@components/header';
+import { colors } from '@constants/colors.constants';
+import { useAppDispatch, useAppSelector } from '@hooks/common';
 import { useToggle } from '@hooks/useToggle';
+import { showSuccess } from '@lib/toast';
 import { goBack } from '@routes/navigationRef';
 import { changePasswordApi } from '@services/user.service';
-import { colors } from '@constants/colors.constants';
-
+import { setUserInfo } from '@store/slices/authenticationSlice';
 
 interface Form {
   currentPassword: string;
@@ -41,6 +36,8 @@ const formSchema = yup.object().shape({
 });
 
 export default function ChangePassword() {
+  const dispatch = useAppDispatch();
+  const { userInfo: cachedUser } = useAppSelector((state) => state.authentication)
   const [loading, setLoading] = useState(false);
   const [showCurrentPassword, toggleCurrentPassword] = useToggle(false);
   const [showNewPassword, toggleNewPassword] = useToggle(false);
@@ -61,8 +58,9 @@ export default function ChangePassword() {
       new_password: data.newPassword,
       new_password_confirmation: data.confirmPassword,
     })
-      .then(() => {
+      .then((res) => {
         showSuccess({ title: 'Password updated successfully!' })
+        dispatch(setUserInfo({ ...cachedUser, token: res.token }))
         goBack()
       })
       .finally(() => setLoading(false));
@@ -94,7 +92,6 @@ export default function ChangePassword() {
                 <Image
                   source={images.eye}
                   className='w-[32] h-[32]'
-                  // tintColor={(showNewPassword ? colors.primary : 'gray')}
                   tintColor={showCurrentPassword ? colors.primary : 'gray'}
                 />
               </Button>

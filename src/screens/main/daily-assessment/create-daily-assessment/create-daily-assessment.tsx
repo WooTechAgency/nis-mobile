@@ -51,23 +51,23 @@ export default function CreateDailyAssessment() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView className='bg-neutral-100'>
       <ScrollView scrollEnabled={enableScroll}>
         <Header title='DSRA-001' isBack onCustomBack={onBack} />
-        <View className='flex-row self-center mt-4'>
+        <View className='flex-row bg-white mt-4 p-6 rounded-[20px]'>
           {Object.entries(steps).map(([key, value]) => {
             const selected = key === String(selectedIndex)
             const lastItem = key === String(DailyAssessmentSteps.Signing)
             const completed = completedSteps?.includes(Number(key))
             return (
-              <View key={key} className='flex-row items-center'>
-                <View className=' items-center'>
-                  <View className={`w-10 h-10 rounded-full border justify-center items-center ${completed && 'bg-primary border-0'} ${selected && 'border-primary'}`}>
-                    <Text className={`${completed && 'text-white'} ${selected && 'text-primary'}`}>{key}</Text>
+              <View key={key} className={`flex-row items-center ${key !== '5' && 'flex-grow '}`}>
+                <View className='items-center'>
+                  <View className={`w-[31px] h-[31px] rounded-full border center ${completed && 'bg-primary border-0'} ${selected && 'border-primary'}`}>
+                    <Text className={`font-medium ${completed && 'text-white'} ${selected && 'text-primary'}`}>{key}</Text>
                   </View>
                   <Text className='mt-1'>{value}</Text>
                 </View>
-                {!lastItem && <View className='h-[1px] w-[60px] bg-red mx-4' />}
+                {!lastItem && <View className='h-[1px] flex-1  bg-neutral50 mx-4 -mt-5' />}
               </View>
             )
           })}

@@ -28,6 +28,7 @@ module.exports = {
         neutral2: 'rgba(250, 250, 250, 1)',
         neutral5: '#F1F1F1',
         neutral10: '#FAFAFA',
+        neutral15: '#F5F5F5',
         neutral20: '#DFDFDF',
         neutral25: '#D3D3D3',
         neutral40: '#BEBEBE',
@@ -39,11 +40,13 @@ module.exports = {
         red: '#E80000',
         // green: '#2D6617',
         positive10: '#D7F6DD',
+        positive30: '#9BE8AB',
         positive60: '#2FAE48',
       
         btnDisable: '#DFDFDF',
         disable: '#DFDFDF',
-        orange: '#FF9A02',
+        orange10: '#FFDB80',
+        orange2: '#FF9A02',
         dropBack: 'rgba(0,0,0,0.1)',
       },
       fontFamily: {

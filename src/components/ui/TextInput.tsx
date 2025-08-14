@@ -48,7 +48,7 @@ export function TextInput(props: Props) {
     autoCapitalize,
     isShowError = true,
     isShowClose,
-    labelOverlap,
+    labelOverlap = true,
     hasVoice,
     classNameInput,
     setValue
@@ -86,10 +86,9 @@ export function TextInput(props: Props) {
       {label &&
         <Text className={`text-[12px] text-neutral70 px-1 mb-1
         ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'} 
-        ${disabled && 'text-neutral40'} 
+        ${disabled && 'text-[#BEBEBE]'} 
         ${labelCls}
         ${messageError && 'text-red'}
-     
         `}
         >
           {label}
@@ -121,26 +120,28 @@ export function TextInput(props: Props) {
         {iconLeft && iconLeft}
         {iconRight && iconRight}
         {isShowClose && field.value && <Image onPress={resetInput} source={images.close} className='w-12 h-12 ' classNameButton='absolute right-1 top-1' />}
+        {hasVoice &&
+          <View className='flex-row mt-2 gap-x-4 absolute right-4 bottom-4 z-50 bg-white'>
+            <Button
+              className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+              onPress={onUseVoice}
+            >
+              <Image source={images.dashboard} className='w-8 h-8' />
+              <Text className='text-[12px] font-medium '>Use Voice</Text>
+            </Button>
+            <Button
+              className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+              onPress={onEnhanceAI}
+            >
+              <Image source={images.dashboard} className='w-8 h-8' />
+              <Text className='text-[12px] font-medium '>AI enhance</Text>
+            </Button>
+          </View>
+        }
+
       </View>
       {isShowError && messageError && <Text className='text-red text-[12px] mt-2 ml-4'>{messageError}</Text>}
-      {hasVoice &&
-        <View className='flex-row mt-2 gap-x-4'>
-          <Button
-            className='flex-row items-center p-2.5 bg-primary gap-x-2 rounded-[8px] '
-            onPress={onUseVoice}
-          >
-            <Image source={images.success} className='w-5 h-5' />
-            <Text className='text-[12px] font-medium text-white'>Use Voice</Text>
-          </Button>
-          <Button
-            className='flex-row items-center p-2.5 bg-violet gap-x-2 rounded-[8px] '
-            onPress={onEnhanceAI}
-          >
-            <Image source={images.success} className='w-5 h-5' />
-            <Text className='text-[12px] font-medium text-white'>AI enhance</Text>
-          </Button>
-        </View>
-      }
+
     </View>
   );
 }

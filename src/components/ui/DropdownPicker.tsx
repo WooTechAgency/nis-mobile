@@ -6,6 +6,7 @@ import { Keyboard, View } from 'react-native';
 import DropDownPickerComponent, { DropDownDirectionType } from 'react-native-dropdown-picker';
 import { Text } from './Text';
 import { getMessageError } from '@utils/common.util';
+import { colors } from '@constants/colors.constants';
 
 export type DropDownType = {
   value: string | number;
@@ -71,18 +72,20 @@ export const DropdownPicker = memo((props: Props) => {
   return (
     <View className={`z-50 ${classNameWrap}`}>
       <>
-        {!!label &&
-          <View className='flex-row items-center justify-between'>
-            <View className='flex-row'>
-              <Text className={`text-blueLight3  ${labelCls}`}>{label}</Text>
-              {required && <Text className='text-red ml-1 text-[16px]'>*</Text>}
-            </View>
-          </View>
+        {label &&
+          <Text className={`text-[12px] text-neutral70 px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
+        ${disabled && 'text-neutral40'} 
+        ${labelCls}
+        ${messageError && 'text-red'}
+        `}>
+            {label}
+          </Text>
         }
         <DropDownPickerComponent
           disabled={disabled}
           onPress={() => Keyboard.dismiss()}
           open={open}
+          containerStyle={{ zIndex: 1 }}
           items={[...(listValue || [])]}
           setOpen={setOpen}
           value={displayValue}
@@ -91,35 +94,34 @@ export const DropdownPicker = memo((props: Props) => {
           placeholder={placeholder}
           dropDownDirection={dropDownDirection || 'AUTO'}
           placeholderStyle={{
-            color: '#7C8DA6',
+            color: colors.gray,
             fontSize: isIpad ? 16 : 14,
           }}
           disableBorderRadius={false}
           style={{
-            zIndex: 50,
+            zIndex: 10,
             backgroundColor: 'white',
             paddingHorizontal: 12,
             borderWidth: 1,
-            borderColor: '#D9D9D9',
-            height: isIpad ? 64 : 50,
-            borderRadius: 4,
-            marginTop: 6,
-          }}
+            borderColor: colors.border,
+            height: 56,
+            borderRadius: 14,
+          }} Date
           labelStyle={{
-            color: '#042659',
+            color: colors.black,
             fontSize: isIpad ? 16 : 14,
           }}
           listParentContainerStyle={{
             borderWidth: 1,
-            borderColor: '#D9D9D9',
+            borderColor: colors.border,
           }}
           listItemLabelStyle={{
-            color: '#042659',
+            color: colors.gray,
             fontSize: isIpad ? 16 : 14,
             borderColor: 'white',
           }}
           dropDownContainerStyle={{
-            borderColor: '#D9D9D9',
+            borderColor: colors.border,
             marginTop: 10,
             backgroundColor: 'white',
             // shadow
@@ -129,10 +131,11 @@ export const DropdownPicker = memo((props: Props) => {
             shadowColor: 'rgba(0, 0, 50, 0.2)',
             overflow: 'visible',
           }}
-          arrowIconStyle={{ tintColor: '#042659' }}
-          tickIconStyle={{ tintColor: '#042659' }}
+          arrowIconStyle={{ tintColor: colors.gray }}
+          tickIconStyle={{ tintColor: colors.black }}
           selectedItemLabelStyle={{
             fontWeight: '600',
+            color: colors.black
           }}
           listMessageTextStyle={{
             color: '#042659',

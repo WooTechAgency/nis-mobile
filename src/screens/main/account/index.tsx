@@ -17,6 +17,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AccountLogo from './components/account-logo';
+import { colors } from '@constants/colors.constants';
 
 export default function Account() {
   const dispatch = useDispatch()
@@ -50,7 +51,7 @@ export default function Account() {
   }
 
   return (
-    <SafeAreaView className='bg-neutral-100'>
+    <SafeAreaView className={``}>
       <Header title='Account details' />
       <View
         className='flex-row items-start gap-x-8 mt-6 bg-white p-6 rounded-[20px] '

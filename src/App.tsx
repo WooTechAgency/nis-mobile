@@ -10,6 +10,7 @@ import { persistor, store } from './store';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@lib/toast';
 import ErrorModal from '@components/modal/error-modal';
+import { PaperProvider } from 'react-native-paper';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,19 +24,20 @@ if (__DEV__) {
   require("../ReactotronConfig");
 }
 
-
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <SafeAreaProvider>
-          <QueryClientProvider client={queryClient}>
-            <GestureHandlerRootView className='flex-1'>
-              <RootNavigator />
-              <Toast config={toastConfig} position='bottom' />
-              <ErrorModal />
-            </GestureHandlerRootView>
-          </QueryClientProvider>
+          <PaperProvider>
+            <QueryClientProvider client={queryClient}>
+              <GestureHandlerRootView className='flex-1'>
+                <RootNavigator />
+                <Toast config={toastConfig} position='bottom' />
+                <ErrorModal />
+              </GestureHandlerRootView>
+            </QueryClientProvider>
+          </PaperProvider>
         </SafeAreaProvider>
       </PersistGate>
     </Provider>

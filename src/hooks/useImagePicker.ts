@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import {
   launchImageLibrary,
   launchCamera,
@@ -8,11 +9,18 @@ import {
   type ImagePickerResponse,
 } from 'react-native-image-picker';
 
-export function useImagePicker() {
-  const [assets, setAssets] = useState<Asset[] | null>(null);
+interface UseImagePicker{
+  setValue: UseFormSetValue<any>;
+  name: string;
+  control: Control<any, any>;
+}
+export function useImagePicker({name,setValue,control}: UseImagePicker) {
+  // const [assets, setAssets] = useState<Asset[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [didCancel, setDidCancel] = useState(false);
+
+  const currentMedias = useWatch({control, name}) || [];
 
   const handleResponse = (response: ImagePickerResponse) => {
     setLoading(false);
@@ -28,7 +36,7 @@ export function useImagePicker() {
       return;
     }
     if (response.assets) {
-      setAssets(response.assets);
+      setValue(name, [...currentMedias,...response.assets]);
     }
   };
 
@@ -39,14 +47,14 @@ export function useImagePicker() {
       launchImageLibrary(
         {
           mediaType: 'photo',
-          selectionLimit: 1,
+          selectionLimit: 10,
           includeBase64: false,
           ...options,
         },
         handleResponse,
       );
     },
-    [],
+    [currentMedias],
   );
 
   const takePhoto = useCallback(
@@ -66,14 +74,12 @@ export function useImagePicker() {
   );
 
   const clear = useCallback(() => {
-    setAssets(null);
     setError(null);
     setDidCancel(false);
     setLoading(false);
   }, []);
 
   return {
-    assets,
     error,
     loading,
     didCancel,

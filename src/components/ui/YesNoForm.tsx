@@ -20,7 +20,7 @@ interface Props {
 const commonWrapCls = 'w-[100px] h-[60px] rounded-[10px] justify-center items-center border'
 const commonLabelCls = 'font-bold text-[20px]'
 export function YesNoForm(props: Props) {
-  const { setValue, name, control, label, classNameWrap, isRadio } = props;
+  const { setValue, name, control, label, classNameWrap, isRadio, labelCls } = props;
   const value = useWatch({ name, control, });
   console.log('value ', value)
 
@@ -33,22 +33,26 @@ export function YesNoForm(props: Props) {
   };
   if (isRadio) {
     return (
-      <View className={`flex-row items-center gap-x-6 ${classNameWrap}`}>
-        <Text>{label}</Text>
+      <View className={`flex-row items-center border border-neutral40 px-4 rounded-[14px] gap-x-11 h-[56px] ${classNameWrap}`}>
+        {label &&
+          <Text className={`text-[12px] text-neutral70 px-1 mb-1 absolute left-4 -top-2 bg-white z-10 ${labelCls}`} >
+            {label}
+          </Text>
+        }
         {/* Yes */}
         <Button
           className='flex-row items-center gap-x-2'
           onPress={onYes}
         >
-          <Image source={value ? images.radioChecked : images.radio} className='w-5 h-5' />
-          <Text className='text-base'>{'Yes'}</Text>
+          <Image source={value ? images.radioChecked : images.radio} className='w-6 h-6' />
+          <Text className='text-base text-neutral70'>{'Yes'}</Text>
         </Button>
         <Button
           className='flex-row items-center gap-x-2'
           onPress={onNo}
         >
-          <Image source={!value ? images.radioChecked : images.radio} className='w-5 h-5' />
-          <Text className='text-base'>{'No'}</Text>
+          <Image source={!value ? images.radioChecked : images.radio} className='w-6 h-6' />
+          <Text className='text-base text-neutral70'>{'No'}</Text>
         </Button>
       </View>
     )

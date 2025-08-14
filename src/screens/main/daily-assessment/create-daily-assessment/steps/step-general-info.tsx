@@ -9,6 +9,7 @@ import { DailyAssessment, DailyAssessmentSteps, useAssessmentContext } from '../
 import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { DatePickerInput } from '@components/ui/DatePickerInput';
 import { IDropdown } from '@constants/interface';
+import { shadowStyle } from '@constants/config.constants';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -26,12 +27,12 @@ export interface GeneralForm {
 }
 
 const formSchema = yup.object().shape({
-  location: yup.string().required('Location is required'),
+  location: yup.object().required('Location is required'),
   date: yup.date().required('Date is required'),
   leader: yup.object().required('Site team leader is required'),
   project: yup.string().required('Project is required'),
   contractor: yup.string().required('Principal contractor is required'),
-  methodStatement: yup.object().required('Method statement is required'),
+  methodStatement: yup.string().required('Method statement is required'),
   description: yup.string().required('Description is required'),
 });
 export default function StepGeneralInformation() {
@@ -58,15 +59,16 @@ export default function StepGeneralInformation() {
   }
 
   return (
-    <View className='mt-8'>
-      <Text className='text-[25px] font-semibold'>General Information</Text>
-      <TextInput
+    <View className='mt-8 px-6 pb-6 pt-5 bg-white rounded-[20px]' style={shadowStyle}>
+      <Text className='text-[25px] font-semibold'>General</Text>
+      <DropdownPicker
         classNameWrap='mt-6'
-        errors={errors}
+        setValue={setValue}
         control={control}
         name='location'
         label='Site Location'
-        placeholder='Enter site location'
+        placeholder="Select site location"
+        listValue={currentEmploymentStatus}
       />
       <DatePickerInput
         label='Date'
@@ -78,14 +80,14 @@ export default function StepGeneralInformation() {
         placeholder="Date"
         errors={errors}
       />
-      <DropdownPicker
+      <TextInput
         classNameWrap='mt-6'
-        setValue={setValue}
+        errors={errors}
         control={control}
         name='leader'
         label='Site Team Leader'
         placeholder="Select site team leader"
-        listValue={currentEmploymentStatus}
+        disabled
       />
       <TextInput
         classNameWrap='mt-6'
@@ -103,15 +105,16 @@ export default function StepGeneralInformation() {
         label='Principal Contractor'
         placeholder='Enter principal contractor'
       />
-      <DropdownPicker
+      <TextInput
         classNameWrap='mt-6'
-        setValue={setValue}
+        errors={errors}
         control={control}
         name='methodStatement'
         label='Safe Work Method Statement'
-        placeholder="Select site team leader"
-        listValue={currentEmploymentStatus}
+        placeholder='Safe Work Method Statement'
+        disabled
       />
+
       <TextInput
         classNameWrap='mt-6'
         errors={errors}

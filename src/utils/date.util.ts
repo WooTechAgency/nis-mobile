@@ -20,3 +20,12 @@ export const convertUTCDate = (value?: Date | string) => {
 
   return dayjs(date).format('MMM-DD-YYYY');
 };
+
+export const convertDDMMYYYY = (value?: Date | string) => {
+  let date = new Date();
+  if (value) {
+    date = new Date(value);
+  }
+
+  return dayjs(date).format('DD/MM/YYYY');
+};

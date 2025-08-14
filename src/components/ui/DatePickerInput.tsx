@@ -86,27 +86,30 @@ export function DatePickerInput(props: Props) {
   return (
     <View className={wrapCls}>
       {label &&
-        <View className='flex-row'>
-          <Text className={'text-blueLight3'}>{label || 'Timestamp'}</Text>
-          {required && <Text className='text-red ml-1 text-[16px]'>*</Text>}
-        </View>
+        <Text className={`text-[12px] text-neutral70 px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
+        ${!editable && 'text-neutral40'} 
+        ${messageError && 'text-red'}
+        `}>
+          {label}
+        </Text>
       }
       <Button
         onPress={onClickPicker}
         disabled={!editable}
-        className={`flex-row items-center gap-x-3 bg-white px-3 border border-border mt-[6] h-[54]  rounded ${className}`}
+        className={`flex-row items-center gap-x-3 bg-white rounded-[14px] border border-border h-[54] px-4  ${className}`}
       >
-        <Image source={images.success} className='w-5 h-5' />
         {placeholder && !field.value ? (
-          <Text className="text-[14px] sm:text-[16px]  text-gray">{placeholder}</Text>
+          <Text className="sm:text-[16px] text-gray">{placeholder}</Text>
         ) : (
           <Text
-            className={`text-[14px] sm:text-[16px] text-blueBold  ${classNameText} ${isTextCenter && 'text-center'}`}
+            className={`sm:text-[16px]  ${classNameText} ${isTextCenter && 'text-center'}`}
             numberOfLines={1}
           >
             {customDisplayValue ? customDisplayValue : renderDefault()}
           </Text>
         )}
+        <View className='flex-1' />
+        <Image source={images.date} className='w-4 h-4' />
       </Button>
       <DatePicker
         open={open}
