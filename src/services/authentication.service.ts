@@ -12,16 +12,36 @@ const ApiName={
   CurrentUser: `${BASE_SERVICE}/me`,
 }
 
-export enum IRole{
+export enum Roles{
   SuperAdmin = 'Super Admin'
 }
+
+export interface IRole{
+  id: number;
+  name:Roles
+  company_id:number
+}
+
+export interface ICompany{
+  id: number;
+  name: string
+  address: string
+  business_number:string
+  website: string
+  status: number
+}
+
 export interface IUser {
   id: number
   name: string
   email:string
+  phone:string
   role: IRole
   permissions: string
-  access_token: string
+  token: string
+  role_id: number;
+  company_id: number;
+  company:ICompany
 }
 export interface LoginApiRequest {
   email: string;
@@ -37,6 +57,7 @@ export async function loginApi(request: LoginApiRequest): Promise<LoginResponse>
     const response = await baseApi.post(ApiName.Login, request);
     return response.data;
   } catch (error: any) {
+    showErrorMessage({ title: 'Login Failed',message: error.message, btnText: 'Try again' })
     throw error;
   }
 }

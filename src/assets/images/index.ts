@@ -1,6 +1,7 @@
 export const images = {
   arrowLeft: require('./sources/arrowLeft.png'),
   arrowLeft2: require('./sources/arrowLeft2.png'),
+  arrowLeft3: require('./sources/arrowLeft3.png'),
   close: require('./sources/close.png'),
   logo: require('./sources/logo.png'),
   eye: require('./sources/eye.png'),
@@ -17,4 +18,5 @@ export const images = {
   dashboard: require('./sources/dashboard.png'),
   incident: require('./sources/incident.png'),
   setting: require('./sources/setting.png'),
+  job: require('./sources/job.png'),
 };

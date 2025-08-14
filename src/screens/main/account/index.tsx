@@ -28,8 +28,10 @@ export default function Account() {
   const { control } = useForm({
     defaultValues: {
       name: userInfo?.name,
-      role: userInfo?.role,
+      role: userInfo?.role.name,
       email: userInfo?.email,
+      phone: userInfo?.phone,
+      company: userInfo?.company?.name,
     },
   });
   const [visibleLogout, toggleVisibleLogout] = useToggle()
@@ -49,7 +51,7 @@ export default function Account() {
     <SafeAreaView className='bg-neutral-100'>
       <Header title='Account details' />
       <View
-        className='flex-row items-start gap-x-8 mt-6 bg-white p-5 rounded-[20px] '
+        className='flex-row items-start gap-x-8 mt-6 bg-white p-6 rounded-[20px] '
         style={shadowStyle}
       >
         <AccountLogo />
@@ -61,7 +63,7 @@ export default function Account() {
               onPress={() => navigate(RouteName.UpdateAccount)}
             >
               <Image source={images.edit} className='w-8 h-8' />
-              <Text className='text-[12px] font-semibold '>Edit</Text>
+              <Text className='text-[12px] font-medium  '>Edit</Text>
             </Button>
           </View>
           <TextInput

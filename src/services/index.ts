@@ -12,7 +12,7 @@ export const api = axios.create({
 api.interceptors.request.use(function (config) {
   const token = config.headers?.Authorization?.toString().replace('Bearer ', '')
   if (!token) {
-    const token = store.getState().authentication.userInfo?.access_token;
+    const token = store.getState().authentication.userInfo?.token;
     config.headers.Authorization = 'Bearer ' + token;
   }
   return config;
@@ -25,7 +25,6 @@ export interface ResponseApi {
   headers: any;
 }
 
-
 const baseApi = {
   post: async (endpoint: string, params?: any, headers?: RawAxiosRequestHeaders | AxiosHeaders) => {
     return api
@@ -33,7 +32,7 @@ const baseApi = {
       .then((response) => handlingResponse(response))
       .catch((err) => handleError(err));
   },
-  postFormData: async (endpoint: string, params: any, ) => {
+  postFormData: async (endpoint: string, params: any ) => {
     return api
       .post(endpoint, params, {
         headers: {

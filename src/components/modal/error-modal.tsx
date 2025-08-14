@@ -50,12 +50,12 @@ class ErrorModal extends Component<{}, ErrorModalState> {
     return (
       <Modal visible={visible} animationType='fade' transparent={true} supportedOrientations={supportedOrientations}>
         <View className='flex-1 sm:items-center justify-center bg-dropBack '>
-          <View className={`bg-white p-6 px-12 rounded-[20px] `}>
+          <View className={`bg-white p-6 rounded-[20px] gap-y-8 min-w-[562px]`}>
             <Text className={`text-[20px] font-semibold text-center`}>{title || 'Notification'}</Text>
-            <Text className={`text-center text-primary1 mt-6`}>
+            <Text className={`text-center text-primary1`}>
               {message}
             </Text>
-            <Button label={btnText || 'Close'} onPress={this.toggleModal} className='mt-6' />
+            <Button label={btnText || 'Close'} onPress={this.toggleModal} className='min-w-[188] self-center' />
           </View>
         </View>
       </Modal>

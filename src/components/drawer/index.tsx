@@ -3,7 +3,7 @@ import { isIpad } from '@constants/app.constants';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { StackActions } from '@react-navigation/native';
 import { toggleCollapseDrawer } from '@store/slices/commonSlice';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, { Easing, ReduceMotion, SharedValue, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
@@ -15,52 +15,51 @@ interface Props {
   title: string;
   url: any;
   onPress: () => void;
-  index: number;
-  selectedIndex?: boolean;
+  selected?: boolean;
   collapsedDrawer: boolean;
   opacity?: SharedValue<number>;
   rotate?: SharedValue<string>;
+  isCloseButton?: boolean
 }
 
 function Item({
   title,
   url,
   onPress,
-  index,
-  selectedIndex,
+  selected,
   collapsedDrawer,
   opacity,
   rotate,
+  isCloseButton = false
 }: Props) {
   return (
     <Button
       style={{ overflow: 'visible' }}
-      className={`flex-row items-center h-[56] px-[12]
-       ${selectedIndex && 'bg-teal20 rounded-[20px]'}
-       ${collapsedDrawer && 'w-[56]'
-        }`}
+      className={`flex-row items-center h-[56] px-[12]   
+       ${selected && 'bg-teal20 rounded-[20px] '}
+       ${collapsedDrawer && 'w-[56]'}
+       `}
       onPress={onPress}
     >
-      <View className='w-8 h-8 justify-center items-center'>
-        {/* animation for open and close sidebar */}
-        {index === 5 ? (
-          <View className='w-8 h-8  rounded-full border border-neutral20 justify-center items-center'>
-            <Animated.Image
-              source={images.arrowLeft2}
-              tintColor={'black'}
-              style={{ width: 12, height: 8, transform: [{ rotate }] }}
-              resizeMode={'contain'}
-            />
-          </View>
-        ) : (
+      {isCloseButton
+        ? <Animated.Image
+          source={images.arrowLeft3}
+          className='w-6 h-6'
+          resizeMode={'contain'}
+          style={{
+            transform: [{ rotate: rotate?.value || '0deg' }],
+          }}
+        />
+        :
+        <View className='w-8 h-8 justify-center items-center'>
           <Image
             source={url}
             className='w-full h-full'
-            tintColor={selectedIndex ? 'black' : colors.neutral70}
+            tintColor={selected ? 'black' : colors.neutral70}
           />
-        )}
-      </View>
-      {isIpad ? (
+        </View>
+      }
+      {title &&
         <Animated.Text
           style={[
             {
@@ -68,20 +67,14 @@ function Item({
               position: 'absolute',
               left: 52,
               fontFamily: 'Poppins-Regular',
-              color: selectedIndex ? colors.black : colors.neutral70,
+              color: selected ? colors.black : colors.neutral70,
               fontSize: 16
             },
           ]}
         >
           {title}
         </Animated.Text>
-      ) : (
-        <Text
-          className={`text-neutral70 ml-2 ${selectedIndex && 'text-black'} ${collapsedDrawer && 'hidden'}`}
-        >
-          {title}
-        </Text>
-      )}
+      }
     </Button>
   );
 }
@@ -121,6 +114,15 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
     }
   }, [collapsedDrawer]);
 
+
+  const menuItems = useMemo(() => [
+    { title: 'Dashboard', url: images.dashboard, routeIndex: 0 },
+    { title: 'Job', url: images.job, routeIndex: 1 },
+    { title: 'Daily assessment', url: images.dailyAssessment, routeIndex: 2 },
+    { title: 'Incidents', url: images.incident, routeIndex: 3 },
+    { title: 'Account', url: images.setting, routeIndex: 4 }
+  ], []);
+
   return (
     <Animated.View className='flex-1 ' style={{ width }}>
       <SafeAreaView className={`pl-8 pr-4 bg-white ${collapsedDrawer && 'pl-4'}`}>
@@ -134,65 +136,29 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
               />
             </View>
           </Button>
-          <View className='flex-col justify-between flex-1'>
-            <View className='mt-6'>
-              <Item
-                title={'Dashboard'}
-                url={images.dashboard}
-                onPress={() => onPress(0)}
-                index={0}
-                selectedIndex={state.index === 0}
-                collapsedDrawer={collapsedDrawer}
-                opacity={opacity}
-              />
-              <Item
-                title={'Job'}
-                url={images.dashboard}
-                onPress={() => onPress(1)}
-                index={1}
-                selectedIndex={state.index === 1}
-                collapsedDrawer={collapsedDrawer}
-                opacity={opacity}
-              />
-              <Item
-                title={'Daily assessment'}
-                url={images.dailyAssessment}
-                onPress={() => onPress(2)}
-                index={1}
-                selectedIndex={state.index === 2}
-                collapsedDrawer={collapsedDrawer}
-                opacity={opacity}
-              />
-              <Item
-                title={'Incidents'}
-                url={images.incident}
-                onPress={() => onPress(3)}
-                index={3}
-                selectedIndex={state.index === 3}
-                collapsedDrawer={collapsedDrawer}
-                opacity={opacity}
-              />
-            </View>
+          <View className='flex-col justify-between flex-1 mt-6'>
             <View>
-              <Item
-                title={'Account'}
-                url={images.setting}
-                onPress={() => onPress(4)}
-                index={4}
-                selectedIndex={state.index === 4}
-                collapsedDrawer={collapsedDrawer}
-                opacity={opacity}
-              />
-              <Item
-                title={'Close'}
-                onPress={() => dispatch(toggleCollapseDrawer())}
-                index={5}
-                selectedIndex={false}
-                collapsedDrawer={collapsedDrawer}
-                opacity={opacity}
-                rotate={rotate}
-              />
+              {menuItems.map((item, idx) => (
+                <Item
+                  key={idx}
+                  title={item.title}
+                  url={item.url}
+                  onPress={() => onPress(item.routeIndex)}
+                  selected={state.index === item.routeIndex}
+                  collapsedDrawer={collapsedDrawer}
+                  opacity={opacity}
+                />
+              ))}
             </View>
+            <Item
+              url={''}
+              onPress={() => dispatch(toggleCollapseDrawer())}
+              selected={false}
+              collapsedDrawer={collapsedDrawer}
+              opacity={opacity}
+              rotate={rotate}
+              isCloseButton
+            />
           </View>
         </View>
       </SafeAreaView>

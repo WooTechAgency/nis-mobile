@@ -9,7 +9,7 @@ import "../global.css";
 import { persistor, store } from './store';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from '@lib/toast';
-import ErrorModal from '@components/modal/ErrorModal';
+import ErrorModal from '@components/modal/error-modal';
 
 const queryClient = new QueryClient({
   defaultOptions: {

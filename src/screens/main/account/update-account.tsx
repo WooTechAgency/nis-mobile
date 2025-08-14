@@ -11,11 +11,20 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import AccountLogo from './components/account-logo';
 import { images } from '@assets/images';
+import { updateUserApi } from '@services/user.service';
 
+interface Form {
+  name: string;
+  company: string;
+  role: string;
+  email: string;
+  phone?: string;
+}
 const formSchema = yup.object().shape({
   name: yup.string().required('Name is required'),
-  company: yup.string().required('Company is required'),
-  role: yup.string().required('Role is required'),
+  company: yup.string().notRequired(),
+  role: yup.string().notRequired(),
+  phone: yup.string().notRequired(),
   email: yup.string().required('Email address is required').email('Invalid email format'),
 });
 
@@ -24,18 +33,37 @@ export default function UpdateAccount() {
   console.log('userInfo ', userInfo)
   const [loading, setLoading] = useState(false)
   const query = useQueryClient()
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       name: userInfo?.name,
-      role: userInfo?.role,
+      role: userInfo?.role.name,
+      phone: userInfo?.phone,
       email: userInfo?.email,
+      company: userInfo?.company.name
     },
     mode: 'onChange',
     resolver: yupResolver(formSchema),
   });
 
-  const onUpdateProfile = (data: any) => {
 
+  const onUpdateProfile = (data: Form) => {
+    if (!userInfo?.id) return;
+    try {
+      const payload = {
+        _method: 'PUT',
+        name: data?.name?.trim(),
+        phone: data?.phone?.trim(),
+        email: data?.email?.trim() ?? undefined,
+      }
+      // Do not update email if it is the same
+      if (data?.email?.trim() === userInfo?.email.trim()) {
+        delete payload.email;
+      }
+      setLoading(true);
+      updateUserApi(userInfo?.id, payload)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -86,14 +114,13 @@ export default function UpdateAccount() {
               label='Email Address'
               labelOverlap
             />
-            {/* <TextInput
-            classNameWrap='mt-6'
-            control={control}
-            name='phone'
-            label='Phone Number'
-            labelOverlap
-            disabled
-          /> */}
+            <TextInput
+              classNameWrap='mt-6'
+              control={control}
+              name='phone'
+              label='Phone Number'
+              labelOverlap
+            />
             <View className='mt-6 flex-row gap-x-4'>
               <Button label='Cancel' onPress={goBack} type='outlined' className='flex-1' classNameLabel='' />
               <Button

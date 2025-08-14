@@ -4,25 +4,24 @@ import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
 import { colors } from '@constants/colors.constants';
+import { MMKV_KEY } from '@constants/keys.constants';
+import { PATTERN } from '@constants/pattern.constant';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppDispatch } from '@hooks/common';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 import { navigate, navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { loginApi } from '@services/authentication.service';
+import { mmkv } from '@store/mkkv';
 import { setUserInfo } from '@store/slices/authenticationSlice';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import Logo from './components/logo';
-import { PATTERN } from '@constants/pattern.constant';
-import { showError, showSuccess } from '@lib/toast';
-import { storage } from '@store/mkkv';
-import { showErrorMessage } from '@utils/functions.util';
 
 const formSchema = yup.object().shape({
-  accountEmail: yup.string().required('Email address is required').email('Invalid email format'),
+  email: yup.string().required('Email address is required').email('Invalid email format'),
   password: yup.string().required('The password you entered is incorrect').matches(
     PATTERN.PASSWORD,
     'Password must have at least 8 characters and contain numbers, lowercase and uppercase letters and special characters..'
@@ -30,10 +29,8 @@ const formSchema = yup.object().shape({
 });
 export const AuthWrapCls = `px-5 sm:w-[416px] sm:px-0`
 export default function Login() {
-  const navigation = useNavigation();
   const dispatch = useAppDispatch()
   const [loading, setLoading] = useState(false);
-  const [visibleLoginError, setVisibleLoginError] = useState(false);
   const [visiblePassword, setVisiblePassword] = useState(false);
   const {
     control,
@@ -41,8 +38,7 @@ export default function Login() {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      accountEmail: '',
-      password: '',
+      email: mmkv.getString(MMKV_KEY.EMAIL),
     },
     mode: 'onChange',
     resolver: yupResolver(formSchema),
@@ -53,38 +49,14 @@ export default function Login() {
     setVisiblePassword(!visiblePassword);
   };
 
-  const toggleLoginError = () => {
-    setVisibleLoginError(!visibleLoginError);
-  };
-
-  // useEffect(() => {
-  //   const getCacheEmail = async () => {
-  //     const cachedEmail = storage.getString('email')
-  //     if (cachedEmail) {
-  //       setValue('accountEmail', cachedEmail)
-  //     }
-  //   }
-  //   getCacheEmail()
-  // }, [])
-
-  const onLogin = async (data: { accountEmail: string; password: string }) => {
+  const onLogin = async (data: { email: string; password: string }) => {
     Keyboard.dismiss()
     try {
       setLoading(true);
-      const response = await loginApi({ email: data.accountEmail, password: data.password });
-      console.log('response ', response)
-      // storage.set('email', data.accountEmail)
-      dispatch(setUserInfo({ access_token: response.token, ...response.user }));
+      const response = await loginApi({ email: data.email, password: data.password });
+      mmkv.set(MMKV_KEY.EMAIL, data.email)
+      dispatch(setUserInfo({ ...response.user, token: response.token, }));
       navigationRef.dispatch(StackActions.replace(RouteName.MainNavigator));
-    } catch (error) {
-      showErrorMessage({ message: error?.message })
-      // if (error?.data?.isWrongInfo) {
-      //   toggleLoginError();
-      // } else if (error?.data?.isAccountPaused) {
-      //   showPopupError('Contact support for assistance', 'Account paused');
-      // } else {
-      //   showPopupError(error?.message, 'Login failed');
-      // }
     } finally {
       setLoading(false);
     }
@@ -108,7 +80,7 @@ export default function Login() {
             classNameWrap='mt-12'
             errors={errors}
             control={control}
-            name='accountEmail'
+            name='email'
             keyboardType='email-address'
             label='Account email'
             placeholder='Enter your account email'

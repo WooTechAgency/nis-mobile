@@ -81,8 +81,6 @@ export function TextInput(props: Props) {
     // return data?.choices?.[0]?.message?.content?.trim();
   }
 
-  console.log('classNameInput ', classNameInput)
-
   return (
     <View className={`${classNameWrap}`}>
       {label &&

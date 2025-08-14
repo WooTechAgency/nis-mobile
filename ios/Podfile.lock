@@ -12,9 +12,6 @@ PODS:
   - hermes-engine (0.80.1):
     - hermes-engine/Pre-built (= 0.80.1)
   - hermes-engine/Pre-built (0.80.1)
-  - MMKV (2.2.2):
-    - MMKVCore (~> 2.2.2)
-  - MMKVCore (2.2.2)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1776,14 +1773,13 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-mmkv (2.12.2):
+  - react-native-mmkv (3.3.0):
     - boost
     - DoubleConversion
     - fast_float
     - fmt
     - glog
     - hermes-engine
-    - MMKV (>= 1.3.3)
     - RCT-Folly
     - RCT-Folly/Fabric
     - RCTRequired
@@ -2859,8 +2855,6 @@ SPEC REPOS:
     - APNGKit
     - Delegate
     - Gifu
-    - MMKV
-    - MMKVCore
     - SocketRocket
     - SwiftSVG
 
@@ -3050,8 +3044,6 @@ SPEC CHECKSUMS:
   Gifu: 9f7e52357d41c0739709019eb80a71ad9aab1b6d
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 4f07404533b808de66cf48ac4200463068d0e95a
-  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
-  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: efa5010912100e944a7ac9a93a157e1def1988fe
   RCTRequired: bbc4cf999ddc4a4b076e076c74dd1d39d0254630
@@ -3089,7 +3081,7 @@ SPEC CHECKSUMS:
   react-native-date-picker: fbe5551afea398c5efd9996d7bf03af5b717c26b
   react-native-image-picker: e9d833df19e87e25e38ddc0be3bad92f57307765
   react-native-keyboard-controller: a8d3f8e0b8c9a6563525b26c795409d9bd37340f
-  react-native-mmkv: f87e0c4ca886aabf99e010e8b62040add176d613
+  react-native-mmkv: 7fb4729ad5cb787a4394e6c4bd48e4b8ec30f25c
   react-native-safe-area-context: 68d1363b8354472a961aa6861ba8451beaf9a810
   react-native-turbo-image: 1d6d48d526069fd6d6accc23ba7ea0a72f2ca9e9
   react-native-voice: 908a0eba96c8c3d643e4f98b7232c6557d0a6f9c

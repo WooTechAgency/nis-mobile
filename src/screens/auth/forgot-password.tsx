@@ -14,7 +14,7 @@ import { AuthWrapCls } from './login';
 import { forgotPasswordApi } from '@services/authentication.service';
 
 const formSchema = yup.object().shape({
-  accountEmail: yup.string().required('Email address is required!').email('Invalid email format'),
+  email: yup.string().required('Email address is required!').email('Invalid email format'),
 });
 
 export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
@@ -25,9 +25,6 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    defaultValues: {
-      accountEmail: '',
-    },
     mode: 'all',
     resolver: yupResolver(formSchema),
   });
@@ -35,9 +32,9 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
   const onNext = (data: any) => {
     Keyboard.dismiss()
     setLoading(true);
-    forgotPasswordApi(data.accountEmail)
+    forgotPasswordApi(data.email)
       .then(() => {
-        navigation.navigate(RouteName.EnterCode, { email: data.accountEmail });
+        navigation.navigate(RouteName.EnterCode, { email: data.email });
       })
       .catch(() => { })
       .finally(() => setLoading(false));
@@ -56,7 +53,7 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
             <TextInput
               errors={errors}
               control={control}
-              name='accountEmail'
+              name='email'
               label='Email address'
               placeholder='Enter your email address'
               labelOverlap
@@ -67,7 +64,6 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
               disabled={!isValid}
               onPress={handleSubmit(onNext)}
             />
-
           </View>
           <BackToLogin />
         </View>
