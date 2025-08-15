@@ -1,12 +1,14 @@
 import Title from '@components/title';
-import { Button, YesNoForm } from '@components/ui';
+import { Button, CheckboxDescriptionForm, Image, Text, Wrapper, YesNoForm } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
+import { shadowStyle } from '@constants/config.constants';
+import { images } from '@assets/images';
 
 export interface IncidentForm {
   thirdParty?: boolean;
@@ -36,6 +38,9 @@ export default function StepIncident() {
     resolver: yupResolver(formSchema),
   });
 
+  const thirdParty = useWatch({ control, name: 'thirdParty' });
+  const injured = useWatch({ control, name: 'injured' });
+
   const onBack = () => {
     setIncident((prev) => ({ ...prev, selectedIndex: 1 }))
 
@@ -51,18 +56,10 @@ export default function StepIncident() {
   }
 
   return (
-    <View className=' mt-6'>
+    <Wrapper className='gap-y-6'>
       {/* Hazard */}
-      <Title label='Person(s) Involved' />
-      <YesNoForm
-        isRadio
-        control={control}
-        setValue={setValue}
-        name='thirdParty'
-        label='Third-party?'
-        classNameWrap='mt-6'
-      />
-      <View className='flex-row items-center gap-x-4 mt-6'>
+      <Title label='Person(s) Involved' className='text-base' />
+      <View className='flex-row items-center gap-x-4  '>
         <TextInput
           control={control}
           setValue={setValue}
@@ -84,23 +81,81 @@ export default function StepIncident() {
         isRadio
         control={control}
         setValue={setValue}
+        name='thirdParty'
+        label='Third-party?'
+      />
+      {thirdParty &&
+        <View className='flex-row items-center gap-x-4  '>
+          <TextInput
+            control={control}
+            setValue={setValue}
+            classNameWrap='flex-1'
+            name='email'
+            label='Email'
+            placeholder='Enter email'
+          />
+          <TextInput
+            classNameWrap='flex-1'
+            errors={errors}
+            control={control}
+            name='phoneNumber'
+            label='Phone number'
+            keyboardType='phone-pad'
+            placeholder='Enter phone number'
+          />
+        </View>
+      }
+      <YesNoForm
+        isRadio
+        control={control}
+        setValue={setValue}
         name='injured'
         label='Injured?'
-        classNameWrap='mt-6'
       />
-      <Button label='Add another person' className='self-start mt-6' />
-      <TextInput
-        classNameWrap='mt-7'
-        errors={errors}
-        control={control}
-        name='other'
-        label='Other:'
-        placeholder='Enter other'
-      />
+      {injured &&
+        <TextInput
+          control={control}
+          setValue={setValue}
+          name='treatment'
+          label='Treatment required'
+          placeholder='Enter treatment'
+        />
+      }
+
+      <Button
+        className='bg-teal20 rounded-[8px] h-9 flex-row items-center self-start px-2'
+      >
+        <Image source={images.plus} className='w-8 h-8' />
+        <Text className='text-[12px] font-medium'>Add person</Text>
+      </Button>
+      <View className='gap-y-4'>
+        <Title label='Incident Type' className='text-base mt-8' />
+        <Text>Select all that apply</Text>
+        <CheckboxDescriptionForm
+          setValue={setValue}
+          errors={errors}
+          control={control}
+          checkboxName='injury'
+          label='Injury /  Illness'
+          descriptionName='injuryDescription'
+          labelDescription='Describe incident'
+          placeholderDescription='Describe the incident that occurred'
+        />
+        <CheckboxDescriptionForm
+          setValue={setValue}
+          errors={errors}
+          control={control}
+          checkboxName='nearMe'
+          label='Near Miss'
+          descriptionName='nearMeDescription'
+          labelDescription='Describe incident'
+          placeholderDescription='Describe the incident that occurred'
+        />
+      </View>
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Next' onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
-    </View>
+    </Wrapper>
   )
 }

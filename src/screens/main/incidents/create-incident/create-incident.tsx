@@ -9,6 +9,7 @@ import StepIncident from './steps/step-incident'
 import StepAction from './steps/step-action'
 import StepWitness from './steps/step-witness'
 import StepSignOff from './steps/step-sign-off'
+import Steps from '@components/steps'
 
 
 const steps = {
@@ -25,7 +26,7 @@ export default function CreateIncident() {
   const renderSteps = () => {
     switch (selectedIndex) {
       case IncidentSteps.General:
-        return <StepGeneralInformation />
+        return <StepIncident />
       case IncidentSteps.Incident:
         return <StepIncident />
       case IncidentSteps.Action:
@@ -54,24 +55,13 @@ export default function CreateIncident() {
     <SafeAreaView>
       <ScrollView scrollEnabled={enableScroll}>
         <Header title='IR001' isBack onCustomBack={onBack} />
-        <View className='flex-row self-center mt-4'>
-          {Object.entries(steps).map(([key, value]) => {
-            const selected = key === String(selectedIndex)
-            const lastItem = key === String(IncidentSteps.SignOff)
-            const completed = completedSteps?.includes(Number(key))
-            return (
-              <View key={key} className='flex-row items-center'>
-                <View className=' items-center'>
-                  <View className={`w-10 h-10 rounded-full border justify-center items-center ${completed && 'bg-primary border-0'} ${selected && 'border-primary'}`}>
-                    <Text className={`${completed && 'text-white'} ${selected && 'text-primary'}`}>{key}</Text>
-                  </View>
-                  <Text className='mt-1'>{value}</Text>
-                </View>
-                {!lastItem && <View className='h-[1px] w-[60px] bg-red mx-4' />}
-              </View>
-            )
-          })}
-        </View>
+        <Steps
+          classNameWrap='mt-4'
+          steps={steps}
+          selectedIndex={selectedIndex}
+          completedSteps={completedSteps}
+          lastItemKey={IncidentSteps.SignOff}
+        />
         {renderSteps()}
       </ScrollView>
     </SafeAreaView>

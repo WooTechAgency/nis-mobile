@@ -14,7 +14,7 @@ export default function Header({ title, onCustomBack, isBack, rightComponent }: 
   return (
     <View className='flex-row items-center justify-between h-[69px]'>
       {isBack && <Image source={images.arrowLeft} className='w-10 h-10' onPress={onCustomBack || goBack} />}
-      <Text className='text-[35px] font-semibold'>{title}</Text>
+      <Text className='text-[35px] font-medium'>{title}</Text>
       {/* width is equal with Image */}
       {(isBack) && <View className='w-10 h-10' />}
       {rightComponent && <View className='absolute right-4'>{rightComponent}</View>}

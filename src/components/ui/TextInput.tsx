@@ -86,7 +86,7 @@ export function TextInput(props: Props) {
       {label &&
         <Text className={`text-[12px] text-neutral70 px-1 mb-1
         ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'} 
-        ${disabled && 'text-[#BEBEBE]'} 
+        ${disabled && 'text-border'} 
         ${labelCls}
         ${messageError && 'text-red'}
         `}
@@ -126,14 +126,14 @@ export function TextInput(props: Props) {
               className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
               onPress={onUseVoice}
             >
-              <Image source={images.dashboard} className='w-8 h-8' />
+              <Image source={images.voice} className='w-8 h-8' />
               <Text className='text-[12px] font-medium '>Use Voice</Text>
             </Button>
             <Button
-              className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+              className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
               onPress={onEnhanceAI}
             >
-              <Image source={images.dashboard} className='w-8 h-8' />
+              <Image source={images.ai} className='w-8 h-8' />
               <Text className='text-[12px] font-medium '>AI enhance</Text>
             </Button>
           </View>

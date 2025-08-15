@@ -1,4 +1,4 @@
-import { Button } from '@components/ui';
+import { Button, Wrapper } from '@components/ui';
 import { DatePickerInput } from '@components/ui/DatePickerInput';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
+import Title from '@components/title';
+import { shadowStyle } from '@constants/config.constants';
 
 
 export interface GeneralForm {
@@ -54,8 +56,8 @@ export default function StepGeneralInformation() {
   }
 
   return (
-    <View className='mt-8'>
-      <Text className='text-[25px] font-semibold'>General</Text>
+    <Wrapper>
+      <Title label='General' className='text-base' />
       <View className='flex-row items-center mt-6 gap-x-4'>
         <TextInput
           classNameWrap='flex-1'
@@ -64,6 +66,7 @@ export default function StepGeneralInformation() {
           name='company'
           label='Company'
           placeholder='Enter company'
+          disabled
         />
         <DatePickerInput
           label='Date of Report'
@@ -74,6 +77,7 @@ export default function StepGeneralInformation() {
           mode="date"
           placeholder="Date"
           errors={errors}
+          disabled
         />
       </View>
       <View className='flex-row items-center mt-6 gap-x-4'>
@@ -84,6 +88,7 @@ export default function StepGeneralInformation() {
           name='completedBy'
           label='Completed by'
           placeholder='Enter completed by'
+          disabled
         />
         <TextInput
           classNameWrap='flex-1'
@@ -92,40 +97,41 @@ export default function StepGeneralInformation() {
           name='role'
           label='Role /  Position'
           placeholder='Enter role / position'
+          disabled
         />
       </View>
       {/* incident detail */}
-      <Text className='text-[25px] font-semibold mt-8'>General</Text>
-      <View className='flex-row items-center mt-6 gap-x-4'>
+      <Title label='Incident Detail' className='text-base mt-8' />
+      <View className='flex-row items-center mt-6 gap-x-6'>
         <DatePickerInput
-          label='Date of Incident'
+          label='Date of Incident * '
           wrapCls="flex-1"
           setValue={setValue}
           name={`dateOfIncident`}
           control={control}
           mode="date"
-          placeholder="Date"
+          placeholder="dd/mm/yyyy"
           errors={errors}
         />
         <DatePickerInput
-          label='Time of Incident'
+          label='Time of Incident *'
           wrapCls="flex-1"
           setValue={setValue}
           name={`timeOfIncident`}
           control={control}
           mode="date"
-          placeholder="Date"
+          placeholder="dd/mm/yyyy"
           errors={errors}
         />
       </View>
-      <View className='flex-row items-center mt-6 gap-x-4'>
+      <View className='flex-row items-center mt-6 gap-x-6'>
         <TextInput
           classNameWrap='flex-1'
           errors={errors}
           control={control}
           name='siteLocation'
           label='Site Location *'
-          placeholder='Enter site location'
+          placeholder='Select Site Location'
         />
         <TextInput
           classNameWrap='flex-1'
@@ -142,6 +148,6 @@ export default function StepGeneralInformation() {
         disabled={!isValid}
         onPress={handleSubmit(onSubmit)}
       />
-    </View>
+    </Wrapper>
   )
 }

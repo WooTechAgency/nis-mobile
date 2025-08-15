@@ -25,4 +25,7 @@ export const images = {
   search: require('./sources/search.png'),
   warning: require('./sources/warning.png'),
   location: require('./sources/location.png'),
+  plus: require('./sources/plus.png'),
+  ai: require('./sources/ai.png'),
+  voice: require('./sources/voice.png'),
 };

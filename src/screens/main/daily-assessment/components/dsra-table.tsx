@@ -77,7 +77,6 @@ export default function DailySiteRickAssessmentTable({ control }: Props) {
               <Image source={images.arrowLeft} className='w-5 h-5' />
             </Button>
           </View> */}
-
         </View>
       </View>
       <View className='bg-white mt-6 rounded-[20px] p-6'>
