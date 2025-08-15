@@ -26,6 +26,22 @@ export const convertDDMMYYYY = (value?: Date | string) => {
   if (value) {
     date = new Date(value);
   }
-
   return dayjs(date).format('DD/MM/YYYY');
+};
+
+export const convertHHMMSSDDMMYYYY = (value?: Date | string) => {
+  let date = new Date();
+  if (value) {
+    date = new Date(value);
+  }
+  return dayjs(date).format('HH:mm:ss DD/MM/YYYY');
+};
+
+
+export const convertHHMM = (value?: Date | string) => {
+  let date = new Date();
+  if (value) {
+    date = new Date(value);
+  }
+  return dayjs(date).format('HH:mm');
 };

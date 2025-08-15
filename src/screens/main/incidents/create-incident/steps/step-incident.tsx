@@ -1,3 +1,4 @@
+import { images } from '@assets/images';
 import Title from '@components/title';
 import { Button, CheckboxDescriptionForm, Image, Text, Wrapper, YesNoForm } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
@@ -7,22 +8,29 @@ import { useForm, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { shadowStyle } from '@constants/config.constants';
-import { images } from '@assets/images';
 
 export interface IncidentForm {
-  thirdParty?: boolean;
   name?: string;
   role?: string;
+  thirdParty?: boolean;
+  email?: string; // third-party contact details
+  phoneNumber?: string; // third-party contact details
   injured?: boolean;
-  other?: string;
+  treatment?: string; // injured contact detail
+  injury?: boolean;
+  injuryDes?: string;
 }
 const formSchema = yup.object().shape({
-  thirdParty: yup.boolean().notRequired(),
   name: yup.string().notRequired(),
   role: yup.string().notRequired(),
+  thirdParty: yup.boolean().notRequired(),
+  email: yup.string().notRequired(),
+  phoneNumber: yup.string().notRequired(),
   injured: yup.boolean().notRequired(),
-  other: yup.string().notRequired(),
+  treatment: yup.string().notRequired(),
+
+  injury: yup.boolean().notRequired(),
+  injuryDes: yup.boolean().notRequired(),
 });
 
 export default function StepIncident() {
@@ -137,7 +145,7 @@ export default function StepIncident() {
           control={control}
           checkboxName='injury'
           label='Injury /  Illness'
-          descriptionName='injuryDescription'
+          descriptionName='injuryDes'
           labelDescription='Describe incident'
           placeholderDescription='Describe the incident that occurred'
         />

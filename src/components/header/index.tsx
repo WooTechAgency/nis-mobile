@@ -12,7 +12,7 @@ interface Props {
 }
 export default function Header({ title, onCustomBack, isBack, rightComponent }: Props) {
   return (
-    <View className='flex-row items-center justify-between h-[69px]'>
+    <View className='flex-row items-start justify-between h-[64px]'>
       {isBack && <Image source={images.arrowLeft} className='w-10 h-10' onPress={onCustomBack || goBack} />}
       <Text className='text-[35px] font-medium'>{title}</Text>
       {/* width is equal with Image */}

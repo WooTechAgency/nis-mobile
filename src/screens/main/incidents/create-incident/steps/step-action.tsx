@@ -1,5 +1,5 @@
-import { Button } from '@components/ui';
-import { TextInput } from '@components/ui/TextInput';
+import Title from '@components/title';
+import { Button, CheckboxDescriptionForm, Wrapper } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -8,11 +8,13 @@ import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 
 export interface ActionForm {
-  other?: string;
+  firstAid?: boolean;
+  firstAidDes?: string;
 
 }
 const formSchema = yup.object().shape({
-  other: yup.string().notRequired(),
+  firstAid: yup.boolean().notRequired(),
+  firstAidDes: yup.string().notRequired(),
 });
 
 export default function StepAction() {
@@ -43,20 +45,25 @@ export default function StepAction() {
   }
 
   return (
-    <View className=' mt-6'>
-      <TextInput
-        classNameWrap='mt-6'
-        errors={errors}
-        control={control}
-        name='other'
-        label='Other:'
-        placeholder='Enter other'
-        multiline
-      />
+    <Wrapper className=''>
+      <View className='gap-y-4'>
+        <Title label='Immediate Action Taken' className='text-base' />
+        <CheckboxDescriptionForm
+          setValue={setValue}
+          errors={errors}
+          control={control}
+          checkboxName='firstAid'
+          label='First aid administered'
+          descriptionName='firstAidDes'
+          labelDescription='Describe action taken'
+          placeholderDescription='Describe the action taken'
+        />
+
+      </View>
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Next' onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
-    </View>
+    </Wrapper>
   )
 }

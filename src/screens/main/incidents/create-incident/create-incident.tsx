@@ -22,11 +22,10 @@ const steps = {
 
 export default function CreateIncident() {
   const { incident: { selectedIndex, enableScroll, completedSteps }, setIncident } = useIncidentContext();
-  console.log('completedSteps ', completedSteps)
   const renderSteps = () => {
     switch (selectedIndex) {
       case IncidentSteps.General:
-        return <StepIncident />
+        return <StepSignOff />
       case IncidentSteps.Incident:
         return <StepIncident />
       case IncidentSteps.Action:

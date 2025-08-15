@@ -27,7 +27,6 @@ export function MediaForm(props: Props) {
   const selectedDeleteImageRef = useRef<number>(undefined)
 
   const currentMedias = useWatch({ name, control, }) || [];
-  console.log('currentMedias ', currentMedias)
 
   const { takePhoto, pickFromLibrary } = useImagePicker({ setValue, control, name })
 

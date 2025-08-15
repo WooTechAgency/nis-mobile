@@ -28,4 +28,9 @@ export const images = {
   plus: require('./sources/plus.png'),
   ai: require('./sources/ai.png'),
   voice: require('./sources/voice.png'),
+  trash: require('./sources/trash.png'),
+  upload: require('./sources/upload.png'),
+  document: require('./sources/document.png'),
+  complete: require('./sources/complete.png'),
+  minus: require('./sources/minus.png'),
 };

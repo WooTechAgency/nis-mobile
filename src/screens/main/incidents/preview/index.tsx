@@ -1,10 +1,14 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Button, Image, SafeAreaView, ScrollView, checkListTemp } from '@components/ui'
 import Header from '@components/header'
-import { convertUTCDate } from '@utils/date.util'
-import { images } from '@assets/images'
-import { useIncidentContext } from './context'
+import { Button, SafeAreaView, ScrollView } from '@components/ui'
+import React, { useState } from 'react'
+import { Text, View } from 'react-native'
+import { useIncidentContext } from '../context'
+import ActionPreview from './components/action-preview'
+import GeneralPreview from './components/general-preview'
+import IncidentPreview from './components/incident-preview'
+import WitnessPreview from './components/witness-preview'
+import SignOffPreview from './components/sign-off-preview'
+import { useToggle } from '@hooks/useToggle'
 
 function Item({ label, value, classNameWrap }: { label: string, value?: string, classNameWrap?: string }) {
   return (
@@ -17,13 +21,8 @@ function Item({ label, value, classNameWrap }: { label: string, value?: string, 
 const commonTitleCls = 'font-semibold text-[20px]'
 const commonWrapCls = 'border border-gray rounded-[5px] p-4'
 export default function PreviewIncident() {
-  const { incident: { generalInfo, action, incident, witness, singing } } = useIncidentContext()
 
-  const onEdit = () => { }
-
-  const onSaveDraft = () => { }
-
-  const onSubmit = () => { }
+  const [allowEdit, toggleAlowEdit] = useToggle(false)
 
   return (
     <SafeAreaView>
@@ -31,13 +30,18 @@ export default function PreviewIncident() {
         <Header
           title={'DSRA-001'}
           isBack
-          rightComponent={
-            <View className='flex-row gap-x-2 '>
-              <Button label='Edit' className='px-3' type='outlined' onPress={onEdit} />
-              <Button label='Submit' className='px-3' onPress={onSubmit} />
-            </View>
-          }
         />
+        <GeneralPreview allowEdit={allowEdit} />
+        <IncidentPreview allowEdit={allowEdit} />
+        <ActionPreview allowEdit={allowEdit} />
+        <WitnessPreview allowEdit={allowEdit} />
+        <SignOffPreview allowEdit={allowEdit} />
+        <Button
+          label={allowEdit ? 'Submit' : 'Edit'}
+          className='mt-8'
+          onPress={toggleAlowEdit}
+        />
+
         {/* general information */}
         {/* <View className={`${commonWrapCls} mt-4`}>
           <Text className={`${commonTitleCls}`}>General Information</Text>
@@ -74,10 +78,6 @@ export default function PreviewIncident() {
           ))}
         </View> */}
         {/* First aid */}
-        <View className={`${commonWrapCls} mt-4`}>
-          <Text className={`${commonTitleCls}`}>Daily Sign off</Text>
-
-        </View>
       </ScrollView>
     </SafeAreaView>
   )

@@ -1,6 +1,6 @@
 import { images } from '@assets/images';
 import { Button, Image, Text } from '@components/ui';
-import dayjs from 'dayjs';
+import { convertHHMMSSDDMMYYYY } from '@utils/date.util';
 import React, { useRef, useState } from 'react';
 import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
@@ -11,18 +11,14 @@ export const signatureStyle = `
   display: none;
 }
 body,html {
-  height: 160px;
+  height: 144px;
   background-color: white;;
-
 }
-
 .m-signature-pad {
   margin: 0;
   box-shadow: none; 
-  border: 2px dashed #B5B5B5;
-  border-radius: 4px;
-  
-
+  border: 1px solid #BEBEBE;
+  border-radius: 14px;
 }
 .m-signature-pad--body {
   position: absolute;
@@ -41,14 +37,11 @@ interface Props {
   onEnd?: () => void;
   setValue: UseFormSetValue<any>;
   name?: string;
-  workerName?: string;
-  role?: string;
-  status?: string
   errors?: FieldErrors;
   control: Control<any, any>;
 }
 
-export function Signature({ onBegin, onEnd, control, name, classNameWrap, role, status, workerName, setValue }: Props) {
+export function Signature({ onBegin, onEnd, control, name, classNameWrap, setValue }: Props) {
   const refSignature = useRef<SignatureViewRef>(null);
   const [isValidSignature, setIsValidSignature] = useState(false);
   const signatureBase64 = useWatch({ name: `${name}.signature`, control })
@@ -83,54 +76,44 @@ export function Signature({ onBegin, onEnd, control, name, classNameWrap, role, 
   }
 
   return (
-    <View className={`border border-primary  p-4 rounded-[10px] ${classNameWrap}`}>
-      <View className='flex-row items-start justify-between'>
-        <View>
-          <Text className='text-[18px] font-medium'>{workerName || "Worker's name"}</Text>
-          <Text className='mt-1'>{role || 'Role'}</Text>
-        </View>
-        <View className=' items-end'>
-          <View className='justify-center items-center h-8 w-[84px] bg-gray rounded-full'>
-            <Text className='text-white'>{signatureBase64 ? 'Signed' : 'Pending'}</Text>
-          </View>
-          {timestamp && <Text className='mt-1'>{dayjs(timestamp).format('HH:mm:ss DD/M/YYYY')}</Text>}
-        </View>
-      </View>
+    <View className={` ${classNameWrap}`}>
       {signatureBase64 ? (
-        <View className="border-2 border-border mt-4 rounded-[10px] border-dashed" >
-          <Image source={{ uri: signatureBase64 }} className="w-full h-[160]" />
+        <View className="border border-border  rounded-[10px] " >
+          <Text className='absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 '>Add signature</Text>
+          <Image source={{ uri: signatureBase64 }} className="w-full h-[144]" />
           <Button className="absolute right-2 top-2" onPress={onDeleteSignature}>
             <Image source={images.close} className="w-[32] h-[32] " />
           </Button>
+          <Text className='text-neutral70 text-[12px] absolute right-4 bottom-4 '>{convertHHMMSSDDMMYYYY(timestamp)}</Text>
         </View>
       ) : (
-        <View>
+        <>
+          <Text className='absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 '>Add signature</Text>
           <SignatureScreen
-            style={{ height: 160, marginTop: 16 }}
+            style={{ height: 144 }}
             ref={refSignature}
             onOK={onSaveEvent}
             webStyle={signatureStyle}
             onEnd={_onEnd}
             onBegin={onBegin}
-            bgHeight={160}
+            bgHeight={144}
           />
-          {/* {messageError && <Text className="text-red mt-[6] text-[11px]">{messageError}</Text>} */}
           <View className="mt-4 flex-row items-center gap-x-4">
             <Button
               onPress={onResetSign}
               label="Clear"
-              type='outlined'
-              className="flex-1"
+              type='small'
+              className=' w-[135px] bg-white border-primary border'
             />
             <Button
               disabled={!isValidSignature}
               onPress={onSaveSign}
+              type='small'
               label="Submit signature"
-              className="flex-1 "
+              className=' bg-teal20'
             />
           </View>
-
-        </View>
+        </>
       )}
     </View>
   );

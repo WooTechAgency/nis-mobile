@@ -1,9 +1,9 @@
 // UserContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { SignOffForm, SigningForm } from './create-incident/steps/step-sign-off';
+import React, { ReactNode, createContext, useContext, useState } from 'react';
+import { ActionForm } from './create-incident/steps/step-action';
 import { GeneralForm } from './create-incident/steps/step-general-info';
 import { IncidentForm } from './create-incident/steps/step-incident';
-import { ActionForm } from './create-incident/steps/step-action';
+import { SignOffForm, SigneeForm } from './create-incident/steps/step-sign-off';
 import { WitnessForm } from './create-incident/steps/step-witness';
 
 export enum IncidentSteps {
@@ -19,7 +19,7 @@ export type Incident = {
   incident?: IncidentForm | undefined
   action?: ActionForm | undefined
   witness?: WitnessForm | undefined
-  singing?: SignOffForm | undefined
+  singing?: SigneeForm[] | undefined
   selectedIndex: number;
   enableScroll?: boolean
   completedSteps?: number[]
