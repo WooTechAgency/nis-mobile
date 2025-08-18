@@ -30,7 +30,7 @@ export function Button(props: Props) {
       <TouchableOpacity
         {...props}
         className={`flex-row justify-center items-center px-4 h-14 rounded-[14px] ${MappingBtn[type]}
-         ${disabled && 'bg-neutral5'} ${props.className} 
+         ${disabled && 'bg-[#F1F1F1]'} ${props.className} 
         `}
       >
         {iconButton && iconButton}

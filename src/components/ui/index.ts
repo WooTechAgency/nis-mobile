@@ -17,3 +17,4 @@ export * from './YesNoForm';
 export * from './YesNoForm';
 export * from './Wrapper';
 export * from './CheckboxDescriptionForm';
+export * from './MediaForm';

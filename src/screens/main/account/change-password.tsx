@@ -1,5 +1,5 @@
 import { images } from '@assets/images';
-import { Button, Image, SafeAreaView, ScrollView, Text } from '@components/ui';
+import { Button, Image, SafeAreaView, ScrollView, Text, Wrapper } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { PATTERN } from '@constants/pattern.constant';
@@ -69,16 +69,14 @@ export default function ChangePassword() {
   const isPasswordError = errors.newPassword?.message;
 
   return (
-    <SafeAreaView className='flex-1 bg-white '>
+    <SafeAreaView className=''>
       <ScrollView>
         <Header
           isBack
           title='Change password'
-
         />
-        <View className='px-5'>
+        <Wrapper className='mt-[0px] pt-[24px]'>
           <TextInput
-            classNameWrap='mt-8'
             errors={errors}
             control={control}
             isShowError={false}
@@ -142,7 +140,7 @@ export default function ChangePassword() {
             <Button label='Cancel' type='outlined' onPress={goBack} className='flex-1' />
             <Button label='Save' disabled={!isValid} onPress={handleSubmit(onSavePassword)} className='flex-1' />
           </View>
-        </View>
+        </Wrapper>
       </ScrollView>
       <Loading loading={loading} />
     </SafeAreaView>

@@ -1,33 +1,55 @@
-import { Button, MediaForm, SelectOption, SelectRating, YesNoForm } from '@components/ui';
-import { TextInput } from '@components/ui/TextInput';
+import { images } from '@assets/images';
+import { Button, Image } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
+import React from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { Keyboard, View } from 'react-native';
+import { Asset } from 'react-native-image-picker';
 import * as yup from 'yup';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
-import Title from '@components/title';
+import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
+import { HazardItem } from '../components/hazard-item';
 
 export interface HazardForm {
   description?: string;
-  likelihood?: string;
-  consequence?: string;
-  initialRiskRating?: string;
+  medias?: Asset[];
+  likelihoodState?: string;
+  consequenceState?: string;
+  consequenceDes?: string;
+  initialRating?: string;
   controlMeasure?: string;
   residualRiskRating?: string;
 }
+
+export interface HazardsForm {
+  haveHazards?: boolean;
+  hazards?: HazardForm[];
+}
+
+const hazardDefault = {
+  description: '',
+}
+
 const formSchema = yup.object().shape({
-  description: yup.string().notRequired(),
-  likelihood: yup.string().notRequired(),
-  consequence: yup.string().notRequired(),
-  initialRiskRating: yup.string().notRequired(),
-  controlMeasure: yup.string().notRequired(),
-  residualRiskRating: yup.string().notRequired(),
   haveHazards: yup.boolean().notRequired(),
+  hazards: yup
+    .array()
+    .notRequired()
+    .of(
+      yup.object({
+        description: yup.string().notRequired(),
+        medias: yup.mixed().notRequired(),
+        likelihoodState: yup.string().notRequired(),
+        consequenceState: yup.date().notRequired(),
+        consequenceDes: yup.string().notRequired(),
+        initialRating: yup.string().notRequired(),
+        controlMeasure: yup.string().notRequired(),
+        residualRiskRating: yup.string().notRequired()
+      })
+    ),
 });
 
 export default function StepHazards() {
-  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext()
+  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext();
   const {
     control,
     handleSubmit,
@@ -37,6 +59,12 @@ export default function StepHazards() {
     defaultValues: {},
     mode: 'onChange',
     resolver: yupResolver(formSchema),
+  });
+
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'hazards',
   });
 
   const onBack = () => {
@@ -53,89 +81,34 @@ export default function StepHazards() {
     }))
   }
 
+  const addField = () => {
+    Keyboard.dismiss()
+    append(hazardDefault);
+  };
+
+
   return (
-    <View className=' mt-6 gap-y-8'>
-      <View className=' bg-white p-6 rounded-[20px] gap-y-8'>
-        <View className='flex-row items-center gap-x-6   '>
-          <TextInput
-            classNameWrap='w-[65%]'
-            errors={errors}
-            control={control}
-            name='methodStatement'
-            value='SWMS-001: NSW TRANSDEV LVR PYRMONT  '
-            className='text-[#4A4646]'
-            label='Safe Work Method Statement'
-            disabled
-          />
-          <Button
-            label='Check SWMS'
-            className='flex-1'
-          />
-        </View>
-        <YesNoForm
-          isRadio
-          control={control}
-          name='haveHazards'
-          setValue={setValue}
-          label='Are there any additional site hazards?'
-        />
-      </View>
-      {/* Hazard */}
-      <View className='p-6 rounded-[20px] bg-white gap-y-6'>
-        <Title label='Hazard 1' />
-        <TextInput
-          errors={errors}
-          control={control}
-          name='description'
-          label='Please describe the hazard'
-          placeholder='Describe the hazard........'
-          multiline
-          hasVoice
-        />
-        <MediaForm
-          isRadio
-          control={control}
-          name='photos'
-          setValue={setValue}
-          label='Photos'
-        />
-        <SelectOption
-          control={control}
-          setValue={setValue}
-          classNameWrap='mt-6'
-          name='likelihood'
-          label='What is its likelihood?'
-        />
-        <TextInput
-          errors={errors}
-          control={control}
-          name='consequence'
-          label='What are the consequences'
-          placeholder='Describe the consequences..'
-          multiline
-        />
-        <SelectRating
-          control={control}
-          setValue={setValue}
-          name='initialRiskRating'
-          label='Initial Risk Rating'
-        />
-        <TextInput
-          classNameWrap='mt-6'
-          errors={errors}
-          control={control}
-          name='measure'
-          label='What are the control measures?'
-          placeholder='Describe the control measures....'
-          multiline
-        />
-        <SelectRating
-          control={control}
-          setValue={setValue}
-          name='residualRiskRating'
-          label='What is its likelihood?'
-        />
-      </View>
+    <View className='mt-6 gap-y-8'>
+      {fields.map((item, index) => {
+        return (
+          <View key={item.id} style={{ zIndex: 50 - index }}>
+            <HazardItem
+              index={index}
+              classNameWrap='mt-6'
+              control={control}
+              setValue={setValue}
+              errors={errors}
+              name='signees'
+            />
+          </View>
+        );
+      })}
+      <Button
+        onPress={addField}
+        iconButton={<Image source={images.plus} className='w-8 h-8' />}
+        label='Add Hazard'
+        type='small'
+      />
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />

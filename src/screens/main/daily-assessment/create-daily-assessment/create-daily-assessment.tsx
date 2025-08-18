@@ -26,7 +26,7 @@ export default function CreateDailyAssessment() {
   const renderSteps = () => {
     switch (selectedIndex) {
       case DailyAssessmentSteps.General:
-        return <StepHazards />
+        return <StepSigning />
       case DailyAssessmentSteps.Hazards:
         return <StepHazards />
       case DailyAssessmentSteps.FirstAid:

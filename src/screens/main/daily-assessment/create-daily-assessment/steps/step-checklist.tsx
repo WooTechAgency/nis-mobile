@@ -1,4 +1,4 @@
-import { Button, CheckList, SelectOption, SelectRating } from '@components/ui';
+import { Button, CheckList, SelectOption, SelectRating, Wrapper } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
@@ -42,21 +42,22 @@ export default function StepCheckList() {
   }
 
   return (
-    <View className=' mt-6'>
+    <>
+      <Wrapper className='gap-y-6' >
+        <Text className='text-[25px] font-semibold'>{'Team Leader Pre-start Check List'}</Text>
+        <CheckList
+          errors={errors}
+          control={control}
+          name='checklist'
+          setValue={setValue}
+        />
 
-      <Text className='text-[25px] font-semibold'>{'Team Leader Pre-start Check List'}</Text>
-      <CheckList
-        classNameWrap='mt-6'
-        errors={errors}
-        control={control}
-        name='checklist'
-        setValue={setValue}
-      />
 
+      </Wrapper>
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
-    </View>
+    </>
   )
 }

@@ -1,14 +1,12 @@
 // UserContext.tsx
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { HazardForm } from './create-daily-assessment/steps/step-hazards';
+import { HazardForm, HazardsForm } from './create-daily-assessment/steps/step-hazards';
 import { GeneralForm } from './create-daily-assessment/steps/step-general-info';
 import { FirstAidForm } from './create-daily-assessment/steps/step-first-aid';
 import { CheckListForm } from './create-daily-assessment/steps/step-checklist';
 import { SigningForm } from './create-daily-assessment/steps/step-signing';
 
 interface GeneralInformation extends GeneralForm {
-}
-interface Hazard extends HazardForm {
 }
 interface FirstAid extends FirstAidForm {
 }
@@ -23,7 +21,7 @@ export enum DailyAssessmentSteps {
 
 export type DailyAssessment = {
   generalInfo?: GeneralInformation | undefined
-  hazard?: Hazard | undefined
+  hazard?: HazardsForm | undefined
   firstAid?: FirstAid | undefined
   checkList?: CheckListForm | undefined
   singing?: SigningForm | undefined

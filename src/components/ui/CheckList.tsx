@@ -50,10 +50,10 @@ export function CheckList(props: Props) {
             <Button
               onPress={() => onSelect(option)}
               key={index}
-              className={`flex-row items-center gap-x-2`}
+              className={`flex-row items-center gap-x-2 h-[56px] border border-border px-4 rounded-[12px]`}
             >
-              <Image source={selected ? images.checked : images.checkbox} className='w-6 h-6' />
-              <Text className='text-[18px]' >{option.title}</Text>
+              <Image source={selected ? images.checked : images.checkbox} className='w-10 h-10' />
+              <Text className='' >{option.title}</Text>
             </Button>
           )
         }

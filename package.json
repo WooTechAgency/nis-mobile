@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
-    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-documents/picker": "^10.1.5",
     "@react-native-voice/voice": "^3.2.4",
     "@react-navigation/drawer": "^7.5.3",
@@ -37,7 +36,7 @@
     "react-native-image-picker": "^8.2.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-keyboard-controller": "^1.18.0",
-    "react-native-mmkv": "^3.2.0",
+    "react-native-mmkv": "^3.3.0",
     "react-native-paper": "^5.14.5",
     "react-native-reanimated": "3.19.0",
     "react-native-safe-area-context": "^5.5.2",

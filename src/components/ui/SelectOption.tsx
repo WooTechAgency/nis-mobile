@@ -13,17 +13,17 @@ interface Props {
   label?: string;
   classNameWrap?: string;
   errors?: FieldErrors;
-  listValue?: any[];
+  options: any[];
 }
 
-const options = [
-  { key: 'low', title: 'Low', bg: '#EAECF0', color: 'black' },
-  { key: 'medium', title: 'Medium', bg: '#C7CAD0', color: 'black' },
-  { key: 'high', title: 'High', bg: '#667085', color: 'white' },
-];
+// const options = [
+//   { key: 'low', title: 'Low', bg: '#EAECF0', color: 'black' },
+//   { key: 'medium', title: 'Medium', bg: '#C7CAD0', color: 'black' },
+//   { key: 'high', title: 'High', bg: '#667085', color: 'white' },
+// ];
 
 export function SelectOption(props: Props) {
-  const { setValue, name, control, label, labelCls, listValue, classNameWrap, errors } = props;
+  const { setValue, name, control, label, labelCls, options, classNameWrap, errors, } = props;
   const value = useWatch({
     name,
     control,
@@ -43,10 +43,10 @@ export function SelectOption(props: Props) {
           <Button
             onPress={() => onSelect(option)}
             key={index}
-            style={{ backgroundColor: option.bg }}
-            className={`w-[147px] h-[48px] rounded-full justify-center items-center ${value === option.key && 'border border-red'}`}
+            // style={{ backgroundColor: option.bg }}
+            className={`w-[147px] h-[48px] bg-teal20 rounded-full justify-center items-center ${value === option.key && 'border border-primary'}`}
           >
-            <Text className='font-medium' style={{ color: option.color }}>{option.title}</Text>
+            <Text className='font-medium'>{option.title}</Text>
           </Button>
         )}
       </View>

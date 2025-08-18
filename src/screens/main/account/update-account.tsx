@@ -1,5 +1,5 @@
 import Header from '@components/header';
-import { Button, Image, SafeAreaView, ScrollView, Text, View } from '@components/ui';
+import { Button, Image, SafeAreaView, ScrollView, Text, View, Wrapper } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -73,20 +73,9 @@ export default function UpdateAccount() {
 
   return (
     <SafeAreaView className='bg-neutral-100'>
-      <Header
-        title='Account details'
-        rightComponent={
-          <Button className='flex-row items-center ' onPress={goBack}>
-            <Image source={images.arrowLeft} className='w-10 h-10' />
-            <Text>Back</Text>
-          </Button>
-        }
-      />
+      <Header title='Account details' />
       <ScrollView>
-        <View
-          className='flex-row items-start gap-x-12 mt-6 bg-white p-5 rounded-[20px] '
-          style={shadowStyle}
-        >
+        <Wrapper className='flex-row items-start gap-x-12 mt-[0px] ' >
           <AccountLogo />
           <View className='flex-1'>
             <TextInput
@@ -137,7 +126,7 @@ export default function UpdateAccount() {
               />
             </View>
           </View>
-        </View>
+        </Wrapper>
       </ScrollView>
       <Loading loading={loading} />
     </SafeAreaView>

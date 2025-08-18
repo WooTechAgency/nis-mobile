@@ -3,27 +3,26 @@ import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import authenticationSlice from './slices/authenticationSlice';
 import commonSlice from './slices/commonSlice';
 import { storage } from './mkkv';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 // import { isAndroid } from '@constants/app.constants';
 
-//  const mvvkStorage: Storage = {
-//   setItem: (key, value) => {
-//     storage.set(key, value);
-//     return Promise.resolve(true);
-//   },
-//   getItem: (key) => {
-//     const value = storage.getString(key);
-//     return Promise.resolve(value);
-//   },
-//   removeItem: (key) => {
-//     storage.delete(key);
-//     return Promise.resolve();
-//   },
-// };
+ const mvvkStorage: Storage = {
+  setItem: (key, value) => {
+    storage.set(key, value);
+    return Promise.resolve(true);
+  },
+  getItem: (key) => {
+    const value = storage.getString(key);
+    return Promise.resolve(value);
+  },
+  removeItem: (key) => {
+    storage.delete(key);
+    return Promise.resolve();
+  },
+};
 
 const persistConfig = {
   key: 'root',
-  storage: AsyncStorage,
+  storage: mvvkStorage,
   whitelist: ['authentication',],
 };
 

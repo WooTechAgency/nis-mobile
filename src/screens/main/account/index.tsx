@@ -1,7 +1,7 @@
 import { images } from '@assets/images';
 import Header from '@components/header';
 import { CommonModal } from '@components/modal';
-import { Button, Image, SafeAreaView, Text, View } from '@components/ui';
+import { Button, Image, SafeAreaView, Text, View, Wrapper } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
 import { useAppSelector } from '@hooks/common';
@@ -53,10 +53,7 @@ export default function Account() {
   return (
     <SafeAreaView className={``}>
       <Header title='Account details' />
-      <View
-        className='flex-row items-start gap-x-8 mt-6 bg-white p-6 rounded-[20px] '
-        style={shadowStyle}
-      >
+      <Wrapper className='flex-row items-start gap-x-12 mt-[0px] ' >
         <AccountLogo />
         <View className='flex-1'>
           <View className='flex-row items-center justify-between'>
@@ -139,7 +136,7 @@ export default function Account() {
           btnPositiveText='Yes'
           onPositive={onLogout}
         />
-      </View>
+      </Wrapper>
     </SafeAreaView>
   )
 }

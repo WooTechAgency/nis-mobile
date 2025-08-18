@@ -1,4 +1,4 @@
-import { Button, SelectOption, SelectRating, YesNoForm } from '@components/ui';
+import { Button, SelectOption, SelectRating, Wrapper, YesNoForm } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useState } from 'react';
@@ -49,7 +49,7 @@ export default function StepFirstAid() {
   }
 
   return (
-    <View className=' mt-6'>
+    <Wrapper className='gap-y-6'>
       {/* <View className='self-center'>
         <Text className='text-[25px] font-semibold mt-8'>Are there any first aid required??</Text>
         <YesNoForm
@@ -61,7 +61,6 @@ export default function StepFirstAid() {
       {/* Hazard */}
       <Text className='text-[25px] font-semibold'>{'First Aid Facilities'}</Text>
       <TextInput
-        classNameWrap='mt-6'
         errors={errors}
         control={control}
         name='name'
@@ -71,32 +70,36 @@ export default function StepFirstAid() {
       <TextInput
         control={control}
         setValue={setValue}
-        classNameWrap='mt-6'
         name='firstAidLocation'
         label='First Aid Box Location'
         placeholder='First Aid Box Location'
       />
       <TextInput
-        classNameWrap='mt-6'
         errors={errors}
         control={control}
         name='hospitalLocation'
         label='Location of Nearest Hospital'
         placeholder='Location of Nearest Hospital'
       />
-      <Text className='text-[25px] font-semibold mt-8'>{'Emergency Assembly Point'}</Text>
       <TextInput
-        classNameWrap='mt-6'
+        errors={errors}
+        control={control}
+        name='location'
+        label='Location'
+        placeholder='Emergency Assembly Point'
+      />
+      {/* <Text className='text-[25px] font-semibold mt-8'>{'Emergency Assembly Point'}</Text>
+      <TextInput
         errors={errors}
         control={control}
         name='assemblyPoint'
         label='Assemply Point'
         placeholder='Assemply Point'
-      />
-      <View className='mt-6 flex-row gap-x-6'>
+      /> */}
+      <View className=' flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
-    </View>
+    </Wrapper>
   )
 }

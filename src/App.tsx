@@ -27,19 +27,19 @@ if (__DEV__) {
 function App() {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <SafeAreaProvider>
-          <PaperProvider>
-            <QueryClientProvider client={queryClient}>
-              <GestureHandlerRootView className='flex-1'>
-                <RootNavigator />
-                <Toast config={toastConfig} position='bottom' />
-                <ErrorModal />
-              </GestureHandlerRootView>
-            </QueryClientProvider>
-          </PaperProvider>
-        </SafeAreaProvider>
-      </PersistGate>
+      {/* <PersistGate loading={null} persistor={persistor}> */}
+      <SafeAreaProvider>
+        <PaperProvider>
+          <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView className='flex-1'>
+              <RootNavigator />
+              <Toast config={toastConfig} position='bottom' />
+              <ErrorModal />
+            </GestureHandlerRootView>
+          </QueryClientProvider>
+        </PaperProvider>
+      </SafeAreaProvider>
+      {/* </PersistGate> */}
     </Provider>
 
 

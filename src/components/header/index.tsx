@@ -12,12 +12,14 @@ interface Props {
 }
 export default function Header({ title, onCustomBack, isBack, rightComponent }: Props) {
   return (
-    <View className='flex-row items-start justify-between h-[64px]'>
-      {isBack && <Image source={images.arrowLeft} className='w-10 h-10' onPress={onCustomBack || goBack} />}
-      <Text className='text-[35px] font-medium'>{title}</Text>
-      {/* width is equal with Image */}
+    <View className='flex-row items-center justify-between h-[50px] mb-[14px]'>
       {(isBack) && <View className='w-10 h-10' />}
-      {rightComponent && <View className='absolute right-4'>{rightComponent}</View>}
+      <Text className='text-[35px] font-medium'>{title}</Text>
+      {isBack && <Button className='flex-row items-center ' onPress={onCustomBack || goBack}>
+        <Image source={images.arrowLeft} className='w-10 h-10' />
+        <Text>Back</Text>
+      </Button>
+      }
     </View>
   )
 }
