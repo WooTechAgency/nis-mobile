@@ -117,7 +117,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
 
   const menuItems = useMemo(() => [
     { title: 'Dashboard', url: images.dashboard, routeIndex: 0 },
-    { title: 'Job', url: images.job, routeIndex: 1 },
+    { title: 'Jobs', url: images.job, routeIndex: 1 },
     { title: 'Daily assessment', url: images.dailyAssessment, routeIndex: 2 },
     { title: 'Incidents', url: images.incident, routeIndex: 3 },
     { title: 'Account', url: images.setting, routeIndex: 4 }
@@ -128,9 +128,9 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
       <SafeAreaView className={`pl-8 pr-4 bg-white ${collapsedDrawer && 'pl-4'}`}>
         <View className='mt-4 pb-8 flex-col h-full  '>
           <Button onPress={onClickLogo} className=' '>
-            <View className='flex-row  items-center ml-[12]'>
+            <View className='flex-row  '>
               <Animated.Image
-                style={{ opacity, width: 130, height: 45, marginLeft: -6 }}
+                style={{ width: 53, height: 31 }}
                 source={images.logo}
                 resizeMode={'contain'}
               />

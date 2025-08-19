@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, PermissionsAndroid, Platform } from 'react-native';
 import Voice from '@react-native-voice/voice';
+import { SafeAreaView } from '@components/ui';
+import Title from '@components/title';
+import Header from '@components/header';
 
 export default function Dashboard() {
   const [result, setResult] = useState('');
@@ -61,16 +64,8 @@ export default function Dashboard() {
   };
 
   return (
-    <View style={{ padding: 20 }}>
-      <Text style={{ fontSize: 18, marginBottom: 10 }}>
-        {isListening ? 'Listening...' : 'Press to Start'}
-      </Text>
-
-      <Button title="Start Voice Recognition" onPress={startListening} />
-      <Button title="Stop" onPress={stopListening} color="red" />
-
-      <Text style={{ marginTop: 20, fontSize: 16 }}>Kết quả:</Text>
-      <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{result}</Text>
-    </View>
+    <SafeAreaView>
+      <Header title='Dashboard' />
+    </SafeAreaView>
   );
 }

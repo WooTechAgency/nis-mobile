@@ -29,7 +29,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       launchOptions: launchOptions
     )
 
+      // Force app xoay landscape khi launch
+   DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+      UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+      UINavigationController.attemptRotationToDeviceOrientation()
+  }
+
     return true
+  }
+
+  func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+    return .landscapeLeft
   }
 }
 

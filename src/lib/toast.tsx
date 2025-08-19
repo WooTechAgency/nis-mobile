@@ -16,7 +16,7 @@ export const toastConfig = {
     </View>
   ),
   error: ({ text1, text2 }: ToastConfigParams<any>) => (
-    <View className={`${parentCls} border-red-500 bg-red-100`}>
+    <View className={`${parentCls} border-red bg-red-100`}>
       <Image source={images.error} className='w-[18px] h-[18px]' />
       <View className=''>
         <Text className={`${titleCls} text-[14px] font-regular`}>{text1}</Text>

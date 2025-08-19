@@ -38,9 +38,9 @@ export default function Login() {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      // email: mmkv.getString(MMKV_KEY.EMAIL),
+      email: mmkv.getString(MMKV_KEY.EMAIL),
     },
-    mode: 'onBlur',
+    mode: 'all',
     resolver: yupResolver(formSchema),
   });
 
@@ -54,7 +54,7 @@ export default function Login() {
     try {
       setLoading(true);
       const response = await loginApi({ email: data.email, password: data.password });
-      // mmkv.set(MMKV_KEY.EMAIL, data.email)
+      mmkv.set(MMKV_KEY.EMAIL, data.email)
       dispatch(setUserInfo({ ...response.user, token: response.token, }));
       navigationRef.dispatch(StackActions.replace(RouteName.MainNavigator));
     } finally {

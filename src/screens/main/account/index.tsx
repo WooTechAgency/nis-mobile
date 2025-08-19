@@ -3,7 +3,6 @@ import Header from '@components/header';
 import { CommonModal } from '@components/modal';
 import { Button, Image, SafeAreaView, Text, View, Wrapper } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
-import { shadowStyle } from '@constants/config.constants';
 import { useAppSelector } from '@hooks/common';
 import { useToggle } from '@hooks/useToggle';
 import { StackActions } from '@react-navigation/native';
@@ -17,7 +16,6 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AccountLogo from './components/account-logo';
-import { colors } from '@constants/colors.constants';
 
 export default function Account() {
   const dispatch = useDispatch()
@@ -45,9 +43,12 @@ export default function Account() {
 
   const onLogout = async () => {
     logoutApi()
-    dispatch(setUserInfo(null));
     query.clear();
     navigationRef.dispatch(StackActions.replace(RouteName.Login))
+    setTimeout(() => {
+      dispatch(setUserInfo(null));
+    }, 500)
+
   }
 
   return (

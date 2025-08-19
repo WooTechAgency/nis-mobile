@@ -29,15 +29,15 @@ export function Button(props: Props) {
     return (
       <TouchableOpacity
         {...props}
-        className={`flex-row justify-center items-center px-4 h-14 rounded-[14px] ${MappingBtn[type]}
-         ${disabled && 'bg-[#F1F1F1]'} ${props.className} 
+        className={`flex-row justify-center items-center px-4 h-14 rounded-[14px] 
+         ${disabled ? 'bg-[#F1F1F1]' : MappingBtn[type]} ${props.className} 
         `}
       >
         {iconButton && iconButton}
         <Text className={`text-[16px] 
-        ${disabled ? 'text-neutral50' : MappingLabel[type]} 
-        ${classNameLabel}`
-        }>
+          ${disabled ? 'text-neutral50' : MappingLabel[type]} 
+          ${classNameLabel}`}
+        >
           {label}
         </Text>
       </TouchableOpacity>
