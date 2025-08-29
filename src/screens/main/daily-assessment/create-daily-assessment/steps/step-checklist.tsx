@@ -1,13 +1,13 @@
-import { Button, CheckList, SelectOption, SelectRating, Wrapper } from '@components/ui';
-import { TextInput } from '@components/ui/TextInput';
+import { Button, CheckList, Wrapper } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { TeamLeaderCheckList } from '../../config.assessment';
+import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 
 export interface CheckListForm {
   checklist?: string[];
@@ -16,7 +16,7 @@ const formSchema = yup.object().shape({
   checklist: yup.array().required('You must tick all checkboxes').length(TeamLeaderCheckList.length, 'You must tick all checkboxes'),
 });
 
-export default function StepCheckList() {
+export default function StepCheckList({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, checkList } } = useAssessmentContext()
   const {
     control,
@@ -43,6 +43,7 @@ export default function StepCheckList() {
       selectedIndex: DailyAssessmentSteps.Signing,
       completedSteps: Array.from(newCompletedSteps)
     }))
+    editingMode && navigate(RouteName.Preview)
   }
 
   return (
@@ -59,7 +60,7 @@ export default function StepCheckList() {
       </Wrapper>
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
-        <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />
+        <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
     </>
   )

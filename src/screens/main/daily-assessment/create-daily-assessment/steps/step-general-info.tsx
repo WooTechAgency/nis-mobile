@@ -13,6 +13,8 @@ import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -38,7 +40,7 @@ const formSchema = yup.object().shape({
   methodStatement: yup.string().required('Method statement is required'),
   description: yup.string().required('Description is required'),
 });
-export default function StepGeneralInformation() {
+export default function StepGeneralInformation({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo } } = useAssessmentContext();
   const { userInfo } = useAppSelector(state => state.authentication)
   const {
@@ -69,6 +71,7 @@ export default function StepGeneralInformation() {
       selectedIndex: DailyAssessmentSteps.Hazards,
       completedSteps: Array.from(newCompletedSteps)
     }))
+    editingMode && navigate(RouteName.Preview)
   }
 
   const onSelectSite = (site: ISite) => {
@@ -145,7 +148,7 @@ export default function StepGeneralInformation() {
       />
       <Button
         className='mt-6'
-        label='Next'
+        label={editingMode ? 'Save' : 'Next'}
         onPress={handleSubmit(onSubmit)}
       />
     </View>

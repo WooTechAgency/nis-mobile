@@ -1,19 +1,21 @@
 import HeaderPreview from '@components/common/header-preview'
 import { shadowStyle } from '@constants/config.constants'
 import { useToggle } from '@hooks/useToggle'
-import { goBack } from '@routes/navigationRef'
+import { dispatch, goBack } from '@routes/navigationRef'
 import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context'
 import { PreviewProps } from '@screens/main/incidents/config.incident'
 import React from 'react'
 import { View } from 'react-native'
-import HazardItemPreview from '../hazard-item-preview'
+import HazardItemPreview from './hazard-item-preview'
+import { RouteName } from '@routes/types'
+import { StackActions } from '@react-navigation/native'
 
 export default function HazardPreview({ allowEdit }: PreviewProps) {
   const { assessment: { hazard }, setAssessment } = useAssessmentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
 
   const onEdit = () => {
-    goBack()
+    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editingMode: true }))
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Hazards }))
   }
 

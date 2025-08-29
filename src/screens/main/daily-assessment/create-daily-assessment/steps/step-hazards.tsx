@@ -10,6 +10,8 @@ import * as yup from 'yup';
 import { SelectItem } from '../../config.assessment';
 import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
 import { HazardItem } from '../components/hazard-item';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 
 export interface HazardForm {
   description?: string;
@@ -50,7 +52,7 @@ const formSchema = yup.object().shape({
     ).nullable(),
 });
 
-export default function StepHazards() {
+export default function StepHazards({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo, hazard } } = useAssessmentContext();
   const {
     control,
@@ -97,6 +99,7 @@ export default function StepHazards() {
       selectedIndex: DailyAssessmentSteps.FirstAid,
       completedSteps: Array.from(newCompletedSteps)
     }))
+    editingMode && navigate(RouteName.Preview)
   }
 
   const addField = () => {
@@ -177,7 +180,7 @@ export default function StepHazards() {
 
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
-        <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />
+        <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
     </View>
   )

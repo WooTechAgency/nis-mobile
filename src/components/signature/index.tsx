@@ -50,7 +50,6 @@ export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap
   const messageError = getMessageError(errors, `${name}.signature`);
 
   const onSaveSign = async () => {
-    const validSignature = await trigger(`${name}.signature`)
     refSignature?.current?.readSignature();
   };
 

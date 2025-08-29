@@ -5,7 +5,7 @@ import { Button, Text } from '@components/ui';
 import { useToggle } from '@hooks/useToggle';
 import React from 'react';
 import { Image, View } from 'react-native';
-import { HazardForm } from '../steps/step-hazards';
+import { HazardForm } from '../../steps/step-hazards';
 
 interface Props {
   toggleShowPreview?: () => void

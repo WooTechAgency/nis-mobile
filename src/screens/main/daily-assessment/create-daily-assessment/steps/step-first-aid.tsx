@@ -1,6 +1,8 @@
 import { Button, Wrapper } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
@@ -20,7 +22,7 @@ const formSchema = yup.object().shape({
   assemblyPoint: yup.string().notRequired(),
 });
 
-export default function StepFirstAid() {
+export default function StepFirstAid({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo, firstAid } } = useAssessmentContext()
   const {
     control,
@@ -47,6 +49,7 @@ export default function StepFirstAid() {
       selectedIndex: DailyAssessmentSteps.CheckList,
       completedSteps: Array.from(newCompletedSteps)
     }))
+    editingMode && navigate(RouteName.Preview)
   }
 
   return (
@@ -91,7 +94,7 @@ export default function StepFirstAid() {
       </Wrapper>
       <View className=' flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
-        <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />
+        <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
     </View>
   )

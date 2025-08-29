@@ -1,6 +1,6 @@
 import { FlatList, Image, Text } from '@components/ui'
 import { useToggle } from '@hooks/useToggle'
-import { goBack } from '@routes/navigationRef'
+import { dispatch, goBack } from '@routes/navigationRef'
 import React from 'react'
 import { View } from 'react-native'
 import { convertHHMMSSDDMMYYYY } from '@utils/date.util'
@@ -10,6 +10,8 @@ import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-
 import { flatListClassName, headerClassName, itemClassName, labelClassName } from '@screens/main/incidents/config.incident'
 import { SigneeForm } from '../../steps/step-sign-off'
 import { useAppSelector } from '@hooks/common'
+import { StackActions } from '@react-navigation/native'
+import { RouteName } from '@routes/types'
 
 
 export default function SignOffPreview({ allowEdit }: PreviewProps) {
@@ -18,12 +20,11 @@ export default function SignOffPreview({ allowEdit }: PreviewProps) {
   const { userInfo } = useAppSelector((state) => state.authentication)
 
   const onEdit = () => {
-    goBack()
+    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editable: true }))
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing }))
   }
 
   const data = [singing?.teamLeader, ...(singing?.signees || [])];
-  console.log('datadata ', data)
 
   return (
     <View className='mt-8 bg-white rounded-[20px]'>

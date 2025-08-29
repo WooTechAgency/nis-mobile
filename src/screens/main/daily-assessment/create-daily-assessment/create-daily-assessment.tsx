@@ -1,15 +1,16 @@
 import Header from '@components/header'
 import Steps from '@components/steps'
 import { SafeAreaView, ScrollView } from '@components/ui'
+import { useRoute } from '@react-navigation/native'
 import { goBack } from '@routes/navigationRef'
 import React from 'react'
 import { View } from 'react-native'
 import { DailyAssessmentSteps, useAssessmentContext } from '../context'
 import StepCheckList from './steps/step-checklist'
 import StepFirstAid from './steps/step-first-aid'
-import StepGeneralInformation from './steps/step-general-info'
 import StepHazards from './steps/step-hazards'
 import StepSignOff from './steps/step-sign-off'
+import StepGeneralInformation from './steps/step-general-info'
 
 
 const steps = {
@@ -21,20 +22,21 @@ const steps = {
 }
 
 export default function CreateDailyAssessment() {
+  const editingMode = useRoute().params?.editingMode as boolean
   const { assessment: { selectedIndex, enableScroll, completedSteps, generalInfo }, setAssessment } = useAssessmentContext();
 
   const renderSteps = () => {
     switch (selectedIndex) {
       case DailyAssessmentSteps.General:
-        return <StepGeneralInformation />
+        return <StepGeneralInformation editingMode={editingMode} />
       case DailyAssessmentSteps.Hazards:
-        return <StepHazards />
+        return <StepHazards editingMode={editingMode} />
       case DailyAssessmentSteps.FirstAid:
-        return <StepFirstAid />
+        return <StepFirstAid editingMode={editingMode} />
       case DailyAssessmentSteps.CheckList:
-        return <StepCheckList />
+        return <StepCheckList editingMode={editingMode} />
       case DailyAssessmentSteps.Signing:
-        return <StepSignOff />
+        return <StepSignOff editingMode={editingMode} />
       default:
         return <View />
     }

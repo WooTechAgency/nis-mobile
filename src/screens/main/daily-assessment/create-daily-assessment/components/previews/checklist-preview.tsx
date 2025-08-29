@@ -4,7 +4,9 @@ import { Image, Text } from '@components/ui'
 import { shadowStyle } from '@constants/config.constants'
 import { PreviewProps } from '@constants/interface'
 import { useToggle } from '@hooks/useToggle'
-import { goBack } from '@routes/navigationRef'
+import { StackActions } from '@react-navigation/native'
+import { dispatch, goBack } from '@routes/navigationRef'
+import { RouteName } from '@routes/types'
 import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context'
 import React from 'react'
 import { View } from 'react-native'
@@ -14,7 +16,7 @@ export default function CheckListPreview({ allowEdit }: PreviewProps) {
   const [collapsed, toggleCollapse] = useToggle(false)
 
   const onEdit = () => {
-    goBack()
+    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editingMode: true }))
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.CheckList }))
   }
 

@@ -69,8 +69,8 @@ export const TeamLeaderCheckList = [
   { key: '', title: 'PPE worn (hi-vis, boots, gloves, glasses)', },
   { key: '', title: 'Emergency evacuation plan reviewed', },
   { key: '', title: 'Emergency Assembly point identified and communicated', },
-  { key: '', title: 'First Aid kit available and accessible', },
-  { key: '', title: 'Site-specific hazards checked and documented', },
-  { key: '', title: 'All personnel free from the effects of drugs and alcohol', },
-  { key: '', title: 'All personnel free from the effects of fatigue ', },
+  // { key: '', title: 'First Aid kit available and accessible', },
+  // { key: '', title: 'Site-specific hazards checked and documented', },
+  // { key: '', title: 'All personnel free from the effects of drugs and alcohol', },
+  // { key: '', title: 'All personnel free from the effects of fatigue ', },
 ];

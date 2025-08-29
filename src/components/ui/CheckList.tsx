@@ -30,7 +30,7 @@ export function CheckList(props: Props) {
       // add
       newList = [...selectedList, option.title];
     }
-    setValue(name, newList, { shouldValidate: true });
+    setValue(name, newList, { shouldValidate: !!messageError });
   };
 
   return (

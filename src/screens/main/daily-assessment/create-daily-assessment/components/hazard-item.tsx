@@ -5,7 +5,7 @@ import { useToggle } from '@hooks/useToggle';
 import React, { useEffect } from 'react';
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, useWatch } from 'react-hook-form';
 import { consequenceOptions, likeliHoodOptions, riskRating } from '../../config.assessment';
-import HazardItemPreview from './hazard-item-preview';
+import HazardItemPreview from './previews/hazard-item-preview';
 import InitialRiskRating from './initial-risk-rating';
 import { SelectRiskRating } from './select-risk-rating';
 

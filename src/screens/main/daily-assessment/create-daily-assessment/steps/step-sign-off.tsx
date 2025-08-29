@@ -13,6 +13,7 @@ import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { SigneeItem } from '../components/signee-item';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 function Label({ text }: { text: string }) {
   return (
@@ -60,8 +61,11 @@ const formSchema = yup.object().shape({
     ),
 });
 
-export default function StepSignOff() {
-  const { setAssessment } = useAssessmentContext()
+export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
+  const { setAssessment, assessment: { singing } } = useAssessmentContext()
+  const editable = useRoute().params?.editable as boolean
+  const navigation = useNavigation();
+
   const { userInfo: cachedUser } = useAppSelector((state) => state.authentication)
   const {
     control,
@@ -70,7 +74,10 @@ export default function StepSignOff() {
     trigger,
     formState: { errors, },
   } = useForm({
-    defaultValues: {},
+    defaultValues: {
+      teamLeader: singing?.teamLeader,
+      signees: singing?.signees
+    },
     mode: 'all',
     resolver: yupResolver(formSchema),
   });
@@ -80,6 +87,9 @@ export default function StepSignOff() {
   });
 
   const onSubmit = (form: SigningForm) => {
+    if (editable && navigation.setParams) {
+      navigation.setParams({ editable: false })
+    }
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing, singing: form })) // Assuming 3 is the index for the next step
     navigate(RouteName.Preview)
   }
@@ -162,7 +172,7 @@ export default function StepSignOff() {
       />
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
-        <Button label='Preview' onPress={handleSubmit(onSubmit)} className='flex-1' />
+        <Button label={editable ? 'Save' : 'Preview'} onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
     </View>
   )
