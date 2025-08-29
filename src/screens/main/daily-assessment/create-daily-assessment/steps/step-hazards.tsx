@@ -1,17 +1,15 @@
 import { images } from '@assets/images';
 import { Button, Image, Wrapper, YesNoForm } from '@components/ui';
+import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import * as yup from 'yup';
+import { SelectItem } from '../../config.assessment';
 import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
 import { HazardItem } from '../components/hazard-item';
-import { TextInput } from '@components/ui/TextInput';
-import { SelectItem } from '../../config.assessment';
-import { RouteName } from '@routes/types';
-import { navigate } from '@routes/navigationRef';
 
 export interface HazardForm {
   description?: string;
@@ -49,7 +47,7 @@ const formSchema = yup.object().shape({
         controlMeasure: yup.string().required('Control measure is required!'),
         residualRiskRating: yup.object().required('Residual rating is required!')
       })
-    ),
+    ).nullable(),
 });
 
 export default function StepHazards() {
@@ -60,17 +58,27 @@ export default function StepHazards() {
     setValue,
     watch,
     trigger,
-    formState: { errors, },
+    resetField,
+    clearErrors,
+    formState: { errors },
   } = useForm({
     defaultValues: {
-      haveHazards: hazard?.haveHazards,
-      hazards: hazard?.hazards
+      haveHazards: hazard?.haveHazards || false,
+      hazards: hazard?.hazards || []
     },
     mode: 'all',
     resolver: yupResolver(formSchema),
   });
 
+  console.log('errors ', errors)
+
   const haveHazards = watch('haveHazards')
+  useEffect(() => {
+    if (!haveHazards) {
+      setValue('hazards', [])
+
+    }
+  }, [haveHazards])
 
   const { fields, append, remove } = useFieldArray({
     control,

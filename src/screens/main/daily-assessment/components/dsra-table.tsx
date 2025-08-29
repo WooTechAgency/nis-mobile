@@ -1,9 +1,15 @@
 import { images } from '@assets/images';
+import SelectedFilter from '@components/common/selected-filter';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
+import DropdownMenu from '@components/ui/DropdownMenu';
 import { TextInput } from '@components/ui/TextInput';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useToggle } from '@hooks/useToggle';
+import { useGetSites } from '@services/hooks/site/useGetSites';
 import { convertDDMMYYYY } from '@utils/date.util';
 import React from 'react';
-import { Control } from 'react-hook-form';
+import { Control, useForm, useWatch } from 'react-hook-form';
+import * as yup from 'yup';
 
 interface DailySiteRiskAssessment {
   id: string;
@@ -49,13 +55,34 @@ const percent = {
 }
 const headerCls = 'text-[12px] font-medium text-neutral50'
 const rowCls = 'text-[16px] text-neutral70'
+const formSchema = yup.object().shape({
+  search: yup.string().notRequired(),
+  site: yup.object().notRequired(),
+  date: yup.date().notRequired(),
+});
 
-export default function DailySiteRickAssessmentTable({ control }: Props) {
+export default function DailySiteRickAssessmentTable() {
+  const [visibleSites, toggleVisibleSites] = useToggle(false);
+  const [visibleDate, toggleVisibleDate] = useToggle(false);
+
+  const {
+    control,
+    setValue,
+  } = useForm({
+    defaultValues: {},
+    mode: 'onSubmit',
+    resolver: yupResolver(formSchema),
+  });
+
+  const { data: sites } = useGetSites();
 
   const filters = [
-    { icon: images.date32, title: 'Date' },
-    { icon: images.location, title: 'Site' }
+    { icon: images.location, name: 'site', title: 'Site', listValue: sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
+    { icon: images.date32, name: 'date', title: 'Date', listValue: sites, visible: visibleDate, toggleVisible: toggleVisibleDate },
   ]
+
+  const site = useWatch({ control, name: 'site' })
+  const date = useWatch({ control, name: 'date' })
 
   return (
     <View>
@@ -73,16 +100,27 @@ export default function DailySiteRickAssessmentTable({ control }: Props) {
 
       <View className='bg-white mt-6 rounded-[20px] p-6 '>
         <View className='flex-row items-center justify-between'>
-          <View className='row-center pl-3 rounded-lg bg-teal20'>
-            <Text className='text-xs font-medium'>Darling Harbour</Text>
-            <Image source={images.close32} className='w-8 h-8' />
-          </View>
+          {site ? <SelectedFilter label={site?.label} name='site' setValue={setValue} /> : <View />}
           <View className='flex-row gap-x-4 self-end'>
-            {filters.map((filter) => (
-              <Button className='row-center justify-center w-[135px] h-8 border border-primary rounded-lg ' key={filter.title}>
-                <Image source={filter.icon} className='w-8 h-8' />
-                <Text className='text-[12px] font-medium'>{filter.title}</Text>
-              </Button>
+            {filters.map((filter, index) => (
+              <DropdownMenu
+                key={index}
+                visible={filter.visible}
+                toggleVisible={filter.toggleVisible}
+                listValue={filter?.listValue || []}
+                setValue={setValue}
+                control={control}
+                name={filter.name}
+              >
+                <Button
+                  className='row-center justify-center w-[135px] h-8 border border-primary rounded-lg '
+                  key={filter.title}
+                  onPress={filter.toggleVisible}
+                >
+                  <Image source={filter.icon} className='w-8 h-8' />
+                  <Text className='text-[12px] font-medium'>{filter.title}</Text>
+                </Button>
+              </DropdownMenu>
             ))}
           </View>
         </View>
@@ -114,15 +152,6 @@ export default function DailySiteRickAssessmentTable({ control }: Props) {
           )
           }
         />
-        <View className='flex-row items-center self-end gap-x-3 ' >
-          <Text className='w-[64px] text-center text-neutral70 text-[12px]'>Previous</Text>
-          <Button
-            label='1'
-            classNameLabel='text-[10px]'
-            className=' px-8 h-9'
-          />
-          <Text className='w-[64px] text-center text-neutral70 text-[12px]'>Next</Text>
-        </View>
       </View>
     </View>
   )

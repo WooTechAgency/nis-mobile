@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, PermissionsAndroid, Platform } from 'react-native';
+import { View, Text, Button, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
 import Voice from '@react-native-voice/voice';
 import { SafeAreaView } from '@components/ui';
 import Title from '@components/title';
 import Header from '@components/header';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 
 export default function Dashboard() {
   const [result, setResult] = useState('');
@@ -62,10 +63,92 @@ export default function Dashboard() {
       console.error(e);
     }
   };
+  const [range, setRange] = useState({ startDate: "", endDate: "" });
+  const [markedDates, setMarkedDates] = useState({});
+
+  const handleDayPress = (day) => {
+    if (!range.startDate || (range.startDate && range.endDate)) {
+      // chọn start date mới
+      setRange({ startDate: day.dateString, endDate: "" });
+      setMarkedDates({
+        [day.dateString]: {
+          startingDay: true,
+          endingDay: true,
+          color: "#4DD0E1", // màu xanh nước
+          textColor: "white",
+        },
+      });
+    } else {
+      const startDate = new Date(range.startDate);
+      const endDate = new Date(day.dateString);
+
+      if (endDate < startDate) {
+        // Nếu endDate nhỏ hơn startDate thì reset lại
+        setRange({ startDate: day.dateString, endDate: "" });
+        setMarkedDates({
+          [day.dateString]: {
+            startingDay: true,
+            endingDay: true,
+            color: "#4DD0E1",
+            textColor: "white",
+          },
+        });
+      } else {
+        // Tạo range highlight
+        let dates = {};
+        let current = new Date(startDate);
+
+        while (current <= endDate) {
+          let dateStr = current.toISOString().split("T")[0];
+          dates[dateStr] = {
+            color: "#B2EBF2", // màu nền cho range
+            textColor: "black",
+          };
+          current.setDate(current.getDate() + 1);
+        }
+
+        // Đánh dấu start và end
+        dates[range.startDate] = {
+          startingDay: true,
+          color: "#4DD0E1",
+          textColor: "white",
+        };
+        dates[day.dateString] = {
+          endingDay: true,
+          color: "#4DD0E1",
+          textColor: "white",
+        };
+
+        setRange({ startDate: range.startDate, endDate: day.dateString });
+        setMarkedDates(dates);
+      }
+    }
+  };
 
   return (
     <SafeAreaView>
       <Header title='Dashboard' />
+      <View style={styles.container}>
+        <CalendarList
+          horizontal
+          pagingEnabled
+          pastScrollRange={12}
+          futureScrollRange={12}
+          onDayPress={handleDayPress}
+          markingType={"period"}
+          markedDates={markedDates}
+        />
+
+        <Text style={styles.text}>
+          {range.startDate && `From: ${range.startDate}`}{" "}
+          {range.endDate && `→ To: ${range.endDate}`}
+        </Text>
+      </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingTop: 40 },
+  text: { textAlign: "center", marginTop: 20, fontSize: 16 },
+});

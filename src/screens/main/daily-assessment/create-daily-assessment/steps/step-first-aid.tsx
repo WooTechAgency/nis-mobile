@@ -50,46 +50,49 @@ export default function StepFirstAid() {
   }
 
   return (
-    <Wrapper className='gap-y-6'>
-      <Text className='text-[25px] font-semibold'>{'First Aid Facilities'}</Text>
-      <TextInput
-        errors={errors}
-        control={control}
-        name='name'
-        label='Name of on-site First Aider'
-        placeholder='Enter the name of the first aider...'
-      />
-      <TextInput
-        control={control}
-        setValue={setValue}
-        name='firstAidLocation'
-        label='First Aid Box Location'
-        placeholder='First Aid Box Location'
-        disabled
-        value={generalInfo?.location.first_aid_box_location}
-      />
-      <TextInput
-        errors={errors}
-        control={control}
-        name='hospitalLocation'
-        label='Location of Nearest Hospital'
-        placeholder='Location of Nearest Hospital'
-        disabled
-        value={generalInfo?.location.location_of_nearest_hospital}
-      />
-      <TextInput
-        errors={errors}
-        control={control}
-        name='location'
-        label='Location'
-        placeholder='Emergency Assembly Point'
-        disabled
-        value={generalInfo?.location.emergency_assembly_point}
-      />
+    <View className='gap-y-6'>
+      <Wrapper className='gap-y-6'>
+        <Text className='text-[25px] font-semibold'>{'First Aid Facilities'}</Text>
+        <TextInput
+          errors={errors}
+          control={control}
+          name='name'
+          label='Name of on-site First Aider'
+          placeholder='Enter the name of the first aider...'
+        />
+        <TextInput
+          control={control}
+          setValue={setValue}
+          name='firstAidLocation'
+          label='First Aid Box Location'
+          placeholder='First Aid Box Location'
+          disabled
+          value={generalInfo?.location.first_aid_box_location}
+        />
+        <TextInput
+          errors={errors}
+          control={control}
+          name='hospitalLocation'
+          label='Location of Nearest Hospital'
+          placeholder='Location of Nearest Hospital'
+          disabled
+          value={generalInfo?.location.location_of_nearest_hospital}
+        />
+        <TextInput
+          errors={errors}
+          control={control}
+          name='location'
+          label='Location'
+          placeholder='Emergency Assembly Point'
+          disabled
+          value={generalInfo?.location.emergency_assembly_point}
+        />
+
+      </Wrapper>
       <View className=' flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
-    </Wrapper>
+    </View>
   )
 }

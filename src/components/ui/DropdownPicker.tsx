@@ -119,7 +119,7 @@ export const DropdownPicker = memo((props: Props) => {
             borderColor: colors.border,
           }}
           listItemLabelStyle={{
-            color: colors.gray,
+            color: colors.black,
             fontSize: isIpad ? 16 : 14,
             borderColor: 'white',
           }}

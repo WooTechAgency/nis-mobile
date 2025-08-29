@@ -39,7 +39,6 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
       const colIndex = consequence.index
       const rowIndex = likelihood.index
       const initialRiskRating = riskRating[colIndex + 1][rowIndex]
-      console.log('initialRiskRating ', initialRiskRating)
       setValue(`${name}.initialRiskRating`, initialRiskRating, { shouldValidate: true })
     }
   }, [likelihood, consequence])
