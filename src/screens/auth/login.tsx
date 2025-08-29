@@ -22,10 +22,7 @@ import Logo from './components/logo';
 
 const formSchema = yup.object().shape({
   email: yup.string().required('Email address is required').email('Invalid email format'),
-  password: yup.string().required('The password you entered is incorrect').matches(
-    PATTERN.PASSWORD,
-    'Password must have at least 8 characters and contain numbers, lowercase and uppercase letters and special characters..'
-  ),
+  password: yup.string().required('Password is required')
 });
 export const AuthWrapCls = `px-5 sm:w-[416px] sm:px-0`
 export default function Login() {
@@ -40,7 +37,7 @@ export default function Login() {
     defaultValues: {
       email: mmkv.getString(MMKV_KEY.EMAIL),
     },
-    mode: 'all',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -108,7 +105,7 @@ export default function Login() {
               </Button>
             }
           />
-          <Button label='Log in' className='mt-6' disabled={!isValid} onPress={handleSubmit(onLogin)} />
+          <Button label='Log in' className='mt-6' onPress={handleSubmit(onLogin)} />
           <Button onPress={onForgotPassword} className='self-center'>
             <Text className='mt-3 text-[12px] text-neutral70'>Forgot password?</Text>
           </Button>

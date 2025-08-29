@@ -21,7 +21,7 @@ export default function Incidents() {
     setValue,
   } = useForm({
     defaultValues: {},
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 

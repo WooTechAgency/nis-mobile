@@ -1,23 +1,27 @@
 import { images } from '@assets/images';
-import { Button, Image } from '@components/ui';
+import { Button, Image, Wrapper, YesNoForm } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
 import { HazardItem } from '../components/hazard-item';
+import { TextInput } from '@components/ui/TextInput';
+import { SelectItem } from '../../config.assessment';
+import { RouteName } from '@routes/types';
+import { navigate } from '@routes/navigationRef';
 
 export interface HazardForm {
   description?: string;
   medias?: Asset[];
-  likelihoodState?: string;
-  consequenceState?: string;
+  likelihood?: SelectItem;
+  consequence?: SelectItem;
   consequenceDes?: string;
-  initialRating?: string;
+  initialRiskRating?: SelectItem;
   controlMeasure?: string;
-  residualRiskRating?: string;
+  residualRiskRating?: SelectItem;
 }
 
 export interface HazardsForm {
@@ -36,31 +40,37 @@ const formSchema = yup.object().shape({
     .notRequired()
     .of(
       yup.object({
-        description: yup.string().notRequired(),
+        description: yup.string().required('Description is required!'),
         medias: yup.mixed().notRequired(),
-        likelihoodState: yup.string().notRequired(),
-        consequenceState: yup.date().notRequired(),
-        consequenceDes: yup.string().notRequired(),
-        initialRating: yup.string().notRequired(),
-        controlMeasure: yup.string().notRequired(),
-        residualRiskRating: yup.string().notRequired()
+        likelihood: yup.object().required('Likelihood is required!'),
+        consequence: yup.object().required('Consequence is required!'),
+        consequenceDes: yup.string().required('Consequence is required!'),
+        initialRiskRating: yup.object().required('Initial risk rating is required!'),
+        controlMeasure: yup.string().required('Control measure is required!'),
+        residualRiskRating: yup.object().required('Residual rating is required!')
       })
     ),
 });
 
 export default function StepHazards() {
-  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext();
+  const { setAssessment, assessment: { completedSteps, generalInfo, hazard } } = useAssessmentContext();
   const {
     control,
     handleSubmit,
     setValue,
+    watch,
+    trigger,
     formState: { errors, },
   } = useForm({
-    defaultValues: {},
-    mode: 'onChange',
+    defaultValues: {
+      haveHazards: hazard?.haveHazards,
+      hazards: hazard?.hazards
+    },
+    mode: 'all',
     resolver: yupResolver(formSchema),
   });
 
+  const haveHazards = watch('haveHazards')
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -71,7 +81,7 @@ export default function StepHazards() {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.General }))
   }
 
-  const onSubmit = (form: HazardForm) => {
+  const onSubmit = (form: HazardsForm) => {
     const newCompletedSteps = new Set([DailyAssessmentSteps.Hazards, ...(completedSteps || [])]);
     setAssessment((prev) => ({
       ...prev,
@@ -86,29 +96,77 @@ export default function StepHazards() {
     append(hazardDefault);
   };
 
+  const removeField = (index: number) => {
+    remove(index)
+  }
+
+  const onCheckSWMS = () => {
+
+  }
+
+  useEffect(() => {
+    if (haveHazards && fields.length === 0) {
+      append(hazardDefault);
+    }
+  }, [haveHazards])
 
   return (
     <View className='mt-6 gap-y-8'>
-      {fields.map((item, index) => {
-        return (
-          <View key={item.id} style={{ zIndex: 50 - index }}>
-            <HazardItem
-              index={index}
-              classNameWrap='mt-6'
-              control={control}
-              setValue={setValue}
-              errors={errors}
-              name='signees'
-            />
-          </View>
-        );
-      })}
-      <Button
-        onPress={addField}
-        iconButton={<Image source={images.plus} className='w-8 h-8' />}
-        label='Add Hazard'
-        type='small'
-      />
+      {/* check hazard */}
+      <Wrapper className={`mt-[0px] gap-y-8`}>
+        <View className='row-center gap-x-6'>
+          <TextInput
+            classNameWrap='flex-1 '
+            errors={errors}
+            control={control}
+            name={`methodStatement`}
+            label='Please describe the hazard'
+            value={generalInfo?.methodStatement}
+            editable={false}
+            classNameInput='text-[#4A4646]'
+          />
+          <Button
+            onPress={onCheckSWMS}
+            label='Check SWMS '
+            className='w-[280px] '
+          />
+        </View>
+        <YesNoForm
+          errors={errors}
+          control={control}
+          name={`haveHazards`}
+          label='Are there any additional site hazards?*'
+          setValue={setValue}
+          isRadio
+        />
+      </Wrapper>
+      {haveHazards &&
+        <>
+          {fields.map((item, index) => {
+            return (
+              <View key={item.id} style={{ zIndex: 50 - index }}>
+                <HazardItem
+                  index={index}
+                  classNameWrap='mt-6'
+                  control={control}
+                  setValue={setValue}
+                  errors={errors}
+                  name={`hazards.${index}`}
+                  onDeleteHazard={removeField}
+                  trigger={trigger}
+                />
+              </View>
+            );
+          })}
+          <Button
+            onPress={addField}
+            iconButton={<Image source={images.plus} className='w-8 h-8' />}
+            label='Add Hazard'
+            type='small'
+          />
+        </>
+      }
+
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label='Save' onPress={handleSubmit(onSubmit)} className='flex-1' />

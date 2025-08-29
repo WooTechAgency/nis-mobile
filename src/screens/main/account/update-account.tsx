@@ -19,14 +19,16 @@ import { setUserInfo } from '@store/slices/authenticationSlice';
 import { QUERY_KEY } from '@constants/keys.constants';
 
 interface Form {
-  name: string;
+  firstName: string;
+  lastName: string;
   company: string;
   role: string;
   email: string;
   phone?: string;
 }
 const formSchema = yup.object().shape({
-  name: yup.string().required('Name is required'),
+  firstName: yup.string().required('First name is required'),
+  lastName: yup.string().required('Last name is required'),
   company: yup.string().notRequired(),
   role: yup.string().notRequired(),
   phone: yup.string().notRequired(),
@@ -40,15 +42,17 @@ export default function UpdateAccount() {
   const [loading, setLoading] = useState(false)
   const query = useQueryClient()
   const dispatch = useAppDispatch()
+  console.log('userInfo ', userInfo)
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      name: userInfo?.name,
+      firstName: userInfo?.first_name,
+      lastName: userInfo?.last_name,
       role: userInfo?.role.name,
       phone: userInfo?.phone,
       email: userInfo?.email,
       company: userInfo?.company.name
     },
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -57,7 +61,8 @@ export default function UpdateAccount() {
     if (!userInfo?.id) return;
     try {
       const payload = {
-        name: data?.name?.trim(),
+        first_name: data?.firstName?.trim(),
+        last_name: data?.lastName?.trim(),
         phone: data?.phone?.trim(),
       }
       setLoading(true);
@@ -76,15 +81,24 @@ export default function UpdateAccount() {
       <Header title='Account details' />
       <ScrollView>
         <Wrapper className='flex-row items-start gap-x-12 mt-[0px] ' >
-          <AccountLogo />
+          <AccountLogo name={userInfo?.full_name || ''} />
           <View className='flex-1'>
-            <TextInput
-              classNameWrap='mt-6'
-              control={control}
-              name='name'
-              label='Name'
-              labelOverlap
-            />
+            <View className='flex-row mt-6 gap-x-6'>
+              <TextInput
+                classNameWrap='flex-1'
+                control={control}
+                name='firstName'
+                label='First name'
+                errors={errors}
+              />
+              <TextInput
+                classNameWrap='flex-1'
+                control={control}
+                name='lastName'
+                label='Last name'
+                errors={errors}
+              />
+            </View>
             <TextInput
               classNameWrap='mt-6'
               control={control}

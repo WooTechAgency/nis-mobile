@@ -1,15 +1,10 @@
-import { Button, FlatList, Image, SafeAreaView, ScrollView, Text, View } from '@components/ui'
-import { navigate } from '@routes/navigationRef'
+import Header from '@components/header';
+import { SafeAreaView, ScrollView } from '@components/ui';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import React from 'react'
-import DailySite from './components/daily-site'
-import Header from '@components/header'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { TextInput } from '@components/ui/TextInput';
-import { images } from '@assets/images';
-import { DataTable } from 'react-native-paper';
-import { convertDDMMYYYY } from '@utils/date.util';
+import DailySite from './components/daily-site';
 import DailySiteRickAssessmentTable from './components/dsra-table';
 
 const formSchema = yup.object().shape({
@@ -24,7 +19,7 @@ export default function DailyAssessment() {
     setValue,
   } = useForm({
     defaultValues: {},
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -38,7 +33,6 @@ export default function DailyAssessment() {
           control={control}
         />
       </ScrollView>
-
 
     </SafeAreaView>
   )

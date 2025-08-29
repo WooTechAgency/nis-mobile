@@ -32,7 +32,7 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
     defaultValues: {
       code: '',
     },
-    mode: 'all',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -68,7 +68,7 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
             placeholder='Enter the code'
             labelOverlap
           />
-          <Button label='Verify' className='mt-6' disabled={!isValid} onPress={handleSubmit(onResetPassword)} />
+          <Button label='Verify' className='mt-6' onPress={handleSubmit(onResetPassword)} />
           <Button
             label='Resend code'
             className='mt-3'

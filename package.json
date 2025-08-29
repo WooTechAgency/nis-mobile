@@ -10,7 +10,8 @@
     "test": "jest",
     "ba": "cd android && ./gradlew app:assembleRelease  --stacktrace && cd ..",
     "ipad": "npx react-native run-ios --simulator='iPad mini (6th generation)'",
-    "iphone": "npx react-native run-ios --simulator='iPhone 15 Pro'"
+    "iphone": "npx react-native run-ios --simulator='iPhone 15 Pro'",
+    "format": "prettier --write ./src"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

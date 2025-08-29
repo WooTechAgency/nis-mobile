@@ -34,7 +34,7 @@ export default function StepWitness() {
     formState: { errors, },
   } = useForm({
     defaultValues: {},
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
   const { pickDocuments } = useDocumentPicker({ setValue, control, name: 'document' })

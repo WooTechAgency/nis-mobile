@@ -1,8 +1,9 @@
 import { images } from '@assets/images';
 import { Button, Image, Text } from '@components/ui';
+import { getMessageError } from '@utils/common.util';
 import { convertHHMMSSDDMMYYYY } from '@utils/date.util';
 import React, { useRef, useState } from 'react';
-import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
+import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
 import SignatureScreen, { SignatureViewRef } from 'react-native-signature-canvas';
 
@@ -36,33 +37,31 @@ interface Props {
   onBegin?: () => void;
   onEnd?: () => void;
   setValue: UseFormSetValue<any>;
-  name?: string;
+  name: string;
   errors?: FieldErrors;
   control: Control<any, any>;
+  trigger: UseFormTrigger<any>
 }
 
-export function Signature({ onBegin, onEnd, control, name, classNameWrap, setValue }: Props) {
+export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap, setValue, trigger }: Props) {
   const refSignature = useRef<SignatureViewRef>(null);
-  const [isValidSignature, setIsValidSignature] = useState(false);
   const signatureBase64 = useWatch({ name: `${name}.signature`, control })
   const timestamp = useWatch({ name: `${name}.timestamp`, control })
-  // const messageError = getMessageError(errors, name);
+  const messageError = getMessageError(errors, `${name}.signature`);
 
-  const onSaveSign = () => {
+  const onSaveSign = async () => {
+    const validSignature = await trigger(`${name}.signature`)
     refSignature?.current?.readSignature();
-    setIsValidSignature(false);
   };
 
   const onResetSign = () => {
     refSignature?.current?.clearSignature();
-    setIsValidSignature(false);
   };
 
   const _onEnd = () => {
     if (onEnd) {
       onEnd();
     }
-    setIsValidSignature(true);
   };
 
   const onSaveEvent = (signature: string) => {
@@ -88,7 +87,7 @@ export function Signature({ onBegin, onEnd, control, name, classNameWrap, setVal
         </View>
       ) : (
         <>
-          <Text className='absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 '>Add signature</Text>
+          <Text className={`absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 ${messageError && ''}`}>Add signature</Text>
           <SignatureScreen
             style={{ height: 144 }}
             ref={refSignature}
@@ -98,19 +97,21 @@ export function Signature({ onBegin, onEnd, control, name, classNameWrap, setVal
             onBegin={onBegin}
             bgHeight={144}
           />
+          {messageError && <Text className='text-red text-[12px] mt-2 ml-4'>{messageError}</Text>}
           <View className="mt-4 flex-row items-center gap-x-4">
             <Button
               onPress={onResetSign}
               label="Clear"
               type='small'
               className=' w-[135px] bg-white border-primary border'
+              classNameLabel='text-xs'
             />
             <Button
-              disabled={!isValidSignature}
               onPress={onSaveSign}
               type='small'
-              label="Submit signature"
-              className=' bg-teal20'
+              label="Submit"
+              className=' w-[135px]'
+              classNameLabel='text-xs'
             />
           </View>
         </>

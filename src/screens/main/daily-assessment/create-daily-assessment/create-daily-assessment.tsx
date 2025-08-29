@@ -1,15 +1,15 @@
 import Header from '@components/header'
+import Steps from '@components/steps'
 import { SafeAreaView, ScrollView } from '@components/ui'
-import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { goBack } from '@routes/navigationRef'
+import React from 'react'
+import { View } from 'react-native'
 import { DailyAssessmentSteps, useAssessmentContext } from '../context'
+import StepCheckList from './steps/step-checklist'
+import StepFirstAid from './steps/step-first-aid'
 import StepGeneralInformation from './steps/step-general-info'
 import StepHazards from './steps/step-hazards'
-import StepFirstAid from './steps/step-first-aid'
-import StepCheckList from './steps/step-checklist'
-import StepSigning from './steps/step-signing'
-import { goBack } from '@routes/navigationRef'
-import Steps from '@components/steps'
+import StepSignOff from './steps/step-sign-off'
 
 
 const steps = {
@@ -21,12 +21,12 @@ const steps = {
 }
 
 export default function CreateDailyAssessment() {
-  const { assessment: { selectedIndex, enableScroll, completedSteps }, setAssessment } = useAssessmentContext();
-  console.log('completedSteps ', completedSteps)
+  const { assessment: { selectedIndex, enableScroll, completedSteps, generalInfo }, setAssessment } = useAssessmentContext();
+
   const renderSteps = () => {
     switch (selectedIndex) {
       case DailyAssessmentSteps.General:
-        return <StepSigning />
+        return <StepGeneralInformation />
       case DailyAssessmentSteps.Hazards:
         return <StepHazards />
       case DailyAssessmentSteps.FirstAid:
@@ -34,7 +34,7 @@ export default function CreateDailyAssessment() {
       case DailyAssessmentSteps.CheckList:
         return <StepCheckList />
       case DailyAssessmentSteps.Signing:
-        return <StepSigning />
+        return <StepSignOff />
       default:
         return <View />
     }
@@ -54,7 +54,7 @@ export default function CreateDailyAssessment() {
   return (
     <SafeAreaView className='bg-neutral-100'>
       <ScrollView scrollEnabled={enableScroll}>
-        <Header title='DSRA-001' isBack onCustomBack={onBack} />
+        <Header title={generalInfo?.location.site_code || 'New DSRA'} isBack onCustomBack={onBack} />
         <Steps
           classNameWrap='mt-4'
           steps={steps}

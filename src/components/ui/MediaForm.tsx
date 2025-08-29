@@ -9,6 +9,8 @@ import { Asset } from 'react-native-image-picker';
 import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
+import { FlatList } from './FlatList';
+import { formatBytes } from '@utils/functions.util';
 
 interface Props {
   setValue: UseFormSetValue<any>;
@@ -26,7 +28,7 @@ export function MediaForm(props: Props) {
   const [visibleDeleteImage, toggleVisibleDeleteImage] = useToggle();
   const selectedDeleteImageRef = useRef<number>(undefined)
 
-  const currentMedias = useWatch({ name, control, }) || [];
+  const currentMedias: Asset[] = useWatch({ name, control, })
 
   const { takePhoto, pickFromLibrary } = useImagePicker({ setValue, control, name })
 
@@ -39,45 +41,40 @@ export function MediaForm(props: Props) {
   }
 
   return (
-    <View className={`flex-row items-center border border-neutral40 px-4 rounded-[14px] gap-x-11 h-[96px] ${classNameWrap}`}>
-      {label &&
-        <Text className={`text-[12px] text-neutral70 px-1 mb-1 absolute left-4 -top-2 bg-white z-10 ${labelCls}`} >
-          {label}
-        </Text>
-      }
-      {/* Yes */}
-      <View className='flex-row flex-wrap gap-x-4'>
-        <Button className='w-[64px] h-[64px] center border rounded-[4px] border-neutral20' onPress={() => { pickFromLibrary() }}>
-          <Image source={images.logo} className='w-8 h-8' />
-          <Text className='text-[12px] text-neutral70 '>Upload</Text>
-        </Button>
-        <ScrollView
-          className=''
-          showsHorizontalScrollIndicator={false}
-          horizontal
-        >
-          {
-            currentMedias.length > 0 && currentMedias.map((media: Asset, index: number) => (
-              <View key={index} className='mr-4'>
+    <View className={`gap-y-8 ${classNameWrap}`}>
+      {currentMedias && currentMedias.length > 0 &&
+        <View className='flex-row flex-wrap gap-4'>
+          {currentMedias?.map((item, index) => (
+            <View className='flex-row items-center  justify-between border border-border bg-neutral10 p-4 rounded-[14px]  w-[48%]' key={index}>
+              <View className='row-center gap-x-3 '>
+                <Image source={images.document} className='w-9 h-9' />
+                <View className='flex-1'>
+                  <Text className='text-[12px] font-medium' numberOfLines={1}>{item.fileName}</Text>
+                  <View className='row-center gap-x-2'>
+                    <Text className='text-[12px] font-medium text-[#A9ACB4]'>{formatBytes(item.fileSize)}</Text>
+                    <Image source={images.complete} className='w-[18px] h-[18px]' />
+                    <Text className='text-[12px] text-[#292D32]'>Completed</Text>
+                  </View>
+                </View>
                 <Image
-                  source={{ uri: media.uri }}
-                  resizeMode='cover'
-                  className='w-[64px] h-[64px] rounded-[4px]  '
-                />
-                <Image
-                  source={images.close}
-                  className='w-4 h-4'
-                  classNameButton='absolute  right-1 top-1'
+                  source={images.trash}
+                  className='w-8 h-8'
                   onPress={() => {
-                    toggleVisibleDeleteImage()
-                    selectedDeleteImageRef.current = index
+                    selectedDeleteImageRef.current = index;
+                    toggleVisibleDeleteImage();
                   }}
                 />
               </View>
-            ))
-          }
-        </ScrollView>
-      </View>
+            </View>
+          ))}
+        </View>
+      }
+      <Button
+        onPress={() => pickFromLibrary()}
+        label='Upload image'
+        iconButton={<Image source={images.upload} className='w-8 h-8' />}
+        type='action'
+      />
       <CommonModal
         visible={visibleDeleteImage}
         toggleModal={toggleVisibleDeleteImage}

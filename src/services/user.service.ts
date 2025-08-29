@@ -10,15 +10,17 @@ const ApiName= {
 }
 
 export interface UpdateUserRequest {
-  name?: string;
+  first_name?: string;
+  last_name?: string;
   phone?: string;
 }
 export async function updateUserApi(userId: number,request: UpdateUserRequest): Promise<any> {
-  const {name, phone} = request
+  const {first_name,last_name, phone} = request
   try {
     var formData = new FormData();
    formData.append('_method', 'PUT');
-    if (name) formData.append('name', name);
+    if (first_name) formData.append('first_name', first_name);
+    if (last_name) formData.append('last_name', last_name);
     if (phone) formData.append('phone', phone);
     const response = await baseApi.postFormData(`${ApiName.User}/${userId}`, formData);
     return response.data?.data;

@@ -1,11 +1,10 @@
 import { Signature } from '@components/signature';
 import Title from '@components/title';
-import { Wrapper } from '@components/ui';
 import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { TextInput } from '@components/ui/TextInput';
-import { currentEmploymentStatus } from '@screens/main/daily-assessment/create-daily-assessment/steps/step-general-info';
+import { useGetRoles } from '@services/hooks/role/useGetRoles';
 import React from 'react';
-import { Control, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import { Control, FieldErrors, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import { View } from 'react-native';
 import { useAssessmentContext } from '../../context';
 
@@ -16,10 +15,12 @@ interface Props {
   name?: string;
   errors?: FieldErrors;
   control: Control<any, any>;
+  trigger: UseFormTrigger<any>;
 }
 
-export function SigneeItem({ control, classNameWrap, errors, setValue, index, name }: Props) {
+export function SigneeItem({ control, trigger, errors, setValue, index, name }: Props) {
   const { setAssessment } = useAssessmentContext()
+  const { data: roles } = useGetRoles()
 
   const onStartSign = () => {
     setAssessment((prev) => ({ ...prev, selectedIndex: prev?.selectedIndex ?? 0, enableScroll: false }))
@@ -32,12 +33,12 @@ export function SigneeItem({ control, classNameWrap, errors, setValue, index, na
   return (
     <View className='mt-8'>
       <Title label={`Signee ${index + 1}`} />
-      <View className='flex-row items-center gap-x-4 mt-6'>
+      <View className='flex-row items-start gap-x-4 mt-6'>
         <TextInput
           classNameWrap='flex-1'
           errors={errors}
           control={control}
-          name={`${name}.${index}.name`}
+          name={`${name}.name`}
           label='Name'
           placeholder='Enter name'
         />
@@ -45,19 +46,22 @@ export function SigneeItem({ control, classNameWrap, errors, setValue, index, na
           classNameWrap='flex-1'
           setValue={setValue}
           control={control}
-          name={`${name}.${index}.role`}
+          name={`${name}.role`}
           label='Role'
           placeholder="Select role"
-          listValue={currentEmploymentStatus}
+          listValue={roles}
+          errors={errors}
         />
       </View>
       <Signature
-        name={`${name}.${index}`}
+        name={`${name}`}
         classNameWrap='mt-6'
         onBegin={onStartSign}
         onEnd={onEndSign}
         control={control}
         setValue={setValue}
+        trigger={trigger}
+        errors={errors}
       />
     </View>
   );

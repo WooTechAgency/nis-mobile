@@ -4,7 +4,7 @@ import { HazardForm, HazardsForm } from './create-daily-assessment/steps/step-ha
 import { GeneralForm } from './create-daily-assessment/steps/step-general-info';
 import { FirstAidForm } from './create-daily-assessment/steps/step-first-aid';
 import { CheckListForm } from './create-daily-assessment/steps/step-checklist';
-import { SigningForm } from './create-daily-assessment/steps/step-signing';
+import { SigningForm } from './create-daily-assessment/steps/step-sign-off';
 
 interface GeneralInformation extends GeneralForm {
 }

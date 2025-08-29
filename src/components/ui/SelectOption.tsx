@@ -32,7 +32,7 @@ export function SelectOption(props: Props) {
   const messageError = getMessageError(errors, name);
 
   const onSelect = (option: any) => {
-    setValue(name, option.key);
+    setValue(name, option, { shouldValidate: true });
   };
 
   return (
@@ -43,14 +43,14 @@ export function SelectOption(props: Props) {
           <Button
             onPress={() => onSelect(option)}
             key={index}
-            // style={{ backgroundColor: option.bg }}
-            className={`w-[147px] h-[48px] bg-teal20 rounded-full justify-center items-center ${value === option.key && 'border border-primary'}`}
+            style={{ backgroundColor: option.bg }}
+            className={`flex-1 h-[48px] bg-teal20 rounded-[14px] justify-center items-center ${value && value.title !== option.title && 'opacity-50'}`}
           >
             <Text className='font-medium'>{option.title}</Text>
           </Button>
         )}
       </View>
-
+      {messageError && <Text className='text-red text-[12px] mt-2 ml-4'>{messageError}</Text>}
     </View>
   );
 }

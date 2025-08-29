@@ -5,7 +5,7 @@ export const showErrorMessage = ({title, message, btnText}:{title?: string, mess
 };
 
 
-export const formatBytes = (bytes: number | null, decimals = 2) => {
+export const formatBytes = (bytes?: number | null, decimals = 2) => {
   if (!bytes || bytes === 0) return '0 Bytes';
 
   const k = 1024;

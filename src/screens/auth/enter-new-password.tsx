@@ -49,7 +49,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -132,7 +132,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
               </Button>
             }
           />
-          <Button label='Reset password' className='mt-6' onPress={handleSubmit(onSavePassword)} disabled={!isValid} />
+          <Button label='Reset password' className='mt-6' onPress={handleSubmit(onSavePassword)} />
           <BackToLogin />
         </View>
       </ScrollView>

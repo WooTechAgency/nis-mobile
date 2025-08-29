@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native'
-import React from 'react'
 import { shadowStyle } from '@constants/config.constants'
+import React from 'react'
+import { Text, View } from 'react-native'
 
 interface Props {
   classNameWrap?: string
@@ -19,8 +19,8 @@ export default function Steps({ steps, selectedIndex, completedSteps, lastItemKe
         return (
           <View key={key} className={`flex-row items-center ${key !== '5' && 'flex-grow '} `}>
             <View className='items-center'>
-              <View className={`w-[31px] h-[31px] rounded-full border center ${completed && 'bg-primary border-0'} ${selected && 'border-primary'}`}>
-                <Text className={`font-medium ${completed && 'text-white'} ${selected && 'text-primary'}`}>{key}</Text>
+              <View className={`w-[31px] h-[31px] rounded-full border center ${completed && 'border border-primary'} ${selected && 'bg-primary border-0'}`}>
+                <Text className={`font-medium `}>{key}</Text>
               </View>
               <Text className='mt-1'>{value}</Text>
             </View>

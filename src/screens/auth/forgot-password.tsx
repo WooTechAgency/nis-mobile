@@ -25,7 +25,7 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'all',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -61,7 +61,6 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
             />
             <Button
               label='Send code'
-              disabled={!isValid}
               onPress={handleSubmit(onNext)}
             />
           </View>

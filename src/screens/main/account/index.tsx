@@ -13,7 +13,7 @@ import { useGetCurrentUser } from '@services/hooks/auth/useGetCurrentUser';
 import { setUserInfo } from '@store/slices/authenticationSlice';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AccountLogo from './components/account-logo';
 
@@ -23,6 +23,7 @@ export default function Account() {
   const { data: latestUser } = useGetCurrentUser()
   const query = useQueryClient()
   const { control, setValue } = useForm();
+  const name = useWatch({ control, name: 'name' });
 
   useEffect(() => {
     if (latestUser || cachedUser) {
@@ -55,12 +56,12 @@ export default function Account() {
     <SafeAreaView className={``}>
       <Header title='Account details' />
       <Wrapper className='flex-row items-start gap-x-12 mt-[0px] ' >
-        <AccountLogo />
+        <AccountLogo name={name} />
         <View className='flex-1'>
           <View className='flex-row items-center justify-between'>
             <Text className='font-semibold text-[16px]'>Profile</Text>
             <Button
-              className='w-[135px] h-[36px] flex-row center border border-black rounded-[8px]'
+              className='w-[135px] h-[36px] flex-row center border border-primary rounded-[8px]'
               onPress={() => navigate(RouteName.UpdateAccount)}
             >
               <Image source={images.edit} className='w-8 h-8' />

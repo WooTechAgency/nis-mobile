@@ -55,7 +55,7 @@ export default function StepSignOff() {
     defaultValues: {
       signees: [signeeDefault],
     },
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 

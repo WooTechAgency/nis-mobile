@@ -42,7 +42,7 @@ export default function StepIncident() {
     formState: { errors, },
   } = useForm({
     defaultValues: {},
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 

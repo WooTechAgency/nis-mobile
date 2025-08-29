@@ -84,9 +84,9 @@ export function TextInput(props: Props) {
   return (
     <View className={`${classNameWrap}`}>
       {label &&
-        <Text className={`text-[12px] text-neutral70 px-1 mb-1
+        <Text className={`text-[12px]  px-1 mb-1
         ${labelOverlap && 'absolute left-4 -top-2 bg-white z-10'} 
-        ${disabled && 'text-border'} 
+        ${disabled ? 'text-border' : 'text-neutral70'} 
         ${labelCls}
         ${messageError && 'text-red'}
         `}

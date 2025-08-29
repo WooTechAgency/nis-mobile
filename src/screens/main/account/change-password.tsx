@@ -47,7 +47,7 @@ export default function ChangePassword() {
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -138,7 +138,7 @@ export default function ChangePassword() {
           />
           <View className='flex-row gap-x-4 mt-6'>
             <Button label='Cancel' type='outlined' onPress={goBack} className='flex-1' />
-            <Button label='Save' disabled={!isValid} onPress={handleSubmit(onSavePassword)} className='flex-1' />
+            <Button label='Save' onPress={handleSubmit(onSavePassword)} className='flex-1' />
           </View>
         </Wrapper>
       </ScrollView>

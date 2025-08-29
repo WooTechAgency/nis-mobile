@@ -1,15 +1,18 @@
-import { View, Text } from 'react-native'
-import React, { use } from 'react'
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { TextInput } from '@components/ui/TextInput';
 import { Button } from '@components/ui';
-import { DailyAssessment, DailyAssessmentSteps, useAssessmentContext } from '../../context';
-import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { DatePickerInput } from '@components/ui/DatePickerInput';
-import { IDropdown } from '@constants/interface';
+import { DropdownPicker } from '@components/ui/DropdownPicker';
+import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
+import { IDropdown } from '@constants/interface';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useAppSelector } from '@hooks/common';
+import { useGetSites } from '@services/hooks/site/useGetSites';
+import { ISite } from '@services/site.service';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { Text, View } from 'react-native';
+import * as yup from 'yup';
+import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -17,36 +20,46 @@ export const currentEmploymentStatus = [
 ];
 
 export interface GeneralForm {
-  location: string
+  location: ISite & IDropdown
   date: Date
-  leader: IDropdown
+  leader: string
   project: string
   contractor: string
-  methodStatement: IDropdown
+  methodStatement: string
   description: string
 }
 
 const formSchema = yup.object().shape({
   location: yup.object().required('Location is required'),
   date: yup.date().required('Date is required'),
-  leader: yup.object().required('Site team leader is required'),
+  leader: yup.string().required('Site team leader is required'),
   project: yup.string().required('Project is required'),
   contractor: yup.string().required('Principal contractor is required'),
   methodStatement: yup.string().required('Method statement is required'),
   description: yup.string().required('Description is required'),
 });
 export default function StepGeneralInformation() {
-  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext();
+  const { setAssessment, assessment: { completedSteps, generalInfo } } = useAssessmentContext();
+  const { userInfo } = useAppSelector(state => state.authentication)
   const {
     control,
     handleSubmit,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
-    defaultValues: {},
-    mode: 'onChange',
+    defaultValues: {
+      location: generalInfo?.location,
+      date: generalInfo?.date || new Date(),
+      leader: generalInfo?.leader || userInfo?.full_name,
+      project: generalInfo?.project,
+      contractor: generalInfo?.contractor,
+      methodStatement: generalInfo?.methodStatement,
+      description: generalInfo?.description
+    },
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
+  const { data: sites } = useGetSites()
 
   const onSubmit = (form: GeneralForm) => {
     const newCompletedSteps = new Set<number>([DailyAssessmentSteps.General, ...(completedSteps || [])]);
@@ -58,6 +71,10 @@ export default function StepGeneralInformation() {
     }))
   }
 
+  const onSelectSite = (site: ISite) => {
+    setValue('methodStatement', site.swms.swms_name, { shouldValidate: true })
+  }
+
   return (
     <View className='mt-8 px-6 pb-6 pt-5 bg-white rounded-[20px]' style={shadowStyle}>
       <Text className='text-[25px] font-semibold'>General</Text>
@@ -66,9 +83,11 @@ export default function StepGeneralInformation() {
         setValue={setValue}
         control={control}
         name='location'
-        label='Site Location'
+        label='Site Location*'
         placeholder="Select site location"
-        listValue={currentEmploymentStatus}
+        listValue={sites}
+        onSelectCallback={onSelectSite}
+        errors={errors}
       />
       <DatePickerInput
         label='Date'
@@ -79,15 +98,15 @@ export default function StepGeneralInformation() {
         mode="date"
         placeholder="Date"
         errors={errors}
+        disabled
       />
       <TextInput
         classNameWrap='mt-6'
         errors={errors}
         control={control}
         name='leader'
-        label='Site Team Leader'
+        label='Site Team Leader*'
         placeholder="Select site team leader"
-        disabled
       />
       <TextInput
         classNameWrap='mt-6'
@@ -102,7 +121,7 @@ export default function StepGeneralInformation() {
         errors={errors}
         control={control}
         name='contractor'
-        label='Principal Contractor'
+        label='Principal Contractor*'
         placeholder='Enter principal contractor'
       />
       <TextInput
@@ -120,14 +139,13 @@ export default function StepGeneralInformation() {
         errors={errors}
         control={control}
         name='description'
-        label='Description of Work'
+        label='Description of Work*'
         placeholder='Enter description of work'
         multiline
       />
       <Button
         className='mt-6'
         label='Next'
-        disabled={!isValid}
         onPress={handleSubmit(onSubmit)}
       />
     </View>

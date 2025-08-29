@@ -6,29 +6,33 @@ import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
+import { TeamLeaderCheckList } from '../../config.assessment';
+import { navigate } from '@routes/navigationRef';
 
 export interface CheckListForm {
   checklist?: string[];
 }
 const formSchema = yup.object().shape({
-  checklist: yup.array().notRequired(),
+  checklist: yup.array().required('You must tick all checkboxes').length(TeamLeaderCheckList.length, 'You must tick all checkboxes'),
 });
 
 export default function StepCheckList() {
-  const { setAssessment, assessment: { completedSteps } } = useAssessmentContext()
+  const { setAssessment, assessment: { completedSteps, checkList } } = useAssessmentContext()
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors, },
   } = useForm({
-    defaultValues: {},
-    mode: 'onChange',
+    defaultValues: {
+      checklist: checkList?.checklist
+    },
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
   const onBack = () => {
-    setAssessment((prev) => ({ ...prev, selectedIndex: 1 }))
+    setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.FirstAid }))
 
   }
   const onSubmit = (form: CheckListForm) => {
@@ -50,9 +54,8 @@ export default function StepCheckList() {
           control={control}
           name='checklist'
           setValue={setValue}
+          listValue={TeamLeaderCheckList}
         />
-
-
       </Wrapper>
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />

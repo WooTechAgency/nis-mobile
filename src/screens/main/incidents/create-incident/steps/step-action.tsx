@@ -26,7 +26,7 @@ export default function StepAction() {
     formState: { errors, },
   } = useForm({
     defaultValues: {},
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 

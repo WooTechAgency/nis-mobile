@@ -32,7 +32,7 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <GestureHandlerRootView className='flex-1'>
               <RootNavigator />
-              <Toast config={toastConfig} position='bottom' />
+              <Toast config={toastConfig} position='top' />
               <ErrorModal />
             </GestureHandlerRootView>
           </QueryClientProvider>

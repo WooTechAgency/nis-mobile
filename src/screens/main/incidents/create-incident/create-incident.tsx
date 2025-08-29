@@ -25,7 +25,7 @@ export default function CreateIncident() {
   const renderSteps = () => {
     switch (selectedIndex) {
       case IncidentSteps.General:
-        return <StepSignOff />
+        return <StepGeneralInformation />
       case IncidentSteps.Incident:
         return <StepIncident />
       case IncidentSteps.Action:

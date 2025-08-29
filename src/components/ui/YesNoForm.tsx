@@ -22,7 +22,6 @@ const commonLabelCls = 'font-bold text-[20px]'
 export function YesNoForm(props: Props) {
   const { setValue, name, control, label, classNameWrap, isRadio, labelCls } = props;
   const value = useWatch({ name, control, });
-  console.log('value ', value)
 
   const onYes = () => {
     setValue(name, true, { shouldDirty: true });

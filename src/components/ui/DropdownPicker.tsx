@@ -7,11 +7,12 @@ import DropDownPickerComponent, { DropDownDirectionType } from 'react-native-dro
 import { Text } from './Text';
 import { getMessageError } from '@utils/common.util';
 import { colors } from '@constants/colors.constants';
+import { IDropdown } from '@constants/interface';
 
-export type DropDownType = {
-  value: string | number;
-  label: string;
-}
+// export interface DropDownType {
+//   value: string | number;
+//   label: string;
+// }
 interface Props {
   setValue: UseFormSetValue<any>;
   name: string;
@@ -19,14 +20,14 @@ interface Props {
   labelCls?: string;
   label?: string;
   classNameWrap?: string;
-  listValue: DropDownType[] | undefined;
+  listValue: IDropdown[] | undefined;
   placeholder?: string;
-  isShouldValidate?: boolean;
   errors?: FieldErrors;
   isRerender?: boolean;
   required?: boolean;
   dropDownDirection?: DropDownDirectionType
-  disabled?: boolean
+  disabled?: boolean;
+  onSelectCallback?: (item: IDropdown | any) => void
 }
 
 export const DropdownPicker = memo((props: Props) => {
@@ -40,14 +41,13 @@ export const DropdownPicker = memo((props: Props) => {
     listValue,
     placeholder,
     errors,
-    isShouldValidate = true,
     isRerender,
     required,
     dropDownDirection,
-    disabled
+    disabled,
+    onSelectCallback
   } = props;
   const selectedItem = useWatch({ name, control });
-  const [isShowError, setIsShowError] = useState(true);
   const [open, setOpen] = useState(false);
   const [displayValue, setDisplayValue] = useState(selectedItem?.value);
   const messageError = getMessageError(errors, name);
@@ -63,10 +63,12 @@ export const DropdownPicker = memo((props: Props) => {
   }, [selectedItem?.value, isRerender]);
 
 
-  const onSelectItem = (item: DropDownType) => {
+  const onSelectItem = (item: IDropdown) => {
+    console.log('itemitem ', item)
     setValue(name, item, { shouldValidate: true, shouldDirty: true });
     setOpen(false)
     setDisplayValue(item.value)
+    onSelectCallback?.(item)
   };
 
   return (
@@ -74,10 +76,11 @@ export const DropdownPicker = memo((props: Props) => {
       <>
         {label &&
           <Text className={`text-[12px] text-neutral70 px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
-        ${disabled && 'text-neutral40'} 
-        ${labelCls}
-        ${messageError && 'text-red'}
-        `}>
+            ${disabled && 'text-neutral40'} 
+            ${labelCls}
+            ${messageError && 'text-red'}
+            `}
+          >
             {label}
           </Text>
         }
@@ -94,7 +97,7 @@ export const DropdownPicker = memo((props: Props) => {
           placeholder={placeholder}
           dropDownDirection={dropDownDirection || 'AUTO'}
           placeholderStyle={{
-            color: colors.gray,
+            color: messageError ? colors.red : colors.gray,
             fontSize: isIpad ? 16 : 14,
           }}
           disableBorderRadius={false}
@@ -103,7 +106,7 @@ export const DropdownPicker = memo((props: Props) => {
             backgroundColor: 'white',
             paddingHorizontal: 12,
             borderWidth: 1,
-            borderColor: colors.border,
+            borderColor: messageError ? colors.red : colors.gray,
             height: 56,
             borderRadius: 14,
           }} Date
@@ -142,7 +145,7 @@ export const DropdownPicker = memo((props: Props) => {
             fontSize: isIpad ? 16 : 14,
           }}
         />
-        {isShowError && messageError && <Text className="text-red mt-[6] text-[11px]">{messageError}</Text>}
+        {messageError && <Text className="text-red mt-[6] text-[11px]">{messageError}</Text>}
       </>
     </View>
   );

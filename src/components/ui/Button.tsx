@@ -8,19 +8,25 @@ interface Props extends TouchableOpacityProps {
   label?: string;
   classNameLabel?: string;
   iconButton?: ReactNode;
-  type?: 'default' | 'outlined' | 'small'
+  type?: 'default' | 'outlined' | 'outlined-small' | 'small' | 'action' | 'delete'
 
 }
 
 const MappingBtn = {
-  default: 'bg-primary',
-  outlined: 'border border-primary bg-white',
-  small: 'h-[37px] bg-teal20 rounded-[8px] self-start',
+  default: 'h-[56px] bg-primary',
+  outlined: 'h-[56px] border border-primary bg-white',
+  'outlined-small': 'h-[36px] border border-primary bg-white',
+  small: 'h-[36px] bg-teal20 rounded-[8px] self-start',
+  action: 'h-[56px] bg-teal10 border border-primary',
+  delete: 'h-[36px] bg-white rounded-[8px] self-start border border-red',
 }
 const MappingLabel = {
   default: 'text-black',
   outlined: 'text-black',
-  small: 'text-black',
+  'outlined-small': 'text-black',
+  small: 'text-black font-medium',
+  action: 'text-black',
+  delete: 'text-red',
 }
 export function Button(props: Props) {
   const { label, classNameLabel, disabled, type = 'default', iconButton } = props;
@@ -29,7 +35,7 @@ export function Button(props: Props) {
     return (
       <TouchableOpacity
         {...props}
-        className={`flex-row justify-center items-center px-4 h-14 rounded-[14px] 
+        className={`flex-row justify-center items-center px-4  rounded-[14px] 
          ${disabled ? 'bg-[#F1F1F1]' : MappingBtn[type]} ${props.className} 
         `}
       >

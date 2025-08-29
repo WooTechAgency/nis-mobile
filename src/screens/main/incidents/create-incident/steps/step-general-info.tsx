@@ -41,7 +41,7 @@ export default function StepGeneralInformation() {
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {},
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
 
@@ -145,7 +145,6 @@ export default function StepGeneralInformation() {
       <Button
         className='mt-6'
         label='Next'
-        disabled={!isValid}
         onPress={handleSubmit(onSubmit)}
       />
     </Wrapper>

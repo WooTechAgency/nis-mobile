@@ -6,5 +6,5 @@ export function useToggle(data?: boolean): [boolean, () => void] {
     setState((v) => !v);
   }, []);
 
-  return [state, toggle];
+  return [state, toggle,setState];
 }
