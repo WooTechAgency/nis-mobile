@@ -1,15 +1,16 @@
 import Header from '@components/header'
+import Steps from '@components/steps'
 import { SafeAreaView, ScrollView } from '@components/ui'
 import { goBack } from '@routes/navigationRef'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 import { IncidentSteps, useIncidentContext } from '../context'
+import StepAction from './steps/step-action'
 import StepGeneralInformation from './steps/step-general-info'
 import StepIncident from './steps/step-incident'
-import StepAction from './steps/step-action'
-import StepWitness from './steps/step-witness'
 import StepSignOff from './steps/step-sign-off'
-import Steps from '@components/steps'
+import StepWitness from './steps/step-witness'
+import { useRoute } from '@react-navigation/native'
 
 
 const steps = {
@@ -21,19 +22,20 @@ const steps = {
 }
 
 export default function CreateIncident() {
-  const { incident: { selectedIndex, enableScroll, completedSteps }, setIncident } = useIncidentContext();
+  const editingMode = useRoute().params?.editingMode as boolean
+  const { incident: { selectedIndex, enableScroll, completedSteps, generalInfo }, setIncident } = useIncidentContext();
   const renderSteps = () => {
     switch (selectedIndex) {
       case IncidentSteps.General:
-        return <StepGeneralInformation />
+        return <StepGeneralInformation editingMode={editingMode} />
       case IncidentSteps.Incident:
-        return <StepIncident />
+        return <StepIncident editingMode={editingMode} />
       case IncidentSteps.Action:
-        return <StepAction />
+        return <StepAction editingMode={editingMode} />
       case IncidentSteps.Witness:
-        return <StepWitness />
+        return <StepWitness editingMode={editingMode} />
       case IncidentSteps.SignOff:
-        return <StepSignOff />
+        return <StepSignOff editingMode={editingMode} />
       default:
         return <View />
     }
@@ -53,7 +55,7 @@ export default function CreateIncident() {
   return (
     <SafeAreaView>
       <ScrollView scrollEnabled={enableScroll}>
-        <Header title='IR001' isBack onCustomBack={onBack} />
+        <Header title={generalInfo?.siteLocation.site_code || 'New Incident'} isBack onCustomBack={onBack} />
         <Steps
           classNameWrap='mt-4'
           steps={steps}

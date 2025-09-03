@@ -2,24 +2,27 @@ import { images } from '@assets/images';
 import Title from '@components/title';
 import { Button, Image } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
+import { useAppSelector } from '@hooks/common';
+import { IRole } from '@services/role.service';
+import { formatRole } from '@utils/functions.util';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { SigneeItem } from '../components/SigneeItem';
+import { SigneeItem } from '../components/singee-item';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 
-export interface SigneeForm {
-  name?: string;
-  role?: any; //TODO: chua biet
-  signature?: string;
-  timestamp?: Date;
+export interface SignOffForm {
+  signees: Signee[];
 }
 
-interface Form {
-  signees: SigneeForm[];
+export interface Signee {
+  name: string;
+  role: IRole;
+  signature?: string;
+  timestamp?: Date;
 }
 
 const signeeDefault = {
@@ -36,24 +39,30 @@ const formSchema = yup.object().shape(
       .notRequired()
       .of(
         yup.object({
-          name: yup.string().notRequired(),
-          role: yup.mixed().notRequired(),
-          signature: yup.string().notRequired(),
+          name: yup.string().required('Name is required'),
+          role: yup.object().required('Role is required'),
+          signature: yup.string().required('Signature is required'),
           timestamp: yup.date().notRequired()
         })
       ),
   },
 );
 
-export default function StepSignOff() {
+export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
+  const { userInfo } = useAppSelector((state) => state.authentication)
+  const { setIncident, incident: { singing } } = useIncidentContext()
+
   const {
     control,
     handleSubmit,
     setValue,
     formState: { errors, },
+    trigger
   } = useForm({
     defaultValues: {
-      signees: [signeeDefault],
+      signees: singing?.signees || [
+        { ...signeeDefault, name: userInfo?.full_name, role: formatRole(userInfo?.role) }
+      ],
     },
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
@@ -64,11 +73,9 @@ export default function StepSignOff() {
     name: 'signees',
   });
 
-  const { setIncident } = useIncidentContext()
 
-  const onSubmit = (form: Form) => {
-    console.log('form', form)
-    setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.SignOff, singing: form.signees }))
+  const onSubmit = (form: SignOffForm) => {
+    setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.SignOff, singing: form }))
     navigate(RouteName.PreviewIncident)
   }
 
@@ -93,7 +100,9 @@ export default function StepSignOff() {
               control={control}
               setValue={setValue}
               errors={errors}
-              name='signees'
+              name={`signees.${index}`}
+              trigger={trigger}
+              remove={remove}
             />
           </View>
         );

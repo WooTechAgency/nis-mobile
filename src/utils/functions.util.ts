@@ -1,4 +1,6 @@
 import ErrorModal from '@components/modal/error-modal';
+import { IUser } from '@services/authentication.service';
+import { IRole } from '@services/role.service';
 
 export const showErrorMessage = ({title, message, btnText}:{title?: string, message: string, btnText?:string}) => {
   ErrorModal.show({title, message, btnText})
@@ -13,4 +15,12 @@ export const formatBytes = (bytes?: number | null, decimals = 2) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + ' ' + sizes[i];
+}
+
+export const formatRole = (role: IRole | undefined) =>{
+  if(role){
+    return {...role,value: role.id,label: role.name }
+  }
+  return undefined
+
 }

@@ -41,9 +41,10 @@ interface Props {
   errors?: FieldErrors;
   control: Control<any, any>;
   trigger: UseFormTrigger<any>
+  disabled?: boolean
 }
 
-export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap, setValue, trigger }: Props) {
+export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap, setValue, trigger, disabled }: Props) {
   const refSignature = useRef<SignatureViewRef>(null);
   const signatureBase64 = useWatch({ name: `${name}.signature`, control })
   const timestamp = useWatch({ name: `${name}.timestamp`, control })
@@ -76,12 +77,14 @@ export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap
   return (
     <View className={` ${classNameWrap}`}>
       {signatureBase64 ? (
-        <View className="border border-border  rounded-[10px] " >
-          <Text className='absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 '>Add signature</Text>
+        <View className={`border   rounded-[10px] ${disabled ? 'border-neutral20' : 'border-border'}`} >
+          <Text className={`absolute left-4 -top-2 bg-white z-10 text-[12px]  ${disabled ? 'text-border' : 'text-neutral70'} `}>Add signature</Text>
           <Image source={{ uri: signatureBase64 }} className="w-full h-[144]" />
-          <Button className="absolute right-2 top-2" onPress={onDeleteSignature}>
-            <Image source={images.close} className="w-[32] h-[32] " />
-          </Button>
+          {!disabled &&
+            <Button className="absolute right-2 top-2" onPress={onDeleteSignature}>
+              <Image source={images.close} className="w-[32] h-[32] " />
+            </Button>
+          }
           <Text className='text-neutral70 text-[12px] absolute right-4 bottom-4 '>{convertHHMMSSDDMMYYYY(timestamp)}</Text>
         </View>
       ) : (

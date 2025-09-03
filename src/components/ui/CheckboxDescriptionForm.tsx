@@ -1,34 +1,34 @@
 import { images } from '@assets/images';
 import { Button, Image, Text } from '@components/ui';
-import { getMessageError } from '@utils/common.util';
 import React from 'react';
-import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
+import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, UseFormWatch, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
 import { TextInput } from './TextInput';
-
 
 interface Props {
   setValue: UseFormSetValue<any>;
   checkboxName: string;
   control: Control<any, any>;
   label: string;
-
+  trigger: UseFormTrigger<any>
   classNameWrap?: string;
   errors?: FieldErrors;
   descriptionName: string;
-  labelDescription: string;
+  labelDescription?: string;
   placeholderDescription: string;
+  watch: UseFormWatch<any>
+  selectedName: string
+  rootName: string
 }
 
-
 export function CheckboxDescriptionForm(props: Props) {
-  const { setValue, checkboxName, descriptionName, control, classNameWrap, errors, label, labelDescription, placeholderDescription } = props;
+  const { setValue, checkboxName, selectedName, rootName, descriptionName, control, classNameWrap, watch, errors, label, trigger, labelDescription, placeholderDescription } = props;
   const checked = useWatch({ name: checkboxName, control }) || false
 
-  const messageError = getMessageError(errors, checkboxName);
-
   const onSelect = () => {
-    setValue(checkboxName, !checked);
+    setValue(checkboxName, !checked, { shouldValidate: true });
+    const atLeastOne = watch(rootName)?.some((i) => i.selected || !checked);
+    setValue(selectedName, atLeastOne, { shouldValidate: true });
   };
 
   return (
@@ -50,6 +50,7 @@ export function CheckboxDescriptionForm(props: Props) {
           label={labelDescription}
           placeholder={placeholderDescription}
           hasVoice
+          errors={errors}
         />
       }
     </View>

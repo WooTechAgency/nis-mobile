@@ -75,8 +75,8 @@ export const DropdownPicker = memo((props: Props) => {
     <View className={`z-50 ${classNameWrap}`}>
       <>
         {label &&
-          <Text className={`text-[12px] text-neutral70 px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
-            ${disabled && 'text-neutral40'} 
+          <Text className={`text-[12px]  px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
+            ${disabled ? 'text-neutral40' : 'text-neutral70'} 
             ${labelCls}
             ${messageError && 'text-red'}
             `}
@@ -106,12 +106,12 @@ export const DropdownPicker = memo((props: Props) => {
             backgroundColor: 'white',
             paddingHorizontal: 12,
             borderWidth: 1,
-            borderColor: messageError ? colors.red : colors.gray,
+            borderColor: messageError ? colors.red : disabled ? colors.neutral20 : colors.border,
             height: 56,
             borderRadius: 14,
           }} Date
           labelStyle={{
-            color: colors.black,
+            color: disabled ? colors.neutral40 : colors.black,
             fontSize: isIpad ? 16 : 14,
           }}
           listParentContainerStyle={{
@@ -134,7 +134,7 @@ export const DropdownPicker = memo((props: Props) => {
             shadowColor: 'rgba(0, 0, 50, 0.2)',
             overflow: 'visible',
           }}
-          arrowIconStyle={{ tintColor: colors.gray }}
+          arrowIconStyle={{ tintColor: colors.neutral70 }}
           tickIconStyle={{ tintColor: colors.black }}
           selectedItemLabelStyle={{
             fontWeight: '600',

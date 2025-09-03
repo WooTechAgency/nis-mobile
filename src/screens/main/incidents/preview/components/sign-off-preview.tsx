@@ -1,13 +1,15 @@
-import { FlatList, Text } from '@components/ui'
+import { FlatList, Image, Text } from '@components/ui'
 import { useToggle } from '@hooks/useToggle'
-import { goBack } from '@routes/navigationRef'
+import { dispatch, goBack } from '@routes/navigationRef'
+import { convertHHMMSSDDMMYYYY } from '@utils/date.util'
 import React from 'react'
 import { View } from 'react-native'
-import { IncidentSteps, useIncidentContext } from '../../context'
-import { WitnessForm } from '../../create-incident/steps/step-witness'
 import { PreviewProps, flatListClassName, headerClassName, itemClassName, labelClassName } from '../../config.incident.ts'
-import Footer from './footer'
-import { convertHHMMSSDDMMYYYY } from '@utils/date.util'
+import { IncidentSteps, useIncidentContext } from '../../context'
+import { Signee } from '../../create-incident/steps/step-sign-off.tsx'
+import HeaderPreview from '@components/common/header-preview.tsx'
+import { StackActions } from '@react-navigation/native'
+import { RouteName } from '@routes/types.ts'
 
 
 export default function SignOffPreview({ allowEdit }: PreviewProps) {
@@ -15,13 +17,13 @@ export default function SignOffPreview({ allowEdit }: PreviewProps) {
   const [collapsed, toggleCollapse] = useToggle(false)
 
   const onEdit = () => {
-    goBack()
+    dispatch(StackActions.popTo(RouteName.CreateIncident, { editingMode: true }))
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Action }))
   }
 
   return (
     <View className='mt-8 bg-white rounded-[20px]'>
-      <Footer
+      <HeaderPreview
         allowEdit={allowEdit}
         label='Sign off'
         onEdit={onEdit}
@@ -35,29 +37,27 @@ export default function SignOffPreview({ allowEdit }: PreviewProps) {
             className={`${flatListClassName}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            data={singing}
+            data={singing?.signees}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={
               <View className={`${headerClassName}`}>
-                <Text className={`${labelClassName} w-[23%]`}>{'Name'}</Text>
-                <Text className={`${labelClassName} w-[23%]`}>{'Role'}</Text>
-                <Text className={`${labelClassName} grow`}>{'Time & Date'}</Text>
-                <Text className={`${labelClassName} w-[20%]`}>{'Signature'}</Text>
+                <Text className={`${labelClassName} w-[25%]`}>{'Name'}</Text>
+                <Text className={`${labelClassName} w-[25%]`}>{'Role'}</Text>
+                <Text className={`${labelClassName} w-[25%]`}>{'Time & Date'}</Text>
+                <Text className={`${labelClassName} w-[25%]`}>{'Signature'}</Text>
               </View>
             }
-            renderItem={({ item }: { item: Signee }) => (
-              <View className={`${itemClassName}`}>
-                <Text className={`${labelClassName} w-[23%]`}>{item?.name}</Text>
-                <Text className={`${labelClassName} w-[23%]`}>{item?.role.label}</Text>
-                <Text className={`${labelClassName} grow`}>{convertHHMMSSDDMMYYYY(item.timestamp)}</Text>
-                {/* <Text className={`${labelClassName} w-[20%]`}>{item?.email || '0123'}</Text> */}
+            renderItem={({ item, index }: { item: Signee, index: number }) => (
+              <View className={`${itemClassName} ${index !== (singing?.signees?.length || 0) - 1 && 'border-b'}`}>
+                <Text className={`${labelClassName}  w-[25%]`}>{item?.name}</Text>
+                <Text className={`${labelClassName}  w-[25%]`}>{item?.role?.name}</Text>
+                <Text className={`${labelClassName}  w-[25%]`}>{convertHHMMSSDDMMYYYY(item?.timestamp)}</Text>
+                <Image source={{ uri: item?.signature }} className=" w-[25%] h-[31px]" resizeMode='cover' />
               </View>
             )}
           />
-
         </>
       }
-
     </View>
   )
 }

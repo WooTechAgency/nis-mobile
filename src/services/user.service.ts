@@ -1,5 +1,7 @@
 import { showErrorMessage } from '@utils/functions.util';
 import baseApi from '.';
+import { ICompany } from './authentication.service';
+import { IRole } from './role.service';
 
 
 const BASE_SERVICE = '/api/users';
@@ -44,6 +46,28 @@ export async function changePasswordApi(request: ChangePasswordRequest): Promise
     return response.data;
   } catch (error: any) {
     showErrorMessage({ message: error.message })
+    throw error;
+  }
+}
+export interface IUser {
+  created_at: string;
+  email: string;
+  id: number
+  is_deactive: boolean;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  phone: string;
+  profile_image: null;
+  company: ICompany;
+  role: IRole;
+}
+export async function getUsersApi(): Promise<IUser[]> {
+  try {
+    const response = await baseApi.get(`${BASE_SERVICE}`);
+    return response?.data?.data || [];
+  } catch (error: any) {
+    showErrorMessage({ message: error.message });
     throw error;
   }
 }

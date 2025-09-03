@@ -1,5 +1,6 @@
 import { showErrorMessage } from '@utils/functions.util';
 import baseApi from './index';
+import { IRole } from './role.service';
 
 const BASE_SERVICE = '/api/auth';
 
@@ -16,11 +17,6 @@ export enum Roles{
   SuperAdmin = 'Super Admin'
 }
 
-export interface IRole{
-  id: number;
-  name:Roles
-  company_id:number
-}
 
 export interface ICompany{
   id: number;

@@ -7,7 +7,7 @@ import { View } from './View';
 import { Text } from './Text';
 import { Button } from './Button';
 import { getMessageError } from '@utils/common.util';
-import { convertUTCDate, convertUTCDay } from '@utils/date.util';
+import { convertHHMM, convertUTCDate, convertUTCDay } from '@utils/date.util';
 import { Image } from './Image';
 import { images } from '@assets/images';
 import { colors } from '@constants/colors.constants';
@@ -74,6 +74,8 @@ export function DatePickerInput(props: Props) {
     switch (type) {
       case 'date':
         return convertUTCDate(field.value)
+      case 'time':
+        return convertHHMM(field.value)
       default:
         return convertUTCDay(field.value);
     }
@@ -87,8 +89,8 @@ export function DatePickerInput(props: Props) {
   return (
     <View className={wrapCls}>
       {label &&
-        <Text className={`text-[12px] text-neutral70 px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
-        ${disabled && 'text-border'} 
+        <Text className={`text-[12px]  px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
+        ${disabled ? 'text-border' : 'text-neutral70'} 
         ${messageError && 'text-red'}
         `}>
           {label}
@@ -97,10 +99,12 @@ export function DatePickerInput(props: Props) {
       <Button
         onPress={onClickPicker}
         disabled={disabled}
-        className={`flex-row items-center gap-x-3 bg-white rounded-[14px] border border-border h-[54] px-4 ${className}`}
+        className={`flex-row items-center gap-x-3 bg-white rounded-[14px] border  h-[54] px-4
+         ${messageError ? 'border-red' : 'border-border'}
+          ${className}`}
       >
         {placeholder && !field.value ? (
-          <Text className="sm:text-[16px] text-gray">{placeholder}</Text>
+          <Text className={`sm:text-[16px]  ${messageError ? 'text-red' : 'text-gray'}`}>{placeholder}</Text>
         ) : (
           <Text
             className={`sm:text-[16px]  ${disabled && 'text-neutral50'} ${classNameText} ${isTextCenter && 'text-center'}`}
@@ -110,7 +114,12 @@ export function DatePickerInput(props: Props) {
           </Text>
         )}
         <View className='flex-1' />
-        <Image source={images.date} className='w-4 h-4' tintColor={disabled ? colors.border : colors.gray} />
+        <Image
+          source={images.date}
+          className='w-4 h-4'
+          tintColor={disabled ? colors.border :
+            messageError ? colors.red : colors.gray}
+        />
       </Button>
       <DatePicker
         open={open}
