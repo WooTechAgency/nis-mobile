@@ -42,7 +42,10 @@ export function DocumentForm(props: Props) {
   return (
     <View className={` ${classNameWrap}`}>
       {currentDocs.length > 0 && currentDocs.map((doc: DocumentPickerResponse, index: number) => (
-        <View className='flex-row items-center  justify-between border border-border bg-neutral10 p-4 rounded-[14px] mt-4'>
+        <View
+          key={index}
+          className='flex-row items-center  justify-between border border-border bg-neutral10 p-4 rounded-[14px] mt-4'
+        >
           <View className='row-center gap-x-3 '>
             <Image source={images.document} className='w-9 h-9' />
             <View className='flex-grow'>

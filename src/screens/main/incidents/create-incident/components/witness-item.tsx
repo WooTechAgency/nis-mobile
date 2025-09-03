@@ -70,7 +70,7 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
       </View>
       <Title label='Statement' className='text-base mt-4 mb-2' />
       <DocumentForm
-        name={`${name}.document`}
+        name={`${name}.documents`}
         setValue={setValue}
         control={control}
       />

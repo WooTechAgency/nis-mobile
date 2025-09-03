@@ -1,21 +1,22 @@
 import Title from '@components/title';
 import { Button, CheckboxDescriptionForm, Text, Wrapper } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import { useGetTakenActions } from '@services/hooks/incident/useGetTakenActions';
+import { getMessageError } from '@utils/common.util';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { getMessageError } from '@utils/common.util';
-import { TAKEN_ACTIONS } from '../../config.incident';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 
 
 export interface Action {
-  key: string
-  selected: boolean
+  id: number,
+  name: string, // label
   description: string
+  selected: boolean
 }
 
 export interface ActionForm {
@@ -28,7 +29,7 @@ const formSchema = yup.object().shape({
     .notRequired()
     .of(
       yup.object({
-        key: yup.string().required(),
+        id: yup.number().required(),
         selected: yup.boolean(),
         description: yup.string().when("selected", {
           is: true,
@@ -53,16 +54,19 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
     formState: { errors, },
   } = useForm({
     defaultValues: {
-      actions: action?.actions || TAKEN_ACTIONS.map((i) => ({
-        key: i.key,
-        selected: false,
-        description: "",
-      })),
+      actions: action?.actions,
       actionSelected: action?.actionSelected || false,
     },
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
+  const { data: actions } = useGetTakenActions();
+
+  useEffect(() => {
+    if (!action?.actions && !!actions) {
+      setValue('actions', actions)
+    }
+  }, [action?.actions, actions])
 
   const onBack = () => {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Incident }))
@@ -82,12 +86,11 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
 
   const actionsSelectedError = getMessageError(errors, 'actionSelected')
 
-
   return (
     <Wrapper className=''>
       <View className='gap-y-4'>
         <Title label='Immediate Action Taken' className='text-base' />
-        {TAKEN_ACTIONS?.map((action, index) => {
+        {actions?.map((action, index) => {
           return (
             <View key={index}>
               <CheckboxDescriptionForm
@@ -96,7 +99,7 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
                 errors={errors}
                 control={control}
                 checkboxName={`actions.${index}.selected`}
-                label={action.label}
+                label={action.name}
                 descriptionName={`actions.${index}.description`}
                 placeholderDescription='Please describe the action taken'
                 trigger={trigger}

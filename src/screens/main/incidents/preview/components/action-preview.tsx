@@ -6,7 +6,7 @@ import { dispatch } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
 import React from 'react'
 import { View } from 'react-native'
-import { PreviewProps, TAKEN_ACTIONS } from '../../config.incident'
+import { PreviewProps } from '../../config.incident'
 import { IncidentSteps, useIncidentContext } from '../../context'
 
 const width = 'w-[50%]'
@@ -19,7 +19,7 @@ export default function ActionPreview({ allowEdit }: PreviewProps) {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Action }))
   }
 
-  const actions = action?.actions.filter((item) => !!item.description)
+  const actions = action?.actions?.filter((item) => !!item.description)
 
   return (
     <View className='mt-8 bg-white rounded-[20px]'>
@@ -36,8 +36,8 @@ export default function ActionPreview({ allowEdit }: PreviewProps) {
           <View className='w-full h-[1px] bg-neutral20 ' />
           <View className='p-6 pt-5 gap-y-4'>
             {actions?.map((item, index) => (
-              <View className={`flex-row gap-x-4 ${index + 1 !== actions.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={item.key}>
-                <ValueItem label='Immediate Action Taken' value={TAKEN_ACTIONS.find((type) => type.key === item.key)?.label} classNameWrap={`${width}`} />
+              <View className={`flex-row gap-x-4 ${index + 1 !== actions?.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={index}>
+                <ValueItem label='Immediate Action Taken' value={item.name} classNameWrap={`${width}`} />
                 <ValueItem label='Action Description' value={item.description} classNameWrap={`${width}`} />
               </View>
             ))}

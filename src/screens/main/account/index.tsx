@@ -9,7 +9,7 @@ import { StackActions } from '@react-navigation/native';
 import { navigate, navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { logoutApi } from '@services/authentication.service';
-import { useGetCurrentUser } from '@services/hooks/auth/useGetCurrentUser';
+import { useGetCurrentUser } from '@services/hooks/useGetCurrentUser';
 import { setUserInfo } from '@store/slices/authenticationSlice';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useEffect } from 'react';

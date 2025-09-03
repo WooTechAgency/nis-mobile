@@ -4,7 +4,7 @@ import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { goBack, navigate } from '@routes/navigationRef';
-import { useGetCurrentUser } from '@services/hooks/auth/useGetCurrentUser';
+import { useGetCurrentUser } from '@services/hooks/useGetCurrentUser';
 import { useQueryClient } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';

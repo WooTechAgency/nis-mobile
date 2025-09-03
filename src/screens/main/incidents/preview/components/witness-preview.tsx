@@ -16,7 +16,7 @@ export default function WitnessPreview({ allowEdit }: PreviewProps) {
 
   const onEdit = () => {
     dispatch(StackActions.popTo(RouteName.CreateIncident, { editingMode: true }))
-    setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Action }))
+    setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Witness }))
   }
 
   return (
@@ -50,7 +50,7 @@ export default function WitnessPreview({ allowEdit }: PreviewProps) {
                 <Text className={`${labelClassName} w-[23%]`}>{item?.name}</Text>
                 <Text className={`${labelClassName} w-[23%]`}>{item?.phone}</Text>
                 <Text className={`${labelClassName} grow`}>{item?.email || '0123'}</Text>
-                <Text className={`${labelClassName} w-[20%] underline `}>{item?.documents ? "Yes" : 'No'}</Text>
+                <Text className={`${labelClassName} w-[20%] underline `}>{item?.documents && item.documents.length > 0 ? "Yes" : 'No'}</Text>
               </View>
             )}
           />

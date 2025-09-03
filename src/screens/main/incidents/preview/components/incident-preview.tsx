@@ -1,16 +1,16 @@
+import HeaderPreview from '@components/common/header-preview'
+import { ValueItem } from '@components/common/value-item'
 import Title from '@components/title'
 import { FlatList, Text } from '@components/ui'
 import { useToggle } from '@hooks/useToggle'
-import { dispatch, goBack } from '@routes/navigationRef'
+import { StackActions } from '@react-navigation/native'
+import { dispatch } from '@routes/navigationRef'
+import { RouteName } from '@routes/types'
 import React from 'react'
 import { View } from 'react-native'
-import { INCIDENT_TYPES, PreviewProps, flatListClassName, headerClassName, itemClassName, labelClassName } from '../../config.incident'
+import { PreviewProps, flatListClassName, headerClassName, itemClassName, labelClassName } from '../../config.incident'
 import { IncidentSteps, useIncidentContext } from '../../context'
 import { InvolvedPerson } from '../../create-incident/steps/step-incident'
-import HeaderPreview from '@components/common/header-preview'
-import { ValueItem } from '@components/common/value-item'
-import { RouteName } from '@routes/types'
-import { StackActions } from '@react-navigation/native'
 
 const width = 'w-[50%]'
 export default function IncidentPreview({ allowEdit }: PreviewProps) {
@@ -67,8 +67,8 @@ export default function IncidentPreview({ allowEdit }: PreviewProps) {
           <View className='p-6 pt-5 gap-y-4 '>
             <Title label='Incident Type' className='text-base' />
             {incidentTypes?.map((item, index) => (
-              <View className={`flex-row gap-x-4 ${index + 1 !== incidentTypes.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={item.key}>
-                <ValueItem label='Incident Type' value={INCIDENT_TYPES.find((type) => type.key === item.key)?.label} classNameWrap={`${width}`} />
+              <View className={`flex-row gap-x-4 ${index + 1 !== incidentTypes.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={index}>
+                <ValueItem label='Incident Type' value={item.name} classNameWrap={`${width}`} />
                 <ValueItem label='Incident Description' value={item.description} classNameWrap={`${width}`} />
               </View>
             ))}

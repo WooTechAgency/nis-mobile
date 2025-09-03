@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Incidents from '@screens/main/incidents';
+import Incidents from '@screens/main/incidents/list-incident';
 import { IncidentProvider } from '@screens/main/incidents/context';
 import CreateIncident from '@screens/main/incidents/create-incident/create-incident';
 import React from 'react';

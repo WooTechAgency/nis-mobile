@@ -6,7 +6,7 @@ import { shadowStyle } from '@constants/config.constants';
 import { IDropdown } from '@constants/interface';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector } from '@hooks/common';
-import { useGetSites } from '@services/hooks/site/useGetSites';
+import { useGetSites } from '@services/hooks/useGetSites';
 import { ISite } from '@services/site.service';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -64,6 +64,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   const { data: sites } = useGetSites()
 
   const onSubmit = (form: GeneralForm) => {
+    console.log('form ', form)
     const newCompletedSteps = new Set<number>([DailyAssessmentSteps.General, ...(completedSteps || [])]);
     setAssessment((prev) => ({
       ...prev,

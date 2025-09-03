@@ -2,21 +2,22 @@ import { images } from '@assets/images';
 import Title from '@components/title';
 import { Button, CheckboxDescriptionForm, Image, Text, Wrapper } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
+import { useGetIncidentTypes } from '@services/hooks/incident/useGetIncidentTypes';
 import { getMessageError } from '@utils/common.util';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
-import { INCIDENT_TYPES } from '../../config.incident';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { InvolvedPersonItem } from '../components/involved-person-item';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
 
 export interface IncidentType {
-  key: string
-  selected: boolean
+  id: number,
+  name: string, // label
   description: string
+  selected: boolean
 }
 export interface InvolvedPerson {
   name?: string;
@@ -64,7 +65,7 @@ const formSchema = yup.object().shape({
     .notRequired()
     .of(
       yup.object({
-        key: yup.string().required(),
+        id: yup.number().required(),
         selected: yup.boolean(),
         description: yup.string().when("selected", {
           is: true,
@@ -90,11 +91,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   } = useForm({
     defaultValues: {
       ...incident,
-      incidentTypes: incident?.incidentTypes || INCIDENT_TYPES.map((i) => ({
-        key: i.key,
-        selected: false,
-        description: "",
-      })),
+      incidentTypes: incident?.incidentTypes,
       involvedPersons: incident?.involvedPersons || [{}],
       incidentSelected: incident?.incidentSelected || false,
     },
@@ -106,11 +103,21 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
     name: 'involvedPersons',
   });
 
+  const { data: incidentTypes } = useGetIncidentTypes();
+
+  useEffect(() => {
+    if (!incident?.incidentTypes && !!incidentTypes) {
+      setValue('incidentTypes', incidentTypes)
+    }
+  }, [incident?.incidentTypes, incidentTypes])
+
   const onBack = () => {
     setIncident((prev) => ({ ...prev, selectedIndex: 1 }))
   }
 
   const onSubmit = (form: IncidentForm) => {
+    console.log('form ', form)
+
     const newCompletedSteps = new Set([IncidentSteps.Incident, ...(completedSteps || [])]);
     setIncident((prev) => ({
       ...prev,
@@ -157,7 +164,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
         <View className='gap-y-4'>
           <Title label='Incident Type' className='text-base mt-8' />
           <Text>Select all that apply</Text>
-          {INCIDENT_TYPES?.map((type, index) => {
+          {incidentTypes?.map((type, index) => {
             return (
               <View key={index}>
                 <CheckboxDescriptionForm
@@ -166,7 +173,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
                   errors={errors}
                   control={control}
                   checkboxName={`incidentTypes.${index}.selected`}
-                  label={type.label}
+                  label={type.name}
                   descriptionName={`incidentTypes.${index}.description`}
                   placeholderDescription='Describe the incident that occurred'
                   trigger={trigger}

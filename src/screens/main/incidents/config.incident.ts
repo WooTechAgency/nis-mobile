@@ -9,15 +9,15 @@ export interface PreviewProps {
 }
 
 
-export const TAKEN_ACTIONS = [
-  { key: "firstAid", label: "First aid administered" },
-  { key: "emergencyServices", label: "Emergency services contacted" },
-  { key: "supervisorNotified", label: "Supervisor notified" },
-  { key: "areaMadeSafe", label: "Area made safe" },
-  { key: "workStopped", label: "Work stopped" },
-  { key: "equipmentFailure", label: "Equipment Failure" },
-  { key: "otherAction", label: "Other" },
-];
+// export const TAKEN_ACTIONS = [
+//   { key: "firstAid", label: "First aid administered" },
+//   { key: "emergencyServices", label: "Emergency services contacted" },
+//   { key: "supervisorNotified", label: "Supervisor notified" },
+//   { key: "areaMadeSafe", label: "Area made safe" },
+//   { key: "workStopped", label: "Work stopped" },
+//   { key: "equipmentFailure", label: "Equipment Failure" },
+//   { key: "otherAction", label: "Other" },
+// ];
 
 
 export const INCIDENT_TYPES = [

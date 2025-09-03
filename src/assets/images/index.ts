@@ -37,4 +37,5 @@ export const images = {
   complete: require('./sources/complete.png'),
   minus: require('./sources/minus.png'),
   checkedDisable: require('./sources/checkedDisable.png'),
+  incidentType: require('./sources/incidentType.png'),
 };
