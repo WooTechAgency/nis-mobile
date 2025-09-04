@@ -8,7 +8,7 @@ export const useGetIncidentTypes = () => {
     queryFn: () => getIncidentTypesApi(),
     select(data) {
       return data.map((item)=> {
-        return {...item, selected: false, }
+        return {...item, selected: false, label: item.name, value: item.id }
       })
   },
     // staleTime: Infinity,

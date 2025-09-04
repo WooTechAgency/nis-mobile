@@ -3,6 +3,7 @@ import SelectedFilter from '@components/common/selected-filter';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
 import DropdownMenu from '@components/ui/DropdownMenu';
 import { useToggle } from '@hooks/useToggle';
+import { useGetIncidentTypes } from '@services/hooks/incident/useGetIncidentTypes';
 import { useGetSites } from '@services/hooks/useGetSites';
 import { IncidentReport } from '@services/incident.service';
 import { convertDDMMYYYY } from '@utils/date.util';
@@ -30,10 +31,12 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
   const [visibleType, toggleVisibleType] = useToggle(false);
 
   const { data: sites } = useGetSites();
+  const { data: incidentTypes } = useGetIncidentTypes();
+  console.log('incidentTypes ', incidentTypes)
 
   const filters = [
     { icon: images.date32, name: 'date', title: 'Date', listValue: sites, visible: visibleDate, toggleVisible: toggleVisibleDate },
-    { icon: images.incidentType, name: 'type', title: 'Incident Type', listValue: sites, visible: visibleType, toggleVisible: toggleVisibleType },
+    { icon: images.incidentType, name: 'type', title: 'Incident Type', listValue: incidentTypes, visible: visibleType, toggleVisible: toggleVisibleType },
     { icon: images.location, name: 'site', title: 'Site', listValue: sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
 
   ]

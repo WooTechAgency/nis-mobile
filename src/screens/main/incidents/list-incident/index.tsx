@@ -37,7 +37,11 @@ export default function Incidents() {
 
   const debouncedSearch = useDebounce(search, 500)
 
-  const { data: incidents, isLoading } = useGetIncidentReports()
+  const { data: incidents, isLoading } = useGetIncidentReports({
+    search: debouncedSearch,
+    site_id: site?.id,
+    incident_type_id: type?.id,
+  })
 
   return (
     <SafeAreaView>

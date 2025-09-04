@@ -103,9 +103,16 @@ export interface InvolvedPerson {
   created_at: string;
   updated_at: string;
 }
-export async function getIncidentReportsApi(): Promise<IncidentReport[]> {
+export interface GetIncidentParams{
+  search?: string | undefined |  null
+  site_id?: number
+  incident_type_id?: number
+  date_from?: string;
+  date_to?: string
+}
+export async function getIncidentReportsApi(params: GetIncidentParams): Promise<IncidentReport[]> {
   try {
-    const response = await baseApi.get(`api/incident-reports`);
+    const response = await baseApi.get(`api/incident-reports`,params);
     console.log('dsda ',response.data.data)
     return response.data.data
   } catch (e: any) {
