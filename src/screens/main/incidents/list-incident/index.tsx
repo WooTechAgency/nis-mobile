@@ -16,12 +16,15 @@ import { View } from 'react-native'
 import * as yup from 'yup'
 import IncidentTable from './components/incident-table'
 import InprogressIncidents from './components/inprogress-incidents'
+import { useToggle } from '@hooks/useToggle'
+import CalendarPicker from '@components/ui/CalendarPicker'
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
   site: yup.object().notRequired(),
   type: yup.object().notRequired(),
   date: yup.object().notRequired(),
+  markedDates: yup.object().notRequired(),
   sort_direction: yup.string().notRequired()
 });
 
@@ -39,7 +42,6 @@ export default function Incidents() {
   const site = watch('site') as ISite
   const sort_direction = watch('sort_direction') as string
 
-
   const debouncedSearch = useDebounce(search, 500)
   const { data: incidents, isLoading } = useGetIncidentReports({
     search: debouncedSearch && debouncedSearch.length > 1 ? debouncedSearch : undefined,
@@ -47,6 +49,8 @@ export default function Incidents() {
     incident_type_id: type?.id,
     sort_by: 'id',
     sort_direction: sort_direction || SortDirection.ASC,
+    date_from: date?.startDate,
+    date_to: date?.endDate
   })
 
   return (

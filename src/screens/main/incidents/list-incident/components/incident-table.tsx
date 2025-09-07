@@ -1,6 +1,7 @@
 import { images } from '@assets/images';
 import SelectedFilter from '@components/common/selected-filter';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
+import CalendarPicker from '@components/ui/CalendarPicker';
 import DropdownMenu from '@components/ui/DropdownMenu';
 import { SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
@@ -28,21 +29,18 @@ interface Props {
 }
 export default function IncidentTable({ control, setValue, incidents }: Props) {
   const [visibleSites, toggleVisibleSites] = useToggle(false);
-  const [visibleDate, toggleVisibleDate] = useToggle(false);
   const [visibleType, toggleVisibleType] = useToggle(false);
-
+  const [visibleCalendar, toggleVisibleCalendar] = useToggle(false)
   const { data: sites } = useGetSites();
   const { data: incidentTypes } = useGetIncidentTypes();
-  console.log('incidentTypes ', incidentTypes)
 
   const filters = [
-    { icon: images.date32, name: 'date', title: 'Date', listValue: sites, visible: visibleDate, toggleVisible: toggleVisibleDate },
     { icon: images.incidentType, name: 'type', title: 'Incident Type', listValue: incidentTypes, visible: visibleType, toggleVisible: toggleVisibleType },
     { icon: images.location, name: 'site', title: 'Site', listValue: sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
-
   ]
 
   const site = useWatch({ control, name: 'site' })
+  const type = useWatch({ control, name: 'type' })
   const date = useWatch({ control, name: 'date' })
   const sortDirection = useWatch({ control, name: 'sort_direction' })
   const isASC = sortDirection === SortDirection.ASC
@@ -51,8 +49,18 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
     <View>
       <View className='bg-white mt-6 rounded-[20px] p-6 '>
         <View className='flex-row items-center justify-between'>
-          {site ? <SelectedFilter label={site?.label} name='site' setValue={setValue} /> : <View />}
+          <View className='row-center gap-x-4'>
+            {type ? <SelectedFilter label={type?.label} name='type' setValue={setValue} /> : <View />}
+            {site ? <SelectedFilter label={site?.label} name='site' setValue={setValue} /> : <View />}
+          </View>
           <View className='flex-row gap-x-4 self-end'>
+            <Button
+              className='row-center justify-center w-[135px] h-8 border border-primary rounded-lg '
+              onPress={toggleVisibleCalendar}
+            >
+              <Image source={images.date32} className='w-8 h-8' />
+              <Text className='text-[12px] font-medium'>{'Date'}</Text>
+            </Button>
             {filters.map((filter, index) => (
               <DropdownMenu
                 key={index}
@@ -105,6 +113,13 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
           }
         />
       </View>
+      <CalendarPicker
+        name='date'
+        visible={visibleCalendar}
+        toggleModal={toggleVisibleCalendar}
+        setValue={setValue}
+        control={control}
+      />
     </View>
   )
 }

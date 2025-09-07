@@ -19,3 +19,4 @@ export * from './Wrapper';
 export * from './CheckboxDescriptionForm';
 export * from './MediaForm';
 export * from './DropdownMenu';
+export * from './CalendarPicker';
