@@ -10,6 +10,7 @@ import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { useUpsertIncident } from '../../useUpsertIncident';
 
 
 export interface Action {
@@ -44,6 +45,8 @@ const formSchema = yup.object().shape({
 });
 
 export default function StepAction({ editingMode }: { editingMode: boolean }) {
+  const { upsertIncident } = useUpsertIncident()
+
   const { setIncident, incident: { completedSteps, action } } = useIncidentContext()
   const {
     control,
@@ -81,7 +84,9 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
       selectedIndex: IncidentSteps.Witness,
       completedSteps: Array.from(newCompletedSteps)
     }))
+    upsertIncident({ action: form, completedSteps: Array.from(newCompletedSteps) })
     editingMode && navigate(RouteName.PreviewIncident)
+
   }
 
   const actionsSelectedError = getMessageError(errors, 'actionSelected')

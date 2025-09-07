@@ -15,14 +15,15 @@ export enum IncidentSteps {
 }
 
 export type Incident = {
+  id?: string;
   generalInfo?: GeneralForm | undefined
   incident?: IncidentForm | undefined
   action?: ActionForm | undefined
   witness?: WitnessForm | undefined
   singing?: SignOffForm | undefined
   selectedIndex: number;
-  enableScroll?: boolean
-  completedSteps?: number[]
+  enableScroll?: boolean;
+  completedSteps?: number[];
 };
 
 type IncidentContextType = {
@@ -32,7 +33,8 @@ type IncidentContextType = {
 
 const IncidentContext = createContext<IncidentContextType | undefined>(undefined);
 
-const initialAssessment: Incident = {
+export const initialIncident: Incident = {
+  id: `${new Date().getTime()}`,
   generalInfo: undefined,
   incident: undefined,
   action: undefined,
@@ -44,7 +46,7 @@ const initialAssessment: Incident = {
 }
 
 export const IncidentProvider = ({ children }: { children: ReactNode }) => {
-  const [incident, setIncident] = useState<Incident | null>(initialAssessment);
+  const [incident, setIncident] = useState<Incident | null>(initialIncident);
 
   return (
     <IncidentContext.Provider value={{ incident, setIncident }}>

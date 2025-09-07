@@ -10,6 +10,13 @@ import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import "../global.css";
 import { store } from './store';
+import { RealmProvider } from '@realm/react';
+import { IncidentModel } from '@lib/models/incident-model';
+
+const realmConfig: Realm.Configuration = {
+  schema: [IncidentModel],
+  deleteRealmIfMigrationNeeded: true
+};
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,15 +37,20 @@ function App() {
       <SafeAreaProvider>
         <PaperProvider>
           <QueryClientProvider client={queryClient}>
-            <GestureHandlerRootView className='flex-1'>
-              <RootNavigator />
-              <Toast config={toastConfig} position='top' />
-              <ErrorModal />
-            </GestureHandlerRootView>
+            <RealmProvider {...realmConfig} >
+
+              <GestureHandlerRootView className='flex-1'>
+
+                <RootNavigator />
+                <Toast config={toastConfig} position='top' />
+                <ErrorModal />
+              </GestureHandlerRootView>
+            </RealmProvider>
           </QueryClientProvider>
         </PaperProvider>
       </SafeAreaProvider>
       {/* </PersistGate> */}
+
     </Provider>
 
 

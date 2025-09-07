@@ -5,6 +5,9 @@ import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector } from '@hooks/common';
+import { useRealm } from '@realm/react';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import { useGetSites } from '@services/hooks/useGetSites';
 import { useGetUsers } from '@services/hooks/useGetUsers';
 import { ISite } from '@services/site.service';
@@ -14,8 +17,7 @@ import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
+import { useUpsertIncident } from '../../useUpsertIncident';
 
 
 export interface GeneralForm {
@@ -45,6 +47,8 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   const { data: sites } = useGetSites()
   const { data: users } = useGetUsers()
 
+  const { upsertIncident } = useUpsertIncident()
+
   const {
     control,
     handleSubmit,
@@ -71,6 +75,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
       completedSteps: Array.from(newCompletedSteps)
     }))
     editingMode && navigate(RouteName.PreviewIncident)
+    upsertIncident({ generalInfo: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
   return (

@@ -17,7 +17,6 @@ api.interceptors.request.use(function (config) {
   const token = config.headers?.Authorization?.toString().replace('Bearer ', '')
   if (!token) {
     const token = store.getState().authentication.userInfo?.token;
-    console.log('token231321 ',token)
     config.headers.Authorization = 'Bearer ' + token;
   }
   return config;

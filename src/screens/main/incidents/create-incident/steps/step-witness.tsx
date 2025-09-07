@@ -11,6 +11,7 @@ import { IncidentSteps, useIncidentContext } from '../../context';
 import { WitnessItem } from '../components/witness-item';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { useUpsertIncident } from '../../useUpsertIncident';
 
 export interface Witness {
   name?: string;
@@ -38,6 +39,7 @@ const formSchema = yup.object().shape(
 );
 
 export default function StepWitness({ editingMode }: { editingMode: boolean }) {
+  const { upsertIncident } = useUpsertIncident()
   const { setIncident, incident: { completedSteps, witness } } = useIncidentContext()
   const {
     control,
@@ -75,6 +77,7 @@ export default function StepWitness({ editingMode }: { editingMode: boolean }) {
       completedSteps: Array.from(newCompletedSteps)
     }))
     editingMode && navigate(RouteName.PreviewIncident)
+    upsertIncident({ witness: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
   return (

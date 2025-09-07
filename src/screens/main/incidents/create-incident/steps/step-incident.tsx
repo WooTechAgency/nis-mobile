@@ -12,6 +12,7 @@ import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { InvolvedPersonItem } from '../components/involved-person-item';
+import { useUpsertIncident } from '../../useUpsertIncident';
 
 export interface IncidentType {
   id: number,
@@ -80,6 +81,8 @@ const formSchema = yup.object().shape({
 });
 
 export default function StepIncident({ editingMode }: { editingMode: boolean }) {
+  const { upsertIncident } = useUpsertIncident()
+
   const { setIncident, incident: { completedSteps, incident } } = useIncidentContext()
   const {
     control,
@@ -125,6 +128,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
       selectedIndex: IncidentSteps.Action,
       completedSteps: Array.from(newCompletedSteps)
     }))
+    upsertIncident({ incident: form, completedSteps: Array.from(newCompletedSteps) })
     editingMode && navigate(RouteName.PreviewIncident)
   }
 

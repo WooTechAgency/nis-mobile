@@ -17,6 +17,7 @@ module.exports = {
           '@routes': './src/routes',
           '@services': './src/services',
           '@lib': './src/lib',
+          '@models': './src/models',
         },
       },
       'react-native-worklets/plugin',

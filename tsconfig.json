@@ -13,7 +13,8 @@
         "@utils/*": ["utils/*"],
         "@services/*": ["services/*"],
         "@routes/*": ["routes/*"],
-        "@lib/*": ["lib/*"]
+        "@lib/*": ["lib/*"],
+        "@models/*": ["models/*"]
       }
     }
 }

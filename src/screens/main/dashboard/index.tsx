@@ -14,6 +14,7 @@ export default function Dashboard() {
     Voice.onSpeechStart = onSpeechStart;
     Voice.onSpeechEnd = onSpeechEnd;
     Voice.onSpeechResults = onSpeechResults;
+    Voice.onSpeechPartialResults = onSpeechPartialResults;
 
     return () => {
       Voice.destroy().then(Voice.removeAllListeners);
@@ -38,6 +39,11 @@ export default function Dashboard() {
   const onSpeechEnd = () => {
     console.log('Speech ended');
     setIsListening(false);
+  };
+
+  const onSpeechPartialResults = (e: any) => {
+    console.log('onSpeechPartialResults:', e.value);
+
   };
 
   const onSpeechResults = (e: any) => {
@@ -128,6 +134,7 @@ export default function Dashboard() {
   return (
     <SafeAreaView>
       <Header title='Dashboard' />
+      <Button title='OK' onPress={startListening} />
       <View style={styles.container}>
         <CalendarList
           horizontal

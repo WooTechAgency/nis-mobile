@@ -1,26 +1,28 @@
 import Header from '@components/header'
 import { Button, SafeAreaView, ScrollView } from '@components/ui'
+import Loading from '@components/ui/Loading'
 import { useToggle } from '@hooks/useToggle'
+import { IncidentModel } from '@lib/models/incident-model'
+import { showSuccess } from '@lib/toast'
+import { StackActions } from '@react-navigation/native'
+import { useRealm } from '@realm/react'
+import { dispatch } from '@routes/navigationRef'
+import { RouteName } from '@routes/types'
+import { CreateIncidentRequest, createIncidentApi, } from '@services/incident.service'
+import dayjs from 'dayjs'
 import React, { useState } from 'react'
+import { IncidentSteps, useIncidentContext } from '../context'
 import ActionPreview from './components/action-preview'
 import GeneralPreview from './components/general-preview'
 import IncidentPreview from './components/incident-preview'
 import SignOffPreview from './components/sign-off-preview'
 import WitnessPreview from './components/witness-preview'
-import { IncidentSteps, useIncidentContext } from '../context'
-import { dispatch } from '@routes/navigationRef'
-import { StackActions } from '@react-navigation/native'
-import { RouteName } from '@routes/types'
-import { CreateIncidentRequest, createIncidentApi, createIncidentTypesApi } from '@services/incident.service'
-import { convertDDMMYYYY } from '@utils/date.util'
-import dayjs from 'dayjs'
-import Loading from '@components/ui/Loading'
-import { showSuccess } from '@lib/toast'
 
 export default function PreviewIncident() {
-  const { incident: { generalInfo, incident, action, witness, singing }, setIncident } = useIncidentContext()
+  const { incident: { generalInfo, incident, action, witness, singing, id }, setIncident } = useIncidentContext()
   const [loading, setLoading] = useState(false)
   const [allowEdit, toggleAlowEdit] = useToggle(true)
+  const realm = useRealm()
 
   const onCustomBack = () => {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.SignOff }))
@@ -72,8 +74,10 @@ export default function PreviewIncident() {
       setLoading(true)
       await createIncidentApi(payload)
       showSuccess({ title: 'Create a new incident successfully' })
+      realm.write(() => {
+        realm.delete(realm.objectForPrimaryKey(IncidentModel, id || 0));
+      });
       // TODO: back ve man nao do
-
     } finally {
       setLoading(false)
     }

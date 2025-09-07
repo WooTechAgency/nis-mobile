@@ -15,6 +15,9 @@ import Loading from '@components/ui/Loading'
 import { useDebounce } from '@hooks/useDebounce'
 import { ISite } from '@services/site.service'
 import { ICheckBoxDescription } from '@constants/interface'
+import { useQuery } from '@realm/react'
+import { IncidentModel } from '@lib/models/incident-model'
+import InprogressIncidents from './components/inprogress-incidents'
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -33,7 +36,6 @@ export default function Incidents() {
   const type = watch('type') as ICheckBoxDescription
   const site = watch('site') as ISite
 
-  console.log('sitesite ', site)
 
   const debouncedSearch = useDebounce(search, 500)
 
@@ -65,7 +67,7 @@ export default function Incidents() {
             onPress={() => navigate(RouteName.CreateIncident)}
           />
         </View>
-
+        <InprogressIncidents />
         <IncidentTable
           incidents={incidents}
           control={control}

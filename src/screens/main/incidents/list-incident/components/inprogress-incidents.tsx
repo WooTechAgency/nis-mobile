@@ -1,0 +1,56 @@
+import { images } from '@assets/images'
+import { Button, Image } from '@components/ui'
+import { useAppSelector } from '@hooks/common'
+import { IncidentModel } from '@lib/models/incident-model'
+import { useQuery } from '@realm/react'
+import { navigate } from '@routes/navigationRef'
+import { RouteName } from '@routes/types'
+import React from 'react'
+import { Text, View } from 'react-native'
+
+export default function InprogressIncidents() {
+  const { userInfo } = useAppSelector((state) => state.authentication)
+
+  const inprogressIncidents =
+    useQuery(IncidentModel, (collection) => {
+      return collection.filtered('creatorId == $0', userInfo?.id);
+    }).map(incident => ({
+      ...incident,
+      generalInfo: JSON.parse(incident.generalInfo || '{}'),
+    }))
+
+
+  const onContinue = (item: any) => {
+    navigate(RouteName.CreateIncident, { incidentId: item.id })
+  }
+
+  return (
+    <View className='mt-2'>
+      {inprogressIncidents.map((item, index) => (
+        <View
+          className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-4 '
+          key={item.id}
+        >
+          <View className=''>
+            <View className='flex-row  items-center gap-x-3 mb-4'>
+              <Text className='text-base font-semibold'>{item.generalInfo.siteLocation.site_code}</Text>
+              <View className={`px-[10px] h-[24px] center rounded-full bg-orange10 `}>
+                <Text className='text-xs font-medium'>{'IN PROGRESS'}</Text>
+              </View>
+            </View>
+            <View className='flex-row  items-center gap-x-1'>
+              <Image source={images.location} className='w-8 h-8' />
+              <Text className='text-base'>{item.generalInfo.siteLocation.site_name}</Text>
+            </View>
+          </View>
+          <Button
+            label='Continue'
+            onPress={() => onContinue(item)}
+            className='h-[56px] w-[204px]'
+            classNameLabel='font-regular'
+          />
+        </View>
+      ))}
+    </View>
+  )
+}

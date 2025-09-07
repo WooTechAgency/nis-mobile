@@ -13,6 +13,7 @@ import { IncidentSteps, useIncidentContext } from '../../context';
 import { SigneeItem } from '../components/singee-item';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { useUpsertIncident } from '../../useUpsertIncident';
 
 export interface SignOffForm {
   signees: Signee[];
@@ -49,6 +50,8 @@ const formSchema = yup.object().shape(
 );
 
 export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
+  const { upsertIncident } = useUpsertIncident()
+
   const { userInfo } = useAppSelector((state) => state.authentication)
   const { setIncident, incident: { singing } } = useIncidentContext()
 
@@ -77,6 +80,7 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
   const onSubmit = (form: SignOffForm) => {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.SignOff, singing: form }))
     navigate(RouteName.PreviewIncident)
+    upsertIncident({ singing: form })
   }
 
   const onBack = () => {
