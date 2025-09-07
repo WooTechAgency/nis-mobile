@@ -1,22 +1,20 @@
 import { images } from '@assets/images'
 import Header from '@components/header'
 import { Button, Image, SafeAreaView, ScrollView } from '@components/ui'
+import Loading from '@components/ui/Loading'
 import { TextInput } from '@components/ui/TextInput'
+import { ICheckBoxDescription, SortDirection } from '@constants/interface'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useDebounce } from '@hooks/useDebounce'
 import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { useGetIncidentReports } from '@services/hooks/incident/useGetIncidentReports'
+import { ISite } from '@services/site.service'
 import React from 'react'
-import { useForm, useWatch } from 'react-hook-form'
-import { Text, View } from 'react-native'
+import { useForm } from 'react-hook-form'
+import { View } from 'react-native'
 import * as yup from 'yup'
 import IncidentTable from './components/incident-table'
-import { useGetIncidentReports } from '@services/hooks/incident/useGetIncidentReports'
-import Loading from '@components/ui/Loading'
-import { useDebounce } from '@hooks/useDebounce'
-import { ISite } from '@services/site.service'
-import { ICheckBoxDescription } from '@constants/interface'
-import { useQuery } from '@realm/react'
-import { IncidentModel } from '@lib/models/incident-model'
 import InprogressIncidents from './components/inprogress-incidents'
 
 const formSchema = yup.object().shape({
@@ -24,25 +22,31 @@ const formSchema = yup.object().shape({
   site: yup.object().notRequired(),
   type: yup.object().notRequired(),
   date: yup.object().notRequired(),
+  sort_direction: yup.string().notRequired()
 });
 
 export default function Incidents() {
   const { control, setValue, watch } = useForm({
     resolver: yupResolver(formSchema),
+    defaultValues: {
+      sort_direction: SortDirection.ASC
+    }
   });
 
   const search = watch('search')
   const date = watch('date') as any
   const type = watch('type') as ICheckBoxDescription
   const site = watch('site') as ISite
+  const sort_direction = watch('sort_direction') as string
 
 
   const debouncedSearch = useDebounce(search, 500)
-
   const { data: incidents, isLoading } = useGetIncidentReports({
-    search: debouncedSearch,
+    search: debouncedSearch && debouncedSearch.length > 1 ? debouncedSearch : undefined,
     site_id: site?.id,
     incident_type_id: type?.id,
+    sort_by: 'id',
+    sort_direction: sort_direction || SortDirection.ASC,
   })
 
   return (

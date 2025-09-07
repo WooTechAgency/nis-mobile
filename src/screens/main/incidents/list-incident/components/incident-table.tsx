@@ -2,6 +2,7 @@ import { images } from '@assets/images';
 import SelectedFilter from '@components/common/selected-filter';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
 import DropdownMenu from '@components/ui/DropdownMenu';
+import { SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
 import { useGetIncidentTypes } from '@services/hooks/incident/useGetIncidentTypes';
 import { useGetSites } from '@services/hooks/useGetSites';
@@ -9,6 +10,7 @@ import { IncidentReport } from '@services/incident.service';
 import { convertDDMMYYYY } from '@utils/date.util';
 import React from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
+import { TouchableOpacity } from 'react-native';
 
 
 const percent = {
@@ -25,7 +27,6 @@ interface Props {
   incidents: IncidentReport[] | undefined
 }
 export default function IncidentTable({ control, setValue, incidents }: Props) {
-
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleDate, toggleVisibleDate] = useToggle(false);
   const [visibleType, toggleVisibleType] = useToggle(false);
@@ -43,6 +44,8 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
 
   const site = useWatch({ control, name: 'site' })
   const date = useWatch({ control, name: 'date' })
+  const sortDirection = useWatch({ control, name: 'sort_direction' })
+  const isASC = sortDirection === SortDirection.ASC
 
   return (
     <View>
@@ -79,10 +82,13 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
           keyExtractor={(item) => item.id}
           ListHeaderComponent={
             <View className='flex-row h-10 items-center border-t border-neutral20'>
-              <View className={`flex-row items-center gap-x-2 ${percent.id}`}>
+              <TouchableOpacity
+                className={`flex-row items-center gap-x-2 ${percent.id}`}
+                onPress={() => setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)}
+              >
                 <Text className={`${headerCls} text-neutral80`}>{'Incident ID'}</Text>
-                <Image source={images.arrowDown} className='w-4 h-4' />
-              </View>
+                <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />
+              </TouchableOpacity>
               <Text className={`${percent.date} ${headerCls}`}>{"Date of Incident"}</Text>
               <Text className={`${percent.type}  ${headerCls}`}>{'Incident Type'}</Text>
               <Text className={`flex-grow ${headerCls}`}>{'Site'}</Text>

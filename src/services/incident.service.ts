@@ -1,8 +1,8 @@
+import { ICheckBoxDescription } from '@constants/interface';
 import { showErrorMessage } from '@utils/functions.util';
 import baseApi from '.';
-import { IUser } from './user.service';
 import { ISite } from './site.service';
-import { ICheckBoxDescription } from '@constants/interface';
+import { IUser } from './user.service';
 
 const BASE = '/api/incidents';
 
@@ -109,11 +109,12 @@ export interface GetIncidentParams{
   incident_type_id?: number
   date_from?: string;
   date_to?: string
+  sort_by?: string;
+  sort_direction?: string;
 }
 export async function getIncidentReportsApi(params: GetIncidentParams): Promise<IncidentReport[]> {
   try {
     const response = await baseApi.get(`api/incident-reports`,params);
-    console.log('dsda ',response.data.data)
     return response.data.data
   } catch (e: any) {
     showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });

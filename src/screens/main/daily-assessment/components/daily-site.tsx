@@ -41,9 +41,6 @@ export default function DailySite() {
       ...convertModelToDailyAssessment(assessment)
     }))
 
-  console.log('inprogressAssessments ', inprogressAssessments)
-
-
   const onContinue = (id: string) => {
     navigate(RouteName.CreateDailyAssessment, { assessmentId: id })
 

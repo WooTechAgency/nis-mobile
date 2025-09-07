@@ -8,11 +8,6 @@ import { Text } from './Text';
 import { getMessageError } from '@utils/common.util';
 import { colors } from '@constants/colors.constants';
 import { IDropdown } from '@constants/interface';
-
-// export interface DropDownType {
-//   value: string | number;
-//   label: string;
-// }
 interface Props {
   setValue: UseFormSetValue<any>;
   name: string;
@@ -62,9 +57,7 @@ export const DropdownPicker = memo((props: Props) => {
     }
   }, [selectedItem?.value, isRerender]);
 
-
   const onSelectItem = (item: IDropdown) => {
-    console.log('itemitem ', item)
     setValue(name, item, { shouldValidate: true, shouldDirty: true });
     setOpen(false)
     setDisplayValue(item.value)
@@ -75,7 +68,7 @@ export const DropdownPicker = memo((props: Props) => {
     <View className={`z-50 ${classNameWrap}`}>
       <>
         {label &&
-          <Text className={`text-[12px]  px-1 mb-1 -top-2 absolute left-4 z-10 bg-white 
+          <Text className={`text-[12px]  px-1  bg-white -top-2 absolute left-4 z-10
             ${disabled ? 'text-neutral40' : 'text-neutral70'} 
             ${labelCls}
             ${messageError && 'text-red'}
@@ -102,7 +95,6 @@ export const DropdownPicker = memo((props: Props) => {
           }}
           disableBorderRadius={false}
           style={{
-            zIndex: 10,
             backgroundColor: 'white',
             paddingHorizontal: 12,
             borderWidth: 1,
@@ -125,7 +117,7 @@ export const DropdownPicker = memo((props: Props) => {
           }}
           dropDownContainerStyle={{
             borderColor: colors.border,
-            marginTop: 10,
+            marginVertical: 8,
             backgroundColor: 'white',
             // shadow
             shadowOpacity: 0.8,
