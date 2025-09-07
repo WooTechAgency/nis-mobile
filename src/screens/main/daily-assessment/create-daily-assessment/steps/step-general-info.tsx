@@ -15,6 +15,7 @@ import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -43,6 +44,8 @@ const formSchema = yup.object().shape({
 export default function StepGeneralInformation({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo } } = useAssessmentContext();
   const { userInfo } = useAppSelector(state => state.authentication)
+  const { upsertDailyAssessment } = useUpsertDailyAssessment()
+
   const {
     control,
     handleSubmit,
@@ -73,6 +76,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
       completedSteps: Array.from(newCompletedSteps)
     }))
     editingMode && navigate(RouteName.Preview)
+    upsertDailyAssessment({ generalInfo: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
   const onSelectSite = (site: ISite) => {

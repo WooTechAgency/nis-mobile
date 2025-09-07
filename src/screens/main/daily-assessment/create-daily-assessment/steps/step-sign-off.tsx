@@ -4,16 +4,17 @@ import Title from '@components/title';
 import { Button, Image, Text, Wrapper } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector } from '@hooks/common';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { IRole } from '@services/role.service';
 import React from 'react';
-import { useFieldArray, useForm, useWatch } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
+import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 import { SigneeItem } from '../components/signee-item';
-import { useNavigation, useRoute } from '@react-navigation/native';
 
 function Label({ text }: { text: string }) {
   return (
@@ -63,6 +64,7 @@ const formSchema = yup.object().shape({
 
 export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { singing } } = useAssessmentContext()
+  const { upsertDailyAssessment } = useUpsertDailyAssessment()
   const editable = useRoute().params?.editable as boolean
   const navigation = useNavigation();
 
@@ -90,8 +92,9 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
     if (editable && navigation.setParams) {
       navigation.setParams({ editable: false })
     }
-    setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing, singing: form })) // Assuming 3 is the index for the next step
+    setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing, singing: form }))
     navigate(RouteName.Preview)
+    upsertDailyAssessment({ singing: form })
   }
 
   const onStartSign = () => {

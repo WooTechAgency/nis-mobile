@@ -12,9 +12,12 @@ import HazardPreview from './create-daily-assessment/components/previews/hazard-
 import SignOffPreview from './create-daily-assessment/components/previews/sign-off-preview'
 import { StackActions } from '@react-navigation/native'
 import { RouteName } from '@routes/types'
+import { useRealm } from '@realm/react'
+import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
 
 export default function Preview() {
-  const { assessment: { generalInfo }, setAssessment } = useAssessmentContext()
+  const realm = useRealm();
+  const { assessment: { generalInfo, id }, setAssessment } = useAssessmentContext()
   const [allowEdit, toggleAlowEdit] = useToggle(true)
 
   const onAddHazard = () => {
@@ -23,6 +26,12 @@ export default function Preview() {
   const onCustomBack = () => {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing }))
     dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editingMode: false }))
+  }
+
+  const onSubmit = () => {
+    realm.write(() => {
+      realm.delete(realm.objectForPrimaryKey(DailyAssessmentModel, id || 0));
+    });
   }
 
   return (

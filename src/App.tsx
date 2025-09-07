@@ -12,9 +12,10 @@ import "../global.css";
 import { store } from './store';
 import { RealmProvider } from '@realm/react';
 import { IncidentModel } from '@lib/models/incident-model';
+import { DailyAssessmentModel } from '@lib/models/daily-assessment-model';
 
 const realmConfig: Realm.Configuration = {
-  schema: [IncidentModel],
+  schema: [IncidentModel, DailyAssessmentModel],
   deleteRealmIfMigrationNeeded: true
 };
 

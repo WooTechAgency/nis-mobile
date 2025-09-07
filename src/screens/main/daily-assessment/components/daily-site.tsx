@@ -1,12 +1,14 @@
 import { images } from '@assets/images'
 import Title from '@components/title'
 import { Button, Image, Text } from '@components/ui'
+import { useAppSelector } from '@hooks/common'
+import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
+import { useQuery } from '@realm/react'
 import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { convertModelToDailyAssessment } from '@utils/realm.util'
 import React from 'react'
 import { View, } from 'react-native'
-const steps = [1, 2, 3, 4, 5]
-const location = 'Pier 26, Darling Harbour'
 
 enum DsraStatus {
   Complete = 'complete',
@@ -23,29 +25,27 @@ const MAP_STATUS_BG = {
   [DsraStatus.InProgress]: 'bg-orange10',
 }
 
-const dsra = [
-  {
-    id: 'DHP-2',
-    location: 'Pier 24, Darling Harbour',
-    hazardNumber: 3,
-    status: DsraStatus.InProgress
-  },
-  {
-    id: 'DHP-3',
-    location: 'Pier 24, Darling Harbour',
-    hazardNumber: 3,
-    status: DsraStatus.Complete
-  },
-]
-
-const isNoDSRA = !true
 const buttonCls = {
   className: 'h-[56px] w-[204px]',
   classNameLabel: 'font-regular'
 }
 export default function DailySite() {
 
-  const onContinue = () => {
+  const { userInfo } = useAppSelector((state) => state.authentication)
+
+  const inprogressAssessments =
+    useQuery(DailyAssessmentModel, (collection) => {
+      return collection.filtered('creatorId == $0', userInfo?.id);
+    }).map(assessment => ({
+      ...assessment,
+      ...convertModelToDailyAssessment(assessment)
+    }))
+
+  console.log('inprogressAssessments ', inprogressAssessments)
+
+
+  const onContinue = (id: string) => {
+    navigate(RouteName.CreateDailyAssessment, { assessmentId: id })
 
   }
   const onAddHazard = () => {
@@ -67,34 +67,39 @@ export default function DailySite() {
       </View>
       {/* today */}
       <Title label='Today' className='mt-6' />
-      {isNoDSRA
+      {inprogressAssessments.length === 0
         ?
         <View className='row-center justify-between rounded-[20px] p-6 border border-border mt-6'>
           <Text className='text-neutral60 '>No DSRAs logged today</Text>
         </View>
         :
-        dsra.map((item) => (
+        inprogressAssessments.map((item) => (
           <View
             className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-6 '
             key={item.id}
           >
             <View className=''>
               <View className='flex-row  items-center gap-x-3 mb-4'>
-                <Text className='text-base font-semibold'>{item.id}</Text>
-                <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG[item.status]} `}>
-                  <Text className='text-xs font-medium'>{MAP_STATUS_TITLE[item.status]}</Text>
+                <Text className='text-base font-semibold'>{item.generalInfo?.location.site_code}</Text>
+                <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG['progress']} `}>
+                  <Text className='text-xs font-medium'>{MAP_STATUS_TITLE['progress']}</Text>
                 </View>
               </View>
               <View className='flex-row  items-center gap-x-1'>
                 <Image source={images.location} className='w-8 h-8' />
-                <Text className='text-base'>{item.location}</Text>
+                <Text className='text-base'>{item.generalInfo?.location.site_name}</Text>
               </View>
               <View className='flex-row  items-center gap-x-1'>
                 <Image source={images.warning} className='w-8 h-8' />
-                <Text className='text-base'>{`${item.hazardNumber} new hazards`}</Text>
+                <Text className='text-base'>{`${item?.hazard?.hazards?.length || 0} new hazards`}</Text>
               </View>
             </View>
-            {item.status === DsraStatus.Complete
+            <Button
+              label='Continue'
+              onPress={() => onContinue(item.id)}
+              {...buttonCls}
+            />
+            {/* {item.status === DsraStatus.Complete
               ? <View className='row-center gap-x-4'>
                 <Button
                   onPress={onAddHazard}
@@ -113,28 +118,11 @@ export default function DailySite() {
                 onPress={onContinue}
                 {...buttonCls}
               />
-            }
+            } */}
 
           </View>
         ))
-
       }
-
-      <Button className='mt-4' >
-        <View className='border rounded-[20px] p-5 border-primary mt-6'>
-          <View className='flex-row items-center justify-between '>
-            <Text className='text-[25px] font-semibold'>{'DRSA - 001'}</Text>
-            <View className='px-1 py-2 min-w-[120px] h-[38px] rounded-full bg-gray justify-center items-center'>
-              <Text className='text-white'>{'Pending'}</Text>
-            </View>
-          </View>
-          <View className='flex-row items-center gap-x-2 mt-2'>
-            <Image source={images.logo} className='w-[22px] h-[22px]' />
-            <Text className=''>{location}</Text>
-          </View>
-
-        </View>
-      </Button>
     </View>
   )
 }

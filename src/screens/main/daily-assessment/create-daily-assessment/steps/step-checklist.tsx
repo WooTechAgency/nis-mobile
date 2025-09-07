@@ -8,6 +8,7 @@ import { TeamLeaderCheckList } from '../../config.assessment';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 
 export interface CheckListForm {
   checklist?: string[];
@@ -18,6 +19,8 @@ const formSchema = yup.object().shape({
 
 export default function StepCheckList({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, checkList } } = useAssessmentContext()
+  const { upsertDailyAssessment } = useUpsertDailyAssessment()
+
   const {
     control,
     handleSubmit,
@@ -30,6 +33,7 @@ export default function StepCheckList({ editingMode }: { editingMode: boolean })
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
+
 
   const onBack = () => {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.FirstAid }))
@@ -44,6 +48,7 @@ export default function StepCheckList({ editingMode }: { editingMode: boolean })
       completedSteps: Array.from(newCompletedSteps)
     }))
     editingMode && navigate(RouteName.Preview)
+    upsertDailyAssessment({ checkList: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
   return (

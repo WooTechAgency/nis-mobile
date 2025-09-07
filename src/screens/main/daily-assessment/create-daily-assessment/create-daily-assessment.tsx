@@ -3,14 +3,18 @@ import Steps from '@components/steps'
 import { SafeAreaView, ScrollView } from '@components/ui'
 import { useRoute } from '@react-navigation/native'
 import { goBack } from '@routes/navigationRef'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { DailyAssessmentSteps, useAssessmentContext } from '../context'
+import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from '../context'
 import StepCheckList from './steps/step-checklist'
 import StepFirstAid from './steps/step-first-aid'
 import StepHazards from './steps/step-hazards'
 import StepSignOff from './steps/step-sign-off'
 import StepGeneralInformation from './steps/step-general-info'
+import { convertModelToDailyAssessment } from '@utils/realm.util'
+import { useRealm } from '@realm/react'
+import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
+import Loading from '@components/ui/Loading'
 
 
 const steps = {
@@ -23,7 +27,10 @@ const steps = {
 
 export default function CreateDailyAssessment() {
   const editingMode = useRoute().params?.editingMode as boolean
+  const assessmentId = useRoute().params?.assessmentId as string
+  const realm = useRealm()
   const { assessment: { selectedIndex, enableScroll, completedSteps, generalInfo }, setAssessment } = useAssessmentContext();
+  const [loading, setLoading] = useState(false)
 
   const renderSteps = () => {
     switch (selectedIndex) {
@@ -53,6 +60,26 @@ export default function CreateDailyAssessment() {
     }
   }
 
+  const loadDailyAssessment = async (assessmentId: string) => {
+    setLoading(true);
+    const assessmentInDB = realm.objectForPrimaryKey(DailyAssessmentModel, assessmentId)
+    if (!assessmentInDB) return;
+    try {
+      const assessment = convertModelToDailyAssessment(assessmentInDB)
+      setAssessment({ ...initialAssessment, ...assessment });
+      setTimeout(() => setLoading(false), 100);
+    } catch (err: any) {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (assessmentId) {
+      loadDailyAssessment(assessmentId)
+    }
+  }, [assessmentId])
+
+
   return (
     <SafeAreaView className='bg-neutral-100'>
       <ScrollView scrollEnabled={enableScroll}>
@@ -64,8 +91,9 @@ export default function CreateDailyAssessment() {
           completedSteps={completedSteps}
           lastItemKey={DailyAssessmentSteps.Signing}
         />
-        {renderSteps()}
+        {!loading && renderSteps()}
       </ScrollView>
+      <Loading loading={loading} />
     </SafeAreaView>
 
   )

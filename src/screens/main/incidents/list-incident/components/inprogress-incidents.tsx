@@ -19,7 +19,6 @@ export default function InprogressIncidents() {
       generalInfo: JSON.parse(incident.generalInfo || '{}'),
     }))
 
-
   const onContinue = (item: any) => {
     navigate(RouteName.CreateIncident, { incidentId: item.id })
   }

@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
 import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
+import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 
 export interface FirstAidForm {
   name?: string;
@@ -24,6 +25,7 @@ const formSchema = yup.object().shape({
 
 export default function StepFirstAid({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo, firstAid } } = useAssessmentContext()
+  const { upsertDailyAssessment } = useUpsertDailyAssessment()
   const {
     control,
     handleSubmit,
@@ -50,6 +52,7 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
       completedSteps: Array.from(newCompletedSteps)
     }))
     editingMode && navigate(RouteName.Preview)
+    upsertDailyAssessment({ firstAid: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
   return (

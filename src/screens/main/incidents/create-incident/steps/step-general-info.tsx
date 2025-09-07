@@ -5,7 +5,6 @@ import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector } from '@hooks/common';
-import { useRealm } from '@realm/react';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { useGetSites } from '@services/hooks/useGetSites';
@@ -18,8 +17,6 @@ import { View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { useUpsertIncident } from '../../useUpsertIncident';
-
-
 export interface GeneralForm {
   company: string
   dateOfReport: Date
@@ -46,7 +43,6 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   const { userInfo } = useAppSelector((state) => state.authentication)
   const { data: sites } = useGetSites()
   const { data: users } = useGetUsers()
-
   const { upsertIncident } = useUpsertIncident()
 
   const {

@@ -12,6 +12,7 @@ import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
 import { HazardItem } from '../components/hazard-item';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 
 export interface HazardForm {
   description?: string;
@@ -54,14 +55,13 @@ const formSchema = yup.object().shape({
 
 export default function StepHazards({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo, hazard } } = useAssessmentContext();
+  const { upsertDailyAssessment } = useUpsertDailyAssessment()
   const {
     control,
     handleSubmit,
     setValue,
     watch,
     trigger,
-    resetField,
-    clearErrors,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -100,6 +100,7 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
       completedSteps: Array.from(newCompletedSteps)
     }))
     editingMode && navigate(RouteName.Preview)
+    upsertDailyAssessment({ hazard: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
   const addField = () => {

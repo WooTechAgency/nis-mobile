@@ -1,25 +1,26 @@
 import { ObjectSchema } from 'realm';
 import { Realm,  } from '@realm/react'
 
-export class IncidentModel extends Realm.Object {
+export class DailyAssessmentModel extends Realm.Object {
   public id!: string;
   public generalInfo!: string;
-  public incident!: string;
-  public action!: string;
-  public witness!: string;
+  public hazard!: string;
+  public firstAid!: string;
+  public checkList!: string;
   public singing!: string;
   public completedSteps!: string;
   public creatorId!: number;
+  public createdAt!: Date;
 
   static schema: ObjectSchema = {
-    name: 'FieldNote',
+    name: 'DailyAssessmentModel',
     primaryKey: 'id',
     properties: {
       id: {type: 'string' },
       generalInfo: 'string?',
-      incident: 'string?',
-      action: 'string?',
-      witness: 'string?',
+      hazard: 'string?',
+      firstAid: 'string?',
+      checkList: 'string?',
       singing: 'string?',
       completedSteps: 'string?',
       creatorId: 'int?',
