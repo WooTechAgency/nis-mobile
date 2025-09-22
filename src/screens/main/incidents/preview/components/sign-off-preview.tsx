@@ -1,18 +1,18 @@
+import HeaderPreview from '@components/common/header-preview.tsx'
 import { FlatList, Image, Text } from '@components/ui'
 import { useToggle } from '@hooks/useToggle'
-import { dispatch, goBack } from '@routes/navigationRef'
+import { StackActions } from '@react-navigation/native'
+import { dispatch } from '@routes/navigationRef'
+import { RouteName } from '@routes/types.ts'
 import { convertHHMMSSDDMMYYYY } from '@utils/date.util'
 import React from 'react'
 import { View } from 'react-native'
 import { PreviewProps, flatListClassName, headerClassName, itemClassName, labelClassName } from '../../config.incident.ts'
 import { IncidentSteps, useIncidentContext } from '../../context'
 import { Signee } from '../../create-incident/steps/step-sign-off.tsx'
-import HeaderPreview from '@components/common/header-preview.tsx'
-import { StackActions } from '@react-navigation/native'
-import { RouteName } from '@routes/types.ts'
 
 
-export default function SignOffPreview({ allowEdit }: PreviewProps) {
+export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
   const { incident: { singing }, setIncident } = useIncidentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
 
@@ -37,7 +37,7 @@ export default function SignOffPreview({ allowEdit }: PreviewProps) {
             className={`${flatListClassName}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            data={singing?.signees}
+            data={singing?.signees || incident?.signatures}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={
               <View className={`${headerClassName}`}>
@@ -48,10 +48,10 @@ export default function SignOffPreview({ allowEdit }: PreviewProps) {
               </View>
             }
             renderItem={({ item, index }: { item: Signee, index: number }) => (
-              <View className={`${itemClassName} ${index !== (singing?.signees?.length || 0) - 1 && 'border-b'}`}>
+              <View className={`${itemClassName} ${index !== (singing?.signees?.length || incident?.signatures?.length || 0) - 1 && 'border-b'}`}>
                 <Text className={`${labelClassName}  w-[25%]`}>{item?.name}</Text>
-                <Text className={`${labelClassName}  w-[25%]`}>{item?.role?.name}</Text>
-                <Text className={`${labelClassName}  w-[25%]`}>{convertHHMMSSDDMMYYYY(item?.timestamp)}</Text>
+                <Text className={`${labelClassName}  w-[25%]`}>{item?.role?.name || item?.role}</Text>
+                <Text className={`${labelClassName}  w-[25%]`}>{convertHHMMSSDDMMYYYY(item?.timestamp || item.created_at)}</Text>
                 <Image source={{ uri: item?.signature }} className=" w-[25%] h-[31px]" resizeMode='cover' />
               </View>
             )}

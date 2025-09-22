@@ -29,7 +29,8 @@ export const useUpsertIncident = () => {
              incident:newIncident,
              singing:newSigning,
              completedSteps:newCompletedSteps,
-             creatorId: userInfo?.id
+             creatorId: userInfo?.id,
+             updatedAt: new Date(),
           }, 
          Realm.UpdateMode.Modified
       );

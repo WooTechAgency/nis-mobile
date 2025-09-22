@@ -28,6 +28,7 @@ export default function CreateIncident() {
   const realm = useRealm();
   const editingMode = useRoute().params?.editingMode as boolean
   const incidentId = useRoute().params?.incidentId as string
+  console.log('incidentId ', incidentId)
   const [loading, setLoading] = useState(false)
 
   const { incident: { selectedIndex, enableScroll, completedSteps, generalInfo }, setIncident } = useIncidentContext();

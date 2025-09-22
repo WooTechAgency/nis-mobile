@@ -5,6 +5,7 @@ import { SafeAreaView } from '@components/ui';
 import Title from '@components/title';
 import Header from '@components/header';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import Animated from 'react-native-reanimated';
 
 export default function Dashboard() {
   const [result, setResult] = useState('');
@@ -135,7 +136,9 @@ export default function Dashboard() {
     <SafeAreaView>
       <Header title='Dashboard' />
       <Button title='OK' onPress={startListening} />
+      <View className=" w-8 h-8 rounded-full bg-primary mr-2 animate-pulse" />
       <View style={styles.container}>
+
         <CalendarList
           horizontal
           pagingEnabled

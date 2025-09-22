@@ -10,7 +10,7 @@ import HeaderPreview from '@components/common/header-preview.tsx'
 import { StackActions } from '@react-navigation/native'
 import { RouteName } from '@routes/types.ts'
 
-export default function WitnessPreview({ allowEdit }: PreviewProps) {
+export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
   const { incident: { witness }, setIncident } = useIncidentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
 
@@ -35,7 +35,7 @@ export default function WitnessPreview({ allowEdit }: PreviewProps) {
             className={`${flatListClassName}`}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
-            data={witness?.witnesses}
+            data={witness?.witnesses || incident?.witnesses}
             keyExtractor={(item, index) => index.toString()}
             ListHeaderComponent={
               <View className={`${headerClassName}`}>
@@ -46,18 +46,18 @@ export default function WitnessPreview({ allowEdit }: PreviewProps) {
               </View>
             }
             renderItem={({ item, index }: { item: Witness, index: number }) => (
-              <View className={`${itemClassName} ${index !== (witness?.witnesses.length || 0) - 1 && 'border-b'}`}>
+              <View className={`${itemClassName} ${index !== (witness?.witnesses.length || incident?.witnesses.length || 0) - 1 && 'border-b'}`}>
                 <Text className={`${labelClassName} w-[23%]`}>{item?.name}</Text>
                 <Text className={`${labelClassName} w-[23%]`}>{item?.phone}</Text>
                 <Text className={`${labelClassName} grow`}>{item?.email || '0123'}</Text>
-                <Text className={`${labelClassName} w-[20%] underline `}>{item?.documents && item.documents.length > 0 ? "Yes" : 'No'}</Text>
+                <Text className={`${labelClassName} w-[20%] underline `}>
+                  {((item?.documents && item.documents.length > 0) || (item.media && item.media.length > 0)) ? "Yes" : 'No'}
+                </Text>
               </View>
             )}
           />
-
         </>
       }
-
     </View>
   )
 }

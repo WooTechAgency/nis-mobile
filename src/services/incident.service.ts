@@ -85,10 +85,28 @@ export interface IncidentReport {
   date_time_of_incident: string; // ISO date string
   supervisor: IUser;
   incident_types: ICheckBoxDescription[];
-  immediate_actions: ICheckBoxDescription[];
   involved_people: InvolvedPerson[];
+  immediate_actions: ICheckBoxDescription[];
+  witnesses: Witness[];
+  signatures: Signature[];
   created_at: string;
   updated_at: string;
+}
+
+ interface Witness {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  media: [];
+}
+
+export interface Signature {
+  id: number;
+  name: string;
+  role: string;
+  signature: string;
+  created_at: string;
 }
 
 export interface InvolvedPerson {
@@ -115,6 +133,17 @@ export interface GetIncidentParams{
 export async function getIncidentReportsApi(params: GetIncidentParams): Promise<IncidentReport[]> {
   try {
     const response = await baseApi.get(`api/incident-reports`,params);
+    return response.data.data
+  } catch (e: any) {
+    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    throw e;
+  }
+}
+
+
+export async function getIncidentReportApi(id: number): Promise<IncidentReport> {
+  try {
+    const response = await baseApi.get(`api/incident-reports/${id}`);
     return response.data.data
   } catch (e: any) {
     showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });

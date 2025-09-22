@@ -1,4 +1,5 @@
 import { images } from '@assets/images'
+import Title from '@components/title'
 import { Button, Image } from '@components/ui'
 import { useAppSelector } from '@hooks/common'
 import { IncidentModel } from '@lib/models/incident-model'
@@ -13,7 +14,8 @@ export default function InprogressIncidents() {
 
   const inprogressIncidents =
     useQuery(IncidentModel, (collection) => {
-      return collection.filtered('creatorId == $0', userInfo?.id);
+      const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
+      return collection.filtered('creatorId == $0', userInfo?.id, twentyFourHoursAgo);
     }).map(incident => ({
       ...incident,
       generalInfo: JSON.parse(incident.generalInfo || '{}'),
@@ -25,31 +27,37 @@ export default function InprogressIncidents() {
 
   return (
     <View className='mt-2'>
-      {inprogressIncidents.map((item, index) => (
-        <View
-          className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-4 '
-          key={item.id}
-        >
-          <View className=''>
-            <View className='flex-row  items-center gap-x-3 mb-4'>
-              <Text className='text-base font-semibold'>{item.generalInfo.siteLocation.site_code}</Text>
-              <View className={`px-[10px] h-[24px] center rounded-full bg-orange10 `}>
-                <Text className='text-xs font-medium'>{'IN PROGRESS'}</Text>
+      {inprogressIncidents?.length > 0 &&
+        <>
+          <Title label='Today' className='mt-4 mb-2' />
+          {inprogressIncidents.map((item, index) => (
+            <View
+              className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-4 '
+              key={item.id}
+            >
+              <View className=''>
+                <View className='flex-row  items-center gap-x-3 mb-4'>
+                  <Text className='text-base font-semibold'>{item.generalInfo.siteLocation.site_code}</Text>
+                  <View className={`px-[10px] h-[24px] center rounded-full bg-orange10 `}>
+                    <Text className='text-xs font-medium'>{'IN PROGRESS'}</Text>
+                  </View>
+                </View>
+                <View className='flex-row  items-center gap-x-1'>
+                  <Image source={images.location} className='w-8 h-8' />
+                  <Text className='text-base'>{item.generalInfo.siteLocation.site_name}</Text>
+                </View>
               </View>
+              <Button
+                label='Continue'
+                onPress={() => onContinue(item)}
+                className='h-[56px] w-[204px]'
+                classNameLabel='font-regular'
+              />
             </View>
-            <View className='flex-row  items-center gap-x-1'>
-              <Image source={images.location} className='w-8 h-8' />
-              <Text className='text-base'>{item.generalInfo.siteLocation.site_name}</Text>
-            </View>
-          </View>
-          <Button
-            label='Continue'
-            onPress={() => onContinue(item)}
-            className='h-[56px] w-[204px]'
-            classNameLabel='font-regular'
-          />
-        </View>
-      ))}
+          ))}
+        </>
+      }
+
     </View>
   )
 }

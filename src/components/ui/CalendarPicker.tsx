@@ -130,15 +130,21 @@ export default function CalendarPicker(props: Props) {
                   setValue={setValue}
                   name='fromDate'
                   label='From'
+                  disabled
                   value={range.startDate ? dayjs(range.startDate).format('DD MMM YYYY') : ''}
+                  style={{ color: colors.black }}
+                  styleLabel={{ color: colors.neutral70 }}
                 />
                 <TextInput
                   classNameWrap='flex-1'
                   control={control}
                   setValue={setValue}
                   name='toDate'
+                  disabled
                   label='To'
                   value={range.endDate ? dayjs(range.endDate).format('DD MMM YYYY') : ''}
+                  style={{ color: colors.black }}
+                  styleLabel={{ color: colors.neutral70 }}
                 />
               </View>
               <Calendar

@@ -3,7 +3,7 @@ import { isAndroid } from '@constants/app.constants';
 import { getMessageError } from '@utils/common.util';
 import React, { ReactNode } from 'react';
 import { Control, FieldErrors, UseFormSetValue, useController } from 'react-hook-form';
-import { TextInput as TextInputComponent, TextInputProps } from 'react-native';
+import { StyleProp, StyleSheet, TextInput as TextInputComponent, TextInputProps, TextStyle } from 'react-native';
 import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
@@ -29,6 +29,7 @@ interface Props extends TextInputProps {
   labelOverlap?: boolean;
   setValue?: UseFormSetValue<any>;
   hasVoice?: boolean
+  styleLabel?: StyleProp<TextStyle>
 }
 
 export function TextInput(props: Props) {
@@ -51,7 +52,8 @@ export function TextInput(props: Props) {
     labelOverlap = true,
     hasVoice,
     classNameInput,
-    setValue
+    setValue,
+    styleLabel
   } = props;
   const { field } = useController({ control: control, name: name });
   const messageError = getMessageError(errors, name);
@@ -90,6 +92,7 @@ export function TextInput(props: Props) {
         ${labelCls}
         ${messageError && 'text-red'}
         `}
+          style={styleLabel}
         >
           {label}
         </Text>

@@ -10,6 +10,8 @@ export class IncidentModel extends Realm.Object {
   public singing!: string;
   public completedSteps!: string;
   public creatorId!: number;
+  public createdAt!: number;
+  public updatedAt!: number;
 
   static schema: ObjectSchema = {
     name: 'FieldNote',
@@ -24,6 +26,7 @@ export class IncidentModel extends Realm.Object {
       completedSteps: 'string?',
       creatorId: 'int?',
       createdAt: { type: 'date', default: new Date() },
+      updatedAt: { type: 'date', default: new Date() },
     },
   };
 }

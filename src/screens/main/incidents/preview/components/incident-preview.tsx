@@ -13,7 +13,7 @@ import { IncidentSteps, useIncidentContext } from '../../context'
 import { InvolvedPerson } from '../../create-incident/steps/step-incident'
 
 const width = 'w-[50%]'
-export default function IncidentPreview({ allowEdit }: PreviewProps) {
+export default function IncidentPreview({ allowEdit, incident: data }: PreviewProps) {
   const { incident: { incident }, setIncident } = useIncidentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
 
@@ -22,7 +22,7 @@ export default function IncidentPreview({ allowEdit }: PreviewProps) {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Incident }))
   }
 
-  const incidentTypes = incident?.incidentTypes.filter((item) => !!item.description)
+  const incidentTypes = incident?.incidentTypes.filter((item) => !!item.description) || data?.incident_types
 
   return (
     <View className='mt-4 bg-white rounded-[20px]'>
@@ -43,7 +43,7 @@ export default function IncidentPreview({ allowEdit }: PreviewProps) {
               className={`${flatListClassName} mx-0 `}
               scrollEnabled={false}
               showsVerticalScrollIndicator={false}
-              data={incident?.involvedPersons}
+              data={incident?.involvedPersons || data?.involved_people}
               keyExtractor={(item, index) => index.toString()}
               ListHeaderComponent={
                 <View className={`${headerClassName}`}>
@@ -54,11 +54,11 @@ export default function IncidentPreview({ allowEdit }: PreviewProps) {
                 </View>
               }
               renderItem={({ item, index }: { item: InvolvedPerson, index: number }) => (
-                <View className={`${itemClassName}  ${index !== (incident?.involvedPersons?.length || 0) - 1 && 'border-b'}`}>
+                <View className={`${itemClassName}  ${index !== (incident?.involvedPersons?.length || data?.involved_people?.length || 0) - 1 && 'border-b'}`}>
                   <Text className={`${labelClassName}  w-[20%]`}>{item?.name}</Text>
                   <Text className={`${labelClassName}  w-[20%]`}>{item?.role}</Text>
                   <Text className={`${labelClassName}  w-[15%]`}>{item?.injured ? 'Yes' : 'No'}</Text>
-                  <Text className={`${labelClassName}  grow`}>{item?.treatment || ''}</Text>
+                  <Text className={`${labelClassName}  grow`}>{item?.treatment || item?.treatment_required || ''}</Text>
                 </View>
               )}
             />

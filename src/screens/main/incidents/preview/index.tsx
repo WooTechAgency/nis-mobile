@@ -4,27 +4,39 @@ import Loading from '@components/ui/Loading'
 import { useToggle } from '@hooks/useToggle'
 import { IncidentModel } from '@lib/models/incident-model'
 import { showSuccess } from '@lib/toast'
-import { StackActions } from '@react-navigation/native'
+import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
 import { dispatch } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
 import { CreateIncidentRequest, createIncidentApi, } from '@services/incident.service'
 import dayjs from 'dayjs'
-import React, { useState } from 'react'
-import { IncidentSteps, useIncidentContext } from '../context'
+import React, { useEffect, useState } from 'react'
+import { IncidentSteps, initialIncident, useIncidentContext } from '../context'
 import ActionPreview from './components/action-preview'
 import GeneralPreview from './components/general-preview'
 import IncidentPreview from './components/incident-preview'
 import SignOffPreview from './components/sign-off-preview'
 import WitnessPreview from './components/witness-preview'
+import { useGetIncidentDetail } from '@services/hooks/incident/useGetIncidentReport'
 
 export default function PreviewIncident() {
+  const incidentId = useRoute().params?.incidentId as number
   const { incident: { generalInfo, incident, action, witness, singing, id }, setIncident } = useIncidentContext()
   const [loading, setLoading] = useState(false)
-  const [allowEdit, toggleAlowEdit] = useToggle(true)
+  const [allowEdit, setAllowEdit] = useState(true)
   const realm = useRealm()
+  const navigation = useNavigation();
+
+  const { data, isLoading } = useGetIncidentDetail(incidentId)
+
+  useEffect(() => {
+    setAllowEdit(false)
+  }, [data])
 
   const onCustomBack = () => {
+    if (data) {
+      return navigation.goBack();
+    }
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.SignOff }))
     dispatch(StackActions.popTo(RouteName.CreateIncident, { editingMode: false }))
   }
@@ -32,7 +44,7 @@ export default function PreviewIncident() {
   const onSubmitIncident = async () => {
     const payload: CreateIncidentRequest = {
       site_id: generalInfo?.siteLocation?.id || 0,
-      date_of_report: dayjs(generalInfo?.dateOfReport).format('YYYY-MM-DD'),
+      date_of_report: dayjs(generalInfo?.dateOfIncident).format('YYYY-MM-DD'),
       date_time_of_incident: generalInfo?.timeOfIncident.toString() || '',
       supervisor_on_site: generalInfo?.supervisor.id,
       incident_types: incident?.incidentTypes
@@ -77,7 +89,8 @@ export default function PreviewIncident() {
       realm.write(() => {
         realm.delete(realm.objectForPrimaryKey(IncidentModel, id || 0));
       });
-      // TODO: back ve man nao do
+      setIncident(initialIncident)
+      navigation.dispatch(StackActions.popToTop());
     } finally {
       setLoading(false)
     }
@@ -87,23 +100,25 @@ export default function PreviewIncident() {
     <SafeAreaView>
       <ScrollView>
         <Header
-          title={generalInfo?.siteLocation.site_code || 'New Incident'}
+          title={generalInfo?.siteLocation.site_code || data?.site.site_code || 'New Incident'}
           isBack
           onCustomBack={onCustomBack}
         />
-        <GeneralPreview allowEdit={allowEdit} />
-        <IncidentPreview allowEdit={allowEdit} />
-        <ActionPreview allowEdit={allowEdit} />
-        <WitnessPreview allowEdit={allowEdit} />
-        <SignOffPreview allowEdit={allowEdit} />
-        <Button
-          label={'Submit'}
-          className='mt-8'
-          onPress={onSubmitIncident}
-        />
+        <GeneralPreview allowEdit={allowEdit} incident={data} />
+        <IncidentPreview allowEdit={allowEdit} incident={data} />
+        <ActionPreview allowEdit={allowEdit} incident={data} />
+        <WitnessPreview allowEdit={allowEdit} incident={data} />
+        <SignOffPreview allowEdit={allowEdit} incident={data} />
+        {allowEdit &&
+          <Button
+            label={'Submit'}
+            className='mt-8'
+            onPress={onSubmitIncident}
+          />
+        }
 
       </ScrollView>
-      <Loading loading={loading} />
+      <Loading loading={loading || isLoading} />
     </SafeAreaView>
   )
 }

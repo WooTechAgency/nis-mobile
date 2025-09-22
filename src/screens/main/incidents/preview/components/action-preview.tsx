@@ -10,7 +10,7 @@ import { PreviewProps } from '../../config.incident'
 import { IncidentSteps, useIncidentContext } from '../../context'
 
 const width = 'w-[50%]'
-export default function ActionPreview({ allowEdit }: PreviewProps) {
+export default function ActionPreview({ allowEdit, incident }: PreviewProps) {
   const { incident: { action }, setIncident } = useIncidentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
 
@@ -19,7 +19,7 @@ export default function ActionPreview({ allowEdit }: PreviewProps) {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.Action }))
   }
 
-  const actions = action?.actions?.filter((item) => !!item.description)
+  const actions = action?.actions?.filter((item) => !!item.description) || incident?.immediate_actions
 
   return (
     <View className='mt-8 bg-white rounded-[20px]'>
