@@ -1,20 +1,27 @@
 import Drawer from '@components/drawer';
 import { isIpad } from '@constants/app.constants';
 import { useAppSelector } from '@hooks/common';
+import { useLLM, } from '@hooks/useLLM';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { AccountNavigator } from './account-navigator';
 import { DailyAssessmentNavigator } from './daily-assessment-navigator';
 import { DashboardNavigator } from './dashboard-navigator';
-import { RouteName } from './types';
-import { JobsNavigator } from './jobs-navigator';
 import { IncidentsNavigator } from './incidents-navigator';
-import { AccountNavigator } from './account-navigator';
+import { JobsNavigator } from './jobs-navigator';
+import { RouteName } from './types';
 
 const DrawerNavigator = createDrawerNavigator();
 const Parent = isIpad ? DrawerNavigator : DrawerNavigator;
 
 export function MainNavigator() {
   const collapsedDrawer = useAppSelector((state) => state.common.collapsedDrawer);
+  const { loadModel } = useLLM()
+
+  useEffect(() => {
+    loadModel();
+  }, []);
+
   return (
     <Parent.Navigator
       // tabBar={(props) => <MyBottomTab {...props} countUnreadNoti={data?.unread_notification || 0} />}

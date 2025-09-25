@@ -1,9 +1,13 @@
 import { images } from '@assets/images';
 import { isAndroid } from '@constants/app.constants';
+import { useLLM } from '@hooks/useLLM';
+import { useVoice } from '@hooks/useVoice';
 import { getMessageError } from '@utils/common.util';
-import React, { ReactNode } from 'react';
-import { Control, FieldErrors, UseFormSetValue, useController } from 'react-hook-form';
-import { StyleProp, StyleSheet, TextInput as TextInputComponent, TextInputProps, TextStyle } from 'react-native';
+import { formatSecondsToMMSS } from '@utils/date.util';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { Control, FieldErrors, UseFormSetValue, useController, useWatch } from 'react-hook-form';
+import { StyleProp, TextInput as TextInputComponent, TextInputProps, TextStyle } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
@@ -57,31 +61,38 @@ export function TextInput(props: Props) {
   } = props;
   const { field } = useController({ control: control, name: name });
   const messageError = getMessageError(errors, name);
+  const [promptLoading, setPromptLoading] = useState(false);
+  const value = useWatch({ control, name });
+  const [oldValue, setOldValue] = useState(value);
+
+  const { askModel } = useLLM()
+  const { startVoice, stopVoice, recognizedText, isListening, seconds, pauseVoice, resumeVoice, isStopped } = useVoice()
 
   const resetInput = () => {
     setValue && setValue(name, '');
   };
 
-  const onUseVoice = () => { }
-
-  const onEnhanceAI = () => {
-    //   const prompt = `Viết lại câu sau bằng tiếng Việt có dấu câu đầy đủ, tự nhiên và lịch sự:\n\n"${rawText}"\n\nChỉ trả về câu đã chỉnh sửa.`;
-    // const res = await fetch("https://api.openai.com/v1/chat/completions", {
-    //   method: "POST",
-    //   headers: {
-    //     "Authorization": `Bearer ${openAiKey}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     model: "gpt-3.5-turbo",
-    //     messages: [{ role: "user", content: prompt }],
-    //     temperature: 0.2,
-    //     max_tokens: 100,
-    //   }),
-    // });
-    // const data = await res.json();
-    // return data?.choices?.[0]?.message?.content?.trim();
+  const onUseVoice = () => {
+    startVoice()
+    setOldValue(value)
   }
+
+  const onEnhanceAI = async () => {
+    try {
+      setPromptLoading(true);
+      const result = await askModel(value)
+      setValue && setValue(name, result || '', { shouldValidate: true })
+    }
+    finally {
+      setPromptLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (recognizedText && setValue) {
+      setValue(name, `${oldValue} ${recognizedText}`, { shouldValidate: true })
+    }
+  }, [name, recognizedText])
 
   return (
     <View className={`${classNameWrap}`}>
@@ -107,7 +118,7 @@ export function TextInput(props: Props) {
           placeholder={placeholder || ''}
           autoCapitalize={name?.toLowerCase().includes('email') ? 'none' : autoCapitalize}
           placeholderTextColor={disabled ? '#BEBEBE' : messageError ? '#E80000' : '#666666'}
-          editable={!disabled}
+          editable={!disabled && !isListening && !promptLoading}
           multiline={multiline}
           style={isAndroid && multiline && { textAlignVertical: 'top' }}
           {...props}
@@ -125,18 +136,47 @@ export function TextInput(props: Props) {
         {isShowClose && field.value && <Image onPress={resetInput} source={images.close} className='w-12 h-12 ' classNameButton='absolute right-1 top-1' />}
         {hasVoice &&
           <View className='flex-row mt-2 gap-x-4 absolute right-4 bottom-4 z-50 bg-white'>
+            {isStopped
+              ?
+              <Button
+                className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+                onPress={onUseVoice}
+              >
+                <Image source={images.voice} className='w-8 h-8' />
+                <Text className='text-[12px] font-medium '>Use Voice</Text>
+              </Button>
+              :
+              <View className='row-center border border-primary rounded-[8px] p-2 h-[36px]'>
+                <Image source={images.voice} className='w-8 h-8' />
+                <Text className='text-sm font-medium'>{formatSecondsToMMSS(seconds)}</Text>
+                <View className='w-[125px] h-[1px] bg-neutral40 mx-[10px]' />
+                <Image source={images.trash}
+                  className='w-8 h-8'
+                  onPress={() => {
+                    stopVoice()
+                    setValue && setValue(name, value?.replace(recognizedText, '') || '');
+                  }}
+                />
+                <View className='w-[1px] h-4 bg-neutral40 mx-1' />
+                <Image
+                  source={isListening ? images.pauseActive : images.pauseInactive}
+                  className='w-8 h-8'
+                  onPress={() => {
+                    if (isListening) {
+                      setOldValue(value)
+                    }
+                    isListening ? pauseVoice() : resumeVoice()
+                  }}
+                />
+                <Image source={images.done} className='w-8 h-8' onPress={stopVoice} />
+              </View>
+            }
             <Button
-              className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
-              onPress={onUseVoice}
-            >
-              <Image source={images.voice} className='w-8 h-8' />
-              <Text className='text-[12px] font-medium '>Use Voice</Text>
-            </Button>
-            <Button
-              className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+              className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] disabled:opacity-50'
               onPress={onEnhanceAI}
+              disabled={isListening}
             >
-              <Image source={images.ai} className='w-8 h-8' />
+              {promptLoading ? <ActivityIndicator size={'small'} /> : <Image source={images.ai} className='w-8 h-8' />}
               <Text className='text-[12px] font-medium '>AI enhance</Text>
             </Button>
           </View>

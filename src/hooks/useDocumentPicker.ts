@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
-import { pick, type DocumentPickerResponse, type DocumentPickerOptions } from '@react-native-documents/picker';
+import { pick, type DocumentPickerResponse } from '@react-native-documents/picker';
+import { showErrorMessage } from '@utils/functions.util';
+import { showError } from '@lib/toast';
 
 interface UseDocumentPicker {
   setValue: UseFormSetValue<any>;
@@ -15,9 +17,8 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
 
   const currentDocs = useWatch({ control, name }) || [];
 
-  console.log('currentDocs ',currentDocs)
-
   const handleResponse = (response?: DocumentPickerResponse[] | null) => {
+    console.log('response ', response)
     setLoading(false);
     setDidCancel(false);
     setError(null);
@@ -36,13 +37,14 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
   };
 
   const pickDocuments = useCallback(
-    async (options?: DocumentPickerOptions) => {
+    async () => {
       try {
+        if(currentDocs.length >= 5) {
+          return showError({ title: 'You can only select up to 5 documents' });
+        }
         setLoading(true);
         setError(null);
         setDidCancel(false);
-        console.log('dmmm')
-
         const docs = await pick();
 
         handleResponse(docs);

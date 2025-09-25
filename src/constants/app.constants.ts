@@ -8,7 +8,13 @@ export const isIOS = Platform.OS === 'ios';
 export const PER_PAGE = 10
 
 
-export const supportedOrientations = [
+export const supportedOrientations: (
+  | 'landscape'
+  | 'landscape-left'
+  | 'landscape-right'
+  | 'portrait'
+  | 'portrait-upside-down'
+)[] = [
   'landscape',
   'landscape-left',
   'landscape-right',

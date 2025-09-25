@@ -5,14 +5,14 @@ import { StackActions } from '@react-navigation/native';
 import { toggleCollapseDrawer } from '@store/slices/commonSlice';
 import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
-import Animated, { Easing, ReduceMotion, SharedValue, useSharedValue, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, ReduceMotion, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 import { Button, Image, SafeAreaView, Text } from '@components/ui';
 import { RouteName } from '@routes/types';
 import { colors } from '@constants/colors.constants';
 
 interface Props {
-  title: string;
+  title?: string;
   url: any;
   onPress: () => void;
   selected?: boolean;
@@ -32,6 +32,11 @@ function Item({
   rotate,
   isCloseButton = false
 }: Props) {
+  const arrowRotateStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ rotate: rotate?.value ?? '0deg' }],
+    };
+  });
   return (
     <Button
       style={{ overflow: 'visible' }}
@@ -46,9 +51,7 @@ function Item({
           source={images.arrowLeft3}
           className='w-6 h-6'
           resizeMode={'contain'}
-          style={{
-            transform: [{ rotate: rotate?.value || '0deg' }],
-          }}
+          style={arrowRotateStyle}
         />
         :
         <View className='w-8 h-8 justify-center items-center'>

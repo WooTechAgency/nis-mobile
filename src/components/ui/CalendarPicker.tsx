@@ -1,14 +1,14 @@
 import { supportedOrientations } from '@constants/app.constants';
-import React, { useState } from 'react';
-import { Control, UseFormSetValue, set, useWatch } from 'react-hook-form';
-import { Modal, TouchableOpacity, View } from 'react-native';
+import { colors } from '@constants/colors.constants';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
+import { Modal, View } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import type { DateData } from 'react-native-calendars';
 import { Button } from './Button';
 import { Text } from './Text';
-import { Calendar, CalendarList } from 'react-native-calendars';
-import { colors } from '@constants/colors.constants';
 import { TextInput } from './TextInput';
-import { convertDDMMYYYY, convertUTCDate } from '@utils/date.util';
-import dayjs from 'dayjs';
 
 
 interface Props {
@@ -23,23 +23,97 @@ interface Props {
   toggleModal: () => void
   disablePressBackdrop?: boolean;
 }
-const options = [
-  { label: 'Custom', value: '' },
-  { label: 'Last 30 days', value: '' },
-  { label: 'Last 90 days', value: '' },
-  { label: 'Last 365 days', value: '' },
-  { label: 'Year to date', value: '' },
+type Option = { label: string; value: 'custom' | 'last30' | 'last90' | 'last365' | 'ytd' }
+const options: Option[] = [
+  { label: 'Custom', value: 'custom' },
+  { label: 'Last 30 days', value: 'last30' },
+  { label: 'Last 90 days', value: 'last90' },
+  { label: 'Last 365 days', value: 'last365' },
+  { label: 'Year to date', value: 'ytd' },
 ]
 export default function CalendarPicker(props: Props) {
   const { visible, toggleModal, disablePressBackdrop, control, setValue, name } = props
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
+  const [savedSelectedOption, setSavedSelectedOption] = useState<Option>(options[0]);
+  type CalendarMarkedDates = Record<string, { startingDay?: boolean; endingDay?: boolean; color?: string; textColor?: string }>
   const [range, setRange] = useState({ startDate: "", endDate: "" });
-  const [markedDates, setMarkedDates] = useState({});
+  const [markedDates, setMarkedDates] = useState<CalendarMarkedDates>({});
 
   const date = useWatch({ control, name: 'date' }) || { startDate: "", endDate: "" };
-  const savedMarkedDates = useWatch({ control, name: 'markedDates' })
+  const savedMarkedDates = useWatch({ control, name: 'markedDates' }) as CalendarMarkedDates | undefined
 
-  const handleDayPress = (day) => {
+  const buildMarkedDatesForRange = (startDateStr: string, endDateStr: string): CalendarMarkedDates => {
+    if (!startDateStr) return {};
+    if (!endDateStr) {
+      return {
+        [startDateStr]: {
+          startingDay: true,
+          endingDay: true,
+          color: colors.primary,
+          textColor: colors.black,
+        },
+      };
+    }
+
+    const start = dayjs(startDateStr);
+    const end = dayjs(endDateStr);
+    const dates: CalendarMarkedDates = {};
+
+    for (let d = start; d.isBefore(end) || d.isSame(end, 'day'); d = d.add(1, 'day')) {
+      const ds = d.format('YYYY-MM-DD');
+      dates[ds] = {
+        color: colors.teal20,
+      };
+    }
+
+    dates[startDateStr] = {
+      ...(dates[startDateStr] || {}),
+      startingDay: true,
+      color: colors.primary,
+    };
+    dates[endDateStr] = {
+      ...(dates[endDateStr] || {}),
+      endingDay: true,
+      color: colors.primary,
+    };
+
+    return dates;
+  };
+
+  useEffect(() => {
+    const today = dayjs();
+    let start: string | null = null;
+    let end: string | null = null;
+
+    switch (selectedOption.value) {
+      case 'last30':
+        start = today.subtract(29, 'day').format('YYYY-MM-DD');
+        end = today.format('YYYY-MM-DD');
+        break;
+      case 'last90':
+        start = today.subtract(89, 'day').format('YYYY-MM-DD');
+        end = today.format('YYYY-MM-DD');
+        break;
+      case 'last365':
+        start = today.subtract(364, 'day').format('YYYY-MM-DD');
+        end = today.format('YYYY-MM-DD');
+        break;
+      case 'ytd':
+        start = today.startOf('year').format('YYYY-MM-DD');
+        end = today.format('YYYY-MM-DD');
+        break;
+      case 'custom':
+      default:
+        return; // do not modify range for custom
+    }
+
+    if (start && end) {
+      setRange({ startDate: start, endDate: end });
+      setMarkedDates(buildMarkedDatesForRange(start, end));
+    }
+  }, [selectedOption]);
+
+  const handleDayPress = (day: DateData) => {
     if (!range.startDate || (range.startDate && range.endDate)) {
       // chọn start date mới
       setRange({ startDate: day.dateString, endDate: "" });
@@ -67,7 +141,7 @@ export default function CalendarPicker(props: Props) {
         });
       } else {
         // Tạo range highlight
-        let dates = {};
+        let dates: CalendarMarkedDates = {};
         let current = new Date(startDate);
         while (current <= endDate) {
           let dateStr = current.toISOString().split("T")[0];
@@ -94,13 +168,15 @@ export default function CalendarPicker(props: Props) {
 
   const onApply = () => {
     setValue(name, range)
+    setSavedSelectedOption(selectedOption)
     toggleModal()
   }
 
   const onCancel = () => {
     toggleModal()
     setRange(date)
-    setTimeout(() => setMarkedDates(savedMarkedDates), 300)
+    setTimeout(() => setMarkedDates(savedMarkedDates || {}), 300)
+    setTimeout(() => setSelectedOption(savedSelectedOption), 300)
   }
 
   return (
@@ -113,6 +189,7 @@ export default function CalendarPicker(props: Props) {
                 const isSelected = option.label === selectedOption.label
                 return (
                   <Button
+                    key={option.value}
                     onPress={() => setSelectedOption(option)}
                     className={`h-[56px] min-w-[148px] justify-center px-4  ${isSelected && 'bg-teal20 rounded-[8px]'}`}
                   >

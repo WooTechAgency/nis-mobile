@@ -10,7 +10,7 @@ import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
 import { useDocumentPicker } from '@hooks/useDocumentPicker';
-import { DocumentPickerOptions, DocumentPickerResponse } from '@react-native-documents/picker';
+import { DocumentPickerResponse } from '@react-native-documents/picker';
 import { formatBytes } from '@utils/functions.util';
 
 interface Props {
@@ -30,6 +30,8 @@ export function DocumentForm(props: Props) {
   const selectedDeleteDocumentRef = useRef<number>(undefined)
 
   const { currentDocs, pickDocuments } = useDocumentPicker({ setValue, control, name })
+
+  console.log('currentDocs ', currentDocs)
 
   const onRemove = () => {
     if (selectedDeleteDocumentRef.current !== undefined) {

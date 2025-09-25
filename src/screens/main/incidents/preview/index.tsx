@@ -1,14 +1,12 @@
 import Header from '@components/header'
 import { Button, SafeAreaView, ScrollView } from '@components/ui'
-import Loading from '@components/ui/Loading'
-import { useToggle } from '@hooks/useToggle'
-import { IncidentModel } from '@lib/models/incident-model'
-import { showSuccess } from '@lib/toast'
 import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
 import { dispatch } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
-import { CreateIncidentRequest, createIncidentApi, } from '@services/incident.service'
+import { uploadMediasApi, UploadMediasDirectory } from '@services/common.service'
+import { useGetIncidentDetail } from '@services/hooks/incident/useGetIncidentReport'
+import { CreateIncidentRequest } from '@services/incident.service'
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { IncidentSteps, initialIncident, useIncidentContext } from '../context'
@@ -17,7 +15,10 @@ import GeneralPreview from './components/general-preview'
 import IncidentPreview from './components/incident-preview'
 import SignOffPreview from './components/sign-off-preview'
 import WitnessPreview from './components/witness-preview'
-import { useGetIncidentDetail } from '@services/hooks/incident/useGetIncidentReport'
+import { createIncidentApi } from '@services/swms'
+import { showSuccess } from '@lib/toast'
+import { IncidentModel } from '@lib/models/incident-model'
+import Loading from '@components/ui/Loading'
 
 export default function PreviewIncident() {
   const incidentId = useRoute().params?.incidentId as number
@@ -27,10 +28,14 @@ export default function PreviewIncident() {
   const realm = useRealm()
   const navigation = useNavigation();
 
+  console.log('incidentId ', incidentId)
+
   const { data, isLoading } = useGetIncidentDetail(incidentId)
 
   useEffect(() => {
-    setAllowEdit(false)
+    if (data) {
+      setAllowEdit(false)
+    }
   }, [data])
 
   const onCustomBack = () => {
@@ -83,7 +88,28 @@ export default function PreviewIncident() {
       })
     }
     try {
-      setLoading(true)
+      // setLoading(true)
+      //upload medias
+      const medias = witness?.witnesses.map((witness) => {
+        return witness.documents
+      }).filter((media) => media !== undefined).flat()
+      if (medias && medias.length > 0) {
+        const mediaResult = await uploadMediasApi({ medias, directory: UploadMediasDirectory.WITNESS })
+        console.log('mediaResult ', mediaResult)
+        payload.witnesses = witness?.witnesses.map((witness) => {
+          return {
+            ...witness,
+            media: [mediaResult.id]
+          }
+        })
+        // payload.witnesses = mediaResult.map((item: any) => {
+        //   return {
+        //     ...witness,
+        //     media: item.id
+        //   }
+        // })
+      }
+      console.log('payload ', payload)
       await createIncidentApi(payload)
       showSuccess({ title: 'Create a new incident successfully' })
       realm.write(() => {
@@ -116,6 +142,8 @@ export default function PreviewIncident() {
             onPress={onSubmitIncident}
           />
         }
+
+
 
       </ScrollView>
       <Loading loading={loading || isLoading} />
