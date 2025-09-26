@@ -11,7 +11,22 @@ export interface UploadMediasRequest {
   medias: DocumentPickerResponse[];
   directory: UploadMediasDirectory
 }
-export async function uploadMediasApi({medias,directory}: UploadMediasRequest): Promise<any> {
+export interface UploadedMedia {
+  id:number
+  path:string
+  mediable_type:string
+  mediable_id:string
+  author_id:number
+  url:string
+  created_at:string
+  updated_at:string
+}
+export interface UploadMediasResponse {
+  total_files: number;
+  successful_uploads: number;
+  uploaded_media: UploadedMedia[];
+}
+export async function uploadMediasApi({medias,directory}: UploadMediasRequest): Promise<UploadMediasResponse> {
   try {
     var formData = new FormData();
     directory && formData.append('directory', directory || '');
@@ -30,7 +45,7 @@ export async function uploadMediasApi({medias,directory}: UploadMediasRequest): 
           size: media.size,
         };
         console.log('formatImage ', formatImage)
-        formData.append('file', formatImage);
+        formData.append('files[]', formatImage);
       }
     }
     

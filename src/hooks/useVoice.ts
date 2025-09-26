@@ -29,14 +29,9 @@ export function useVoice() {
   };
 
   useEffect(() => {
-    Voice.onSpeechStart = onSpeechStart;
-    Voice.onSpeechEnd = onSpeechEnd;
-    Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechPartialResults = onSpeechPartialResults;
-
     return () => {
       stopTimer();
-      Voice.destroy().then(Voice.removeAllListeners);
+      Voice.removeAllListeners();
     };
   }, []);
 
@@ -82,7 +77,11 @@ export function useVoice() {
           setRecognizedText('');
         }
         startTimer(resetText);
-
+        // Assign listeners specifically for this start session
+        Voice.onSpeechStart = onSpeechStart;
+        Voice.onSpeechEnd = onSpeechEnd;
+        Voice.onSpeechResults = onSpeechResults;
+        Voice.onSpeechPartialResults = onSpeechPartialResults;
         await Voice.start('en-US');
       } catch (e) {
         console.error(e);
@@ -97,6 +96,7 @@ export function useVoice() {
       stopTimer();
       setSeconds(0);
       setIsStopped(true)
+      Voice.removeAllListeners();
     } catch (e) {
       console.error('Stop error: ', e);
     }

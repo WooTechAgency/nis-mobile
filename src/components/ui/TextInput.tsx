@@ -90,7 +90,7 @@ export function TextInput(props: Props) {
 
   useEffect(() => {
     if (recognizedText && setValue) {
-      setValue(name, `${oldValue} ${recognizedText}`, { shouldValidate: true })
+      setValue(name, `${oldValue || ''} ${recognizedText}`.trim(), { shouldValidate: true })
     }
   }, [name, recognizedText])
 
@@ -134,7 +134,7 @@ export function TextInput(props: Props) {
         {iconLeft && iconLeft}
         {iconRight && iconRight}
         {isShowClose && field.value && <Image onPress={resetInput} source={images.close} className='w-12 h-12 ' classNameButton='absolute right-1 top-1' />}
-        {hasVoice &&
+        {hasVoice && setValue &&
           <View className='flex-row mt-2 gap-x-4 absolute right-4 bottom-4 z-50 bg-white'>
             {isStopped
               ?

@@ -17,7 +17,7 @@ export interface Witness {
   name?: string;
   phone?: string;
   email?: string;
-  documents?: DocumentPickerResponse[];
+  documents?: (DocumentPickerResponse & { id: number })[];
 }
 
 export interface WitnessForm {

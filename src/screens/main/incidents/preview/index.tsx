@@ -28,7 +28,6 @@ export default function PreviewIncident() {
   const realm = useRealm()
   const navigation = useNavigation();
 
-  console.log('incidentId ', incidentId)
 
   const { data, isLoading } = useGetIncidentDetail(incidentId)
 
@@ -76,7 +75,7 @@ export default function PreviewIncident() {
       witnesses: witness?.witnesses.map((witness) => {
         return {
           ...witness,
-          // media: [1,2,3], //TODO
+          media: witness.documents?.map((document) => document.id) || []
         }
       }),
       signatures: singing?.signees.map((signee) => {
@@ -88,27 +87,7 @@ export default function PreviewIncident() {
       })
     }
     try {
-      // setLoading(true)
-      //upload medias
-      const medias = witness?.witnesses.map((witness) => {
-        return witness.documents
-      }).filter((media) => media !== undefined).flat()
-      if (medias && medias.length > 0) {
-        const mediaResult = await uploadMediasApi({ medias, directory: UploadMediasDirectory.WITNESS })
-        console.log('mediaResult ', mediaResult)
-        payload.witnesses = witness?.witnesses.map((witness) => {
-          return {
-            ...witness,
-            media: [mediaResult.id]
-          }
-        })
-        // payload.witnesses = mediaResult.map((item: any) => {
-        //   return {
-        //     ...witness,
-        //     media: item.id
-        //   }
-        // })
-      }
+      setLoading(true)
       console.log('payload ', payload)
       await createIncidentApi(payload)
       showSuccess({ title: 'Create a new incident successfully' })

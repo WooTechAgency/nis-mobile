@@ -62,6 +62,7 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
             placeholder='Describe the hazard........'
             multiline
             hasVoice
+            setValue={setValue}
           />
           <MediaForm
             isRadio
@@ -94,6 +95,7 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
             placeholder='Describe the consequences.....'
             multiline
             hasVoice
+            setValue={setValue}
           />
           <InitialRiskRating
             control={control}
@@ -108,6 +110,7 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
             placeholder='Describe the control measures....'
             multiline
             hasVoice
+            setValue={setValue}
           />
           <SelectRiskRating
             control={control}

@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react';
-import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
-import { pick, type DocumentPickerResponse } from '@react-native-documents/picker';
-import { showErrorMessage } from '@utils/functions.util';
 import { showError } from '@lib/toast';
+import { pick, type DocumentPickerResponse } from '@react-native-documents/picker';
+import { uploadMediasApi, UploadMediasDirectory } from '@services/common.service';
+import { useLoadingZ } from '@zustand/useLoadingZ';
+import { useCallback, useState } from 'react';
+import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 
 interface UseDocumentPicker {
   setValue: UseFormSetValue<any>;
@@ -12,28 +13,35 @@ interface UseDocumentPicker {
 
 export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker) {
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [didCancel, setDidCancel] = useState(false);
+  const {setLoading} = useLoadingZ()
 
   const currentDocs = useWatch({ control, name }) || [];
 
-  const handleResponse = (response?: DocumentPickerResponse[] | null) => {
+  const handleResponse = async (response?: DocumentPickerResponse[] | null) => {
     console.log('response ', response)
-    setLoading(false);
     setDidCancel(false);
     setError(null);
 
     if (!response) {
       setDidCancel(true);
-      return;
+      return; 
     }
-
-    // Nếu response là mảng và có file
-    if (Array.isArray(response) && response.length > 0) {
-      setValue(name, [...currentDocs, ...response]);
-    } else {
-      setError('No documents selected');
+    try{
+      setLoading(true)
+      const mediaResult = await uploadMediasApi({ medias: response, directory: UploadMediasDirectory.WITNESS })
+      // Nếu response là mảng và có file
+      if (Array.isArray(response) && response.length > 0) {
+        setValue(name, [...currentDocs, {...response[0], id: mediaResult.uploaded_media[0].id} ]);
+      } else {
+        showError({title: 'Upload documents failed'})
+      }
+    }catch(err: any){
+      showError({title: 'Upload documents failed'})
+    }finally{
+      setLoading(false)
     }
+   
   };
 
   const pickDocuments = useCallback(
@@ -42,7 +50,6 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
         if(currentDocs.length >= 5) {
           return showError({ title: 'You can only select up to 5 documents' });
         }
-        setLoading(true);
         setError(null);
         setDidCancel(false);
         const docs = await pick();
@@ -50,7 +57,6 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
         handleResponse(docs);
       } catch (err: any) {
         console.log('err ',err?.message)
-        setLoading(false);
         if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
           setDidCancel(true);
         } else {
@@ -64,12 +70,10 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
   const clear = useCallback(() => {
     setError(null);
     setDidCancel(false);
-    setLoading(false);
   }, []);
 
   return {
     error,
-    loading,
     didCancel,
     pickDocuments,
     clear,

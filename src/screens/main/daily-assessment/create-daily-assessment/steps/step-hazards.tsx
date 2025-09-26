@@ -13,6 +13,8 @@ import { HazardItem } from '../components/hazard-item';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
+import { useToggle } from '@hooks/useToggle';
+import { ShowDocumentModal } from '@components/modal/show-document-modeal';
 
 export interface HazardForm {
   description?: string;
@@ -56,6 +58,7 @@ const formSchema = yup.object().shape({
 export default function StepHazards({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo, hazard } } = useAssessmentContext();
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
+  const [showDocument, toggleShowDocument] = useToggle(false)
   const {
     control,
     handleSubmit,
@@ -72,20 +75,17 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
     resolver: yupResolver(formSchema),
   });
 
-  console.log('errors ', errors)
-
   const haveHazards = watch('haveHazards')
-  useEffect(() => {
-    if (!haveHazards) {
-      setValue('hazards', [])
-
-    }
-  }, [haveHazards])
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'hazards',
   });
+
+  const addField = () => {
+    Keyboard.dismiss()
+    append(hazardDefault);
+  };
 
   const onBack = () => {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.General }))
@@ -103,21 +103,21 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
     upsertDailyAssessment({ hazard: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
-  const addField = () => {
-    Keyboard.dismiss()
-    append(hazardDefault);
-  };
 
   const removeField = (index: number) => {
     remove(index)
   }
 
   const onCheckSWMS = () => {
-
+    toggleShowDocument()
   }
 
+  console.log('generalInfo ', generalInfo)
+
   useEffect(() => {
-    if (haveHazards && fields.length === 0) {
+    if (!haveHazards) {
+      setValue('hazards', [])
+    } else if (haveHazards && fields.length === 0) {
       append(hazardDefault);
     }
   }, [haveHazards])
@@ -183,6 +183,11 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
         <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
       </View>
+      <ShowDocumentModal
+        visible={showDocument}
+        toggleModal={toggleShowDocument}
+        url={generalInfo?.location.swms.attachment}
+      />
     </View>
   )
 }

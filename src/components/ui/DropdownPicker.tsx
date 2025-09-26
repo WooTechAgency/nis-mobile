@@ -37,7 +37,6 @@ export const DropdownPicker = memo((props: Props) => {
     placeholder,
     errors,
     isRerender,
-    required,
     dropDownDirection,
     disabled,
     onSelectCallback
@@ -58,17 +57,20 @@ export const DropdownPicker = memo((props: Props) => {
   }, [selectedItem?.value, isRerender]);
 
   const onSelectItem = (item: IDropdown) => {
-    setValue(name, item, { shouldValidate: true, shouldDirty: true });
     setOpen(false)
     setDisplayValue(item.value)
     onSelectCallback?.(item)
+    // fix bug doesn't hide error
+    setTimeout(() => {
+      setValue(name, item, { shouldValidate: true, shouldDirty: true });
+    }, 0)
   };
 
   return (
     <View className={`z-50 ${classNameWrap}`}>
       <>
         {label &&
-          <Text className={`text-[12px]  px-1  bg-white -top-2 absolute left-4 z-10
+          <Text className={`text-[12px] px-1 bg-white -top-2 absolute left-4 z-10
             ${disabled ? 'text-neutral40' : 'text-neutral70'} 
             ${labelCls}
             ${messageError && 'text-red'}

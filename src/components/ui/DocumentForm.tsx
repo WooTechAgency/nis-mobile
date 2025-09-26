@@ -1,17 +1,15 @@
 import { images } from '@assets/images';
 import { CommonModal } from '@components/modal';
-import { useImagePicker } from '@hooks/useImagePicker';
+import { useDocumentPicker } from '@hooks/useDocumentPicker';
 import { useToggle } from '@hooks/useToggle';
+import { DocumentPickerResponse } from '@react-native-documents/picker';
+import { formatBytes } from '@utils/functions.util';
 import React, { useRef } from 'react';
-import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
-import { ScrollView, View } from 'react-native';
-import { Asset } from 'react-native-image-picker';
+import { Control, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import { View } from 'react-native';
 import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
-import { useDocumentPicker } from '@hooks/useDocumentPicker';
-import { DocumentPickerResponse } from '@react-native-documents/picker';
-import { formatBytes } from '@utils/functions.util';
 
 interface Props {
   setValue: UseFormSetValue<any>;
@@ -30,8 +28,6 @@ export function DocumentForm(props: Props) {
   const selectedDeleteDocumentRef = useRef<number>(undefined)
 
   const { currentDocs, pickDocuments } = useDocumentPicker({ setValue, control, name })
-
-  console.log('currentDocs ', currentDocs)
 
   const onRemove = () => {
     if (selectedDeleteDocumentRef.current !== undefined) {

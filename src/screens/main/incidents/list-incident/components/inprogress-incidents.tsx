@@ -14,8 +14,18 @@ export default function InprogressIncidents() {
 
   const inprogressIncidents =
     useQuery(IncidentModel, (collection) => {
-      const twentyFourHoursAgo = Date.now() - 24 * 60 * 60 * 1000;
-      return collection.filtered('creatorId == $0', userInfo?.id, twentyFourHoursAgo);
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      const startOfTomorrow = new Date(startOfToday);
+      startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+      return collection.filtered(
+        'creatorId == $0 AND createdAt >= $1 AND createdAt < $2',
+        userInfo?.id ?? 0,
+        startOfToday,
+        startOfTomorrow,
+
+      );
     }).map(incident => ({
       ...incident,
       generalInfo: JSON.parse(incident.generalInfo || '{}'),

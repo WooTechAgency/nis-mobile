@@ -21,7 +21,7 @@ export default function DropdownMenu(props: Props) {
   const selectedValue = useWatch({ control, name })
 
   const onSelect = (item: IDropdown) => {
-    setValue(name, item)
+    setValue(name, item, { shouldValidate: true })
   }
 
   return (

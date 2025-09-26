@@ -1,164 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button, PermissionsAndroid, Platform, StyleSheet } from 'react-native';
-import Voice from '@react-native-voice/voice';
-import { SafeAreaView } from '@components/ui';
-import Title from '@components/title';
+import { images } from '@assets/images';
 import Header from '@components/header';
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import Animated from 'react-native-reanimated';
+import { Button, Image, SafeAreaView, Text, View } from '@components/ui';
+import { useLLM } from '@hooks/useLLM';
+import { useVoice } from '@hooks/useVoice';
+import { formatSecondsToMMSS } from '@utils/date.util';
+import { useLLMContext } from '@zustand/useLLMContext';
+import React, { useState } from 'react';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default function Dashboard() {
-  const [result, setResult] = useState('');
-  const [isListening, setIsListening] = useState(false);
+  const { askModel } = useLLM()
+  // const { startVoice, stopVoice, recognizedText, isListening, seconds, pauseVoice, resumeVoice, isStopped } = useVoice()
+  const [promptLoading, setPromptLoading] = useState(false);
 
-  useEffect(() => {
-    Voice.onSpeechStart = onSpeechStart;
-    Voice.onSpeechEnd = onSpeechEnd;
-    Voice.onSpeechResults = onSpeechResults;
-    Voice.onSpeechPartialResults = onSpeechPartialResults;
-
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
-
-  const requestPermission = async () => {
-    if (Platform.OS === 'android') {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
-    }
-    return true;
-  };
-
-  const onSpeechStart = () => {
-    console.log('Speech started');
-    setIsListening(true);
-  };
-
-  const onSpeechEnd = () => {
-    console.log('Speech ended');
-    setIsListening(false);
-  };
-
-  const onSpeechPartialResults = (e: any) => {
-    console.log('onSpeechPartialResults:', e.value);
-
-  };
-
-  const onSpeechResults = (e: any) => {
-    console.log('Speech results:', e.value);
-    setResult(e.value[0]); // lấy câu đầu tiên
-  };
-
-  const startListening = async () => {
-    const hasPermission = await requestPermission();
-    if (hasPermission) {
-      try {
-        await Voice.start('en-US'); // đổi thành 'vi-VN' nếu dùng tiếng Việt
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  };
-
-  const stopListening = async () => {
-    try {
-      await Voice.stop();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const [range, setRange] = useState({ startDate: "", endDate: "" });
-  const [markedDates, setMarkedDates] = useState({});
-
-  const handleDayPress = (day) => {
-    if (!range.startDate || (range.startDate && range.endDate)) {
-      // chọn start date mới
-      setRange({ startDate: day.dateString, endDate: "" });
-      setMarkedDates({
-        [day.dateString]: {
-          startingDay: true,
-          endingDay: true,
-          color: "#4DD0E1", // màu xanh nước
-          textColor: "white",
-        },
-      });
-    } else {
-      const startDate = new Date(range.startDate);
-      const endDate = new Date(day.dateString);
-
-      if (endDate < startDate) {
-        // Nếu endDate nhỏ hơn startDate thì reset lại
-        setRange({ startDate: day.dateString, endDate: "" });
-        setMarkedDates({
-          [day.dateString]: {
-            startingDay: true,
-            endingDay: true,
-            color: "#4DD0E1",
-            textColor: "white",
-          },
-        });
-      } else {
-        // Tạo range highlight
-        let dates = {};
-        let current = new Date(startDate);
-
-        while (current <= endDate) {
-          let dateStr = current.toISOString().split("T")[0];
-          dates[dateStr] = {
-            color: "#B2EBF2", // màu nền cho range
-            textColor: "black",
-          };
-          current.setDate(current.getDate() + 1);
-        }
-
-        // Đánh dấu start và end
-        dates[range.startDate] = {
-          startingDay: true,
-          color: "#4DD0E1",
-          textColor: "white",
-        };
-        dates[day.dateString] = {
-          endingDay: true,
-          color: "#4DD0E1",
-          textColor: "white",
-        };
-
-        setRange({ startDate: range.startDate, endDate: day.dateString });
-        setMarkedDates(dates);
-      }
-    }
-  };
+  const onUseVoice = () => {
+    // startVoice()
+  }
 
   return (
     <SafeAreaView>
       <Header title='Dashboard' />
-      <Button title='OK' onPress={startListening} />
-      <View className=" w-8 h-8 rounded-full bg-primary mr-2 animate-pulse" />
-      <View style={styles.container}>
 
-        <CalendarList
-          horizontal
-          pagingEnabled
-          pastScrollRange={12}
-          futureScrollRange={12}
-          onDayPress={handleDayPress}
-          markingType={"period"}
-          markedDates={markedDates}
-        />
+      {/* <View className='flex-row mt-2 gap-x-4  right-4 bottom-4 z-50 bg-white'>
+        {isStopped
+          ?
+          <Button
+            className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+            onPress={onUseVoice}
+          >
+            <Image source={images.voice} className='w-8 h-8' />
+            <Text className='text-[12px] font-medium '>Use Voice</Text>
+          </Button>
+          :
+          <View className='row-center border border-primary rounded-[8px] p-2 h-[36px]'>
+            <Image source={images.voice} className='w-8 h-8' />
+            <Text className='text-sm font-medium'>{formatSecondsToMMSS(seconds)}</Text>
+            <View className='w-[125px] h-[1px] bg-neutral40 mx-[10px]' />
+            <Image source={images.trash}
+              className='w-8 h-8'
+              onPress={() => {
+                stopVoice()
+              }}
+            />
+            <View className='w-[1px] h-4 bg-neutral40 mx-1' />
+            <Image
+              source={isListening ? images.pauseActive : images.pauseInactive}
+              className='w-8 h-8'
+              onPress={isListening ? pauseVoice : resumeVoice}
+            />
+            <Image source={images.done} className='w-8 h-8' onPress={stopVoice} />
+          </View>
+        }
+        <Button
+          className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] disabled:opacity-50'
+          onPress={() => { }}
+          disabled={!isStopped}
+        >
+          {promptLoading ? <ActivityIndicator size={'small'} /> : <Image source={images.ai} className='w-8 h-8' />}
+          <Text className='text-[12px] font-medium '>AI enhance</Text>
+        </Button>
+      </View> */}
 
-        <Text style={styles.text}>
-          {range.startDate && `From: ${range.startDate}`}{" "}
-          {range.endDate && `→ To: ${range.endDate}`}
-        </Text>
-      </View>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 40 },
-  text: { textAlign: "center", marginTop: 20, fontSize: 16 },
-});
