@@ -71,3 +71,13 @@ export async function getUsersApi(): Promise<IUser[]> {
     throw error;
   }
 }
+
+export async function getUsersByRoleApi(roleId: number): Promise<IUser[]> {
+  try {
+    const response = await baseApi.get(`${BASE_SERVICE}/role/${roleId}`);
+    return response?.data?.data || [];
+  } catch (error: any) {
+    showErrorMessage({ message: error.message });
+    throw error;
+  }
+}

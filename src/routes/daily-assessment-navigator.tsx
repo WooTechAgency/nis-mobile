@@ -13,7 +13,7 @@ export function DailyAssessmentNavigator() {
       <DailyAssessmentStack.Navigator initialRouteName={RouteName.DailyAssessment} screenOptions={{ headerShown: false }}>
         <DailyAssessmentStack.Screen name={RouteName.DailyAssessment} component={DailyAssessment} />
         <DailyAssessmentStack.Screen name={RouteName.CreateDailyAssessment} component={CreateDailyAssessment} />
-        <DailyAssessmentStack.Screen name={RouteName.Preview} component={Preview} />
+        <DailyAssessmentStack.Screen name={RouteName.DailyAssessmentPreview} component={Preview} />
       </DailyAssessmentStack.Navigator>
     </DailyAssessmentProvider>
 

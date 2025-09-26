@@ -1,3 +1,5 @@
+import { uploadFilesApi, UploadMediasDirectory } from '@services/common.service';
+import { useLoadingZ } from '@zustand/useLoadingZ';
 import { useState, useCallback } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import {
@@ -15,15 +17,13 @@ interface UseImagePicker{
   control: Control<any, any>;
 }
 export function useImagePicker({name,setValue,control}: UseImagePicker) {
-  // const [assets, setAssets] = useState<Asset[] | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
   const [didCancel, setDidCancel] = useState(false);
+  const {setLoading} = useLoadingZ()
 
   const currentMedias = useWatch({control, name}) || [];
 
-  const handleResponse = (response: ImagePickerResponse) => {
-    setLoading(false);
+  const handleResponse =  async (response: ImagePickerResponse) => {
     setDidCancel(false);
     setError(null);
 
@@ -36,13 +36,19 @@ export function useImagePicker({name,setValue,control}: UseImagePicker) {
       return;
     }
     if (response.assets) {
-      setValue(name, [...currentMedias,...response.assets]);
+      try{
+        setLoading(true)
+        // upload image to server
+        const mediaResult = await uploadFilesApi({ files: response.assets, directory: UploadMediasDirectory.HAZARD })
+        setValue(name, [...currentMedias,...response.assets.map(asset => ({...asset, id: mediaResult.uploaded_media[0].id})) ]);
+      }finally{
+        setLoading(false)
+      }
     }
   };
 
   const pickFromLibrary = useCallback(
     (options?: ImageLibraryOptions) => {
-      setLoading(true);
       setError(null);
       launchImageLibrary(
         {
@@ -59,7 +65,6 @@ export function useImagePicker({name,setValue,control}: UseImagePicker) {
 
   const takePhoto = useCallback(
     (options?: CameraOptions) => {
-      setLoading(true);
       setError(null);
       launchCamera(
         {
@@ -76,12 +81,10 @@ export function useImagePicker({name,setValue,control}: UseImagePicker) {
   const clear = useCallback(() => {
     setError(null);
     setDidCancel(false);
-    setLoading(false);
   }, []);
 
   return {
     error,
-    loading,
     didCancel,
     pickFromLibrary,
     takePhoto,

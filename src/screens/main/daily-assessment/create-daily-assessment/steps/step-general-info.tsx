@@ -16,6 +16,9 @@ import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
+import { ROLE_ID } from '@constants/app.constants';
+import { useGetUsersByRole } from '@services/hooks/useGetUsers';
+import { IUser } from '@services/authentication.service';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -25,7 +28,7 @@ export const currentEmploymentStatus = [
 export interface GeneralForm {
   location: ISite & IDropdown
   date: Date
-  leader: string
+  leader: IUser & IDropdown
   project: string
   contractor: string
   methodStatement: string
@@ -35,7 +38,7 @@ export interface GeneralForm {
 const formSchema = yup.object().shape({
   location: yup.object().required('Location is required'),
   date: yup.date().required('Date is required'),
-  leader: yup.string().required('Site team leader is required'),
+  leader: yup.object().required('Site team leader is required'),
   project: yup.string().required('Project is required'),
   contractor: yup.string().required('Principal contractor is required'),
   methodStatement: yup.string().required('Method statement is required'),
@@ -45,6 +48,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   const { setAssessment, assessment: { completedSteps, generalInfo } } = useAssessmentContext();
   const { userInfo } = useAppSelector(state => state.authentication)
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
+  const { data: leaders } = useGetUsersByRole(ROLE_ID.TEAM_LEADER)
 
   const {
     control,
@@ -55,7 +59,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     defaultValues: {
       location: generalInfo?.location,
       date: generalInfo?.date || new Date(),
-      leader: generalInfo?.leader || userInfo?.full_name,
+      leader: generalInfo?.leader || { value: userInfo?.id, label: userInfo?.full_name },
       project: generalInfo?.project,
       contractor: generalInfo?.contractor,
       methodStatement: generalInfo?.methodStatement,
@@ -66,6 +70,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   });
   const { data: sites } = useGetSites()
 
+
   const onSubmit = (form: GeneralForm) => {
     console.log('form ', form)
     const newCompletedSteps = new Set<number>([DailyAssessmentSteps.General, ...(completedSteps || [])]);
@@ -75,7 +80,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
       selectedIndex: DailyAssessmentSteps.Hazards,
       completedSteps: Array.from(newCompletedSteps)
     }))
-    editingMode && navigate(RouteName.Preview)
+    editingMode && navigate(RouteName.DailyAssessmentPreview)
     upsertDailyAssessment({ generalInfo: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
@@ -87,7 +92,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     <View className='mt-8 px-6 pb-6 pt-5 bg-white rounded-[20px]' style={shadowStyle}>
       <Text className='text-[25px] font-semibold'>General</Text>
       <DropdownPicker
-        classNameWrap='mt-6'
+        classNameWrap='mt-6 z-50'
         setValue={setValue}
         control={control}
         name='location'
@@ -108,13 +113,16 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
         errors={errors}
         disabled
       />
-      <TextInput
-        classNameWrap='mt-6'
-        errors={errors}
+      <DropdownPicker
+        classNameWrap='mt-6 z-40'
+        setValue={setValue}
         control={control}
         name='leader'
         label='Site Team Leader*'
         placeholder="Select site team leader"
+        listValue={leaders}
+        errors={errors}
+        isRerender
       />
       <TextInput
         classNameWrap='mt-6'

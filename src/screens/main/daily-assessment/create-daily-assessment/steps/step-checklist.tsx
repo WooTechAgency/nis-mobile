@@ -1,39 +1,53 @@
 import { Button, CheckList, Wrapper } from '@components/ui';
-import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Text, View } from 'react-native';
-import * as yup from 'yup';
-import { TeamLeaderCheckList } from '../../config.assessment';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
+import Loading from '@components/ui/Loading';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { GetPreStartChecklist } from '@services/dsra.service';
+import { useGetChecklist } from '@services/hooks/dsra/useGetChecklist';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { ActivityIndicator, Text, View } from 'react-native';
+import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
 import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
+import { colors } from '@constants/colors.constants';
 
 export interface CheckListForm {
-  checklist?: string[];
+  checklist?: GetPreStartChecklist[];
 }
-const formSchema = yup.object().shape({
-  checklist: yup.array().required('You must tick all checkboxes').length(TeamLeaderCheckList.length, 'You must tick all checkboxes'),
-});
 
 export default function StepCheckList({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, checkList } } = useAssessmentContext()
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
+  const { data: checklist, isLoading } = useGetChecklist()
 
   const {
     control,
     handleSubmit,
     setValue,
+    register,
     formState: { errors, },
   } = useForm({
     defaultValues: {
-      checklist: checkList?.checklist
+      checklist: checkList?.checklist || []
     },
-    mode: 'onSubmit',
-    resolver: yupResolver(formSchema),
+    mode: 'onSubmit', // Only validate on submit, not on change/blur
   });
 
+  // Register validation rules dynamically
+  useEffect(() => {
+    if (checklist && checklist.length > 0) {
+      register('checklist', {
+        required: 'You must tick all checkboxes',
+        validate: (value: GetPreStartChecklist[]) => {
+          if (!value || value.length !== checklist.length) {
+            return 'You must tick all checkboxes';
+          }
+          return true;
+        }
+      });
+      // Don't trigger validation on load - only on submit
+    }
+  }, [checklist, register]);
 
   const onBack = () => {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.FirstAid }))
@@ -47,7 +61,7 @@ export default function StepCheckList({ editingMode }: { editingMode: boolean })
       selectedIndex: DailyAssessmentSteps.Signing,
       completedSteps: Array.from(newCompletedSteps)
     }))
-    editingMode && navigate(RouteName.Preview)
+    editingMode && navigate(RouteName.DailyAssessmentPreview)
     upsertDailyAssessment({ checkList: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
@@ -55,13 +69,17 @@ export default function StepCheckList({ editingMode }: { editingMode: boolean })
     <>
       <Wrapper className='gap-y-6' >
         <Text className='text-[25px] font-semibold'>{'Team Leader Pre-start Check List'}</Text>
-        <CheckList
-          errors={errors}
-          control={control}
-          name='checklist'
-          setValue={setValue}
-          listValue={TeamLeaderCheckList}
-        />
+        {isLoading ?
+          <ActivityIndicator size={'large'} color={colors.primary} className='self-center' />
+          :
+          <CheckList
+            errors={errors}
+            control={control}
+            name='checklist'
+            setValue={setValue}
+            listValue={checklist}
+          />
+        }
       </Wrapper>
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />

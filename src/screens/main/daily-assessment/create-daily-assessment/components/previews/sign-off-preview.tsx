@@ -5,16 +5,15 @@ import React from 'react'
 import { View } from 'react-native'
 import { convertHHMMSSDDMMYYYY } from '@utils/date.util'
 import HeaderPreview from '@components/common/header-preview.tsx'
-import { PreviewProps } from '@constants/interface'
 import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context'
-import { flatListClassName, headerClassName, itemClassName, labelClassName } from '@screens/main/incidents/config.incident'
+import { flatListClassName, headerClassName, itemClassName, labelClassName, PreviewProps } from '@screens/main/incidents/config.incident'
 import { SigneeForm } from '../../steps/step-sign-off'
 import { useAppSelector } from '@hooks/common'
 import { StackActions } from '@react-navigation/native'
 import { RouteName } from '@routes/types'
 
 
-export default function SignOffPreview({ allowEdit }: PreviewProps) {
+export default function SignOffPreview({ allowEdit, dsra }: PreviewProps) {
   const { assessment: { singing }, setAssessment } = useAssessmentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
   const { userInfo } = useAppSelector((state) => state.authentication)
@@ -24,7 +23,7 @@ export default function SignOffPreview({ allowEdit }: PreviewProps) {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing }))
   }
 
-  const data = [singing?.teamLeader, ...(singing?.signees || [])];
+  const data = dsra?.signatures || [singing?.teamLeader, ...(singing?.signees || [])];
 
   return (
     <View className='mt-8 bg-white rounded-[20px]'>

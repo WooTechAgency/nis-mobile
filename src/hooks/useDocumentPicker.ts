@@ -1,6 +1,6 @@
 import { showError } from '@lib/toast';
 import { pick, type DocumentPickerResponse } from '@react-native-documents/picker';
-import { uploadMediasApi, UploadMediasDirectory } from '@services/common.service';
+import { uploadFilesApi, UploadMediasDirectory } from '@services/common.service';
 import { useLoadingZ } from '@zustand/useLoadingZ';
 import { useCallback, useState } from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
@@ -29,7 +29,7 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
     }
     try{
       setLoading(true)
-      const mediaResult = await uploadMediasApi({ medias: response, directory: UploadMediasDirectory.WITNESS })
+      const mediaResult = await uploadFilesApi({ files: response, directory: UploadMediasDirectory.WITNESS })
       // Nếu response là mảng và có file
       if (Array.isArray(response) && response.length > 0) {
         setValue(name, [...currentDocs, {...response[0], id: mediaResult.uploaded_media[0].id} ]);

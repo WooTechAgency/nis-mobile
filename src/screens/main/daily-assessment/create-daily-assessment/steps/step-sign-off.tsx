@@ -93,7 +93,7 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
       navigation.setParams({ editable: false })
     }
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing, singing: form }))
-    navigate(RouteName.Preview)
+    navigate(RouteName.DailyAssessmentPreview)
     upsertDailyAssessment({ singing: form })
   }
 

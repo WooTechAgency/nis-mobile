@@ -89,11 +89,6 @@ export function ShowDocumentModal(props: Props) {
               <Text className='text-sm text-gray-400 mb-4'>
                 File: {url.split('/').pop()}
               </Text>
-              <Button
-                label="Close"
-                onPress={handleClose}
-                className='min-w-[120px]'
-              />
             </View>
           ) : (
             <>
@@ -112,11 +107,6 @@ export function ShowDocumentModal(props: Props) {
                   <Text className='text-center text-gray-500 mb-4'>
                     {error}
                   </Text>
-                  <Button
-                    label="Close"
-                    onPress={handleClose}
-                    className='min-w-[120px]'
-                  />
                 </View>
               ) : (
                 <WebView

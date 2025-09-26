@@ -1,33 +1,33 @@
 import Header from '@components/header'
 import { Button, SafeAreaView, ScrollView } from '@components/ui'
+import Loading from '@components/ui/Loading'
+import { QUERY_KEY } from '@constants/keys.constants'
+import { IncidentModel } from '@lib/models/incident-model'
+import { showSuccess } from '@lib/toast'
 import { StackActions, useNavigation, useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
 import { dispatch } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
-import { uploadMediasApi, UploadMediasDirectory } from '@services/common.service'
 import { useGetIncidentDetail } from '@services/hooks/incident/useGetIncidentReport'
-import { CreateIncidentRequest } from '@services/incident.service'
+import { createIncidentApi, CreateIncidentRequest } from '@services/incident.service'
+import { useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { IncidentSteps, initialIncident, useIncidentContext } from '../context'
 import ActionPreview from './components/action-preview'
 import GeneralPreview from './components/general-preview'
-import IncidentPreview from './components/incident-preview'
+import IncidentPreviewComponent from './components/incident-preview'
 import SignOffPreview from './components/sign-off-preview'
 import WitnessPreview from './components/witness-preview'
-import { createIncidentApi } from '@services/swms'
-import { showSuccess } from '@lib/toast'
-import { IncidentModel } from '@lib/models/incident-model'
-import Loading from '@components/ui/Loading'
 
-export default function PreviewIncident() {
+export default function IncidentPreview() {
   const incidentId = useRoute().params?.incidentId as number
   const { incident: { generalInfo, incident, action, witness, singing, id }, setIncident } = useIncidentContext()
   const [loading, setLoading] = useState(false)
   const [allowEdit, setAllowEdit] = useState(true)
   const realm = useRealm()
   const navigation = useNavigation();
-
+  const queryClient = useQueryClient()
 
   const { data, isLoading } = useGetIncidentDetail(incidentId)
 
@@ -96,6 +96,7 @@ export default function PreviewIncident() {
       });
       setIncident(initialIncident)
       navigation.dispatch(StackActions.popToTop());
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.INCIDENT_REPORT] })
     } finally {
       setLoading(false)
     }
@@ -110,7 +111,7 @@ export default function PreviewIncident() {
           onCustomBack={onCustomBack}
         />
         <GeneralPreview allowEdit={allowEdit} incident={data} />
-        <IncidentPreview allowEdit={allowEdit} incident={data} />
+        <IncidentPreviewComponent allowEdit={allowEdit} incident={data} />
         <ActionPreview allowEdit={allowEdit} incident={data} />
         <WitnessPreview allowEdit={allowEdit} incident={data} />
         <SignOffPreview allowEdit={allowEdit} incident={data} />
@@ -121,9 +122,6 @@ export default function PreviewIncident() {
             onPress={onSubmitIncident}
           />
         }
-
-
-
       </ScrollView>
       <Loading loading={loading || isLoading} />
     </SafeAreaView>

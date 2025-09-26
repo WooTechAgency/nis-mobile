@@ -84,29 +84,3 @@ export default function Incidents() {
     </SafeAreaView>
   )
 }
-{/* {
-          incidents?.map((item) => (
-            <View
-              className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-6 '
-              key={item.id}
-            >
-              <View>
-                <View className='flex-row  items-center gap-x-3 mb-4'>
-                  <Text className='text-base font-semibold'>{item.id}</Text>
-                  <View className={`px-[10px] h-[24px] center rounded-full bg-orange10 `}>
-                    <Text className='text-xs font-medium'>{'IN PROGRESS'}</Text>
-                  </View>
-                </View>
-                <View className='flex-row  items-center gap-x-1'>
-                  <Image source={images.location} className='w-8 h-8' />
-                  <Text className='text-base'>{item.location}</Text>
-                </View>
-              </View>
-              <Button
-                label='Continue'
-                onPress={() => { }}
-                className='w-[204px]'
-              />
-            </View>
-          ))
-        } */}

@@ -1,6 +1,7 @@
 import { DocumentPickerResponse } from '@react-native-documents/picker';
-import baseApi from '.';
 import { showErrorMessage } from '@utils/functions.util';
+import { Asset } from 'react-native-image-picker';
+import baseApi from '.';
 
 export enum UploadMediasDirectory {
   PROFILE = 'profile-images',
@@ -8,7 +9,7 @@ export enum UploadMediasDirectory {
   HAZARD = 'hazard_attachments',
 }
 export interface UploadMediasRequest {
-  medias: DocumentPickerResponse[];
+  files: DocumentPickerResponse[] | Asset[];
   directory: UploadMediasDirectory
 }
 export interface UploadedMedia {
@@ -26,26 +27,33 @@ export interface UploadMediasResponse {
   successful_uploads: number;
   uploaded_media: UploadedMedia[];
 }
-export async function uploadMediasApi({medias,directory}: UploadMediasRequest): Promise<UploadMediasResponse> {
+
+
+export async function uploadFilesApi({files,directory}: UploadMediasRequest): Promise<UploadMediasResponse> {
   try {
     var formData = new FormData();
     directory && formData.append('directory', directory || '');
-    if (medias.length > 0) {
-      for (const media of medias) {
-        console.log('media ', media)
-        // Prefer fileCopyUri (from pick({ copyTo: 'cachesDirectory' })) on iOS
-        // to avoid NSCocoaErrorDomain Code=260 (temp Inbox file missing).
-        const safeUri = (media as any).fileCopyUri ?? media.uri;
-        const normalizedUri = safeUri?.startsWith('file://') ? safeUri : safeUri;
-
-        const formatImage: any = {
-          name: media.name || 'document',
-          type: media.type || 'application/octet-stream',
-          uri: decodeURIComponent(normalizedUri || ''),
-          size: media.size,
-        };
-        console.log('formatImage ', formatImage)
-        formData.append('files[]', formatImage);
+    if (files.length > 0) {
+      for (const media of files) {
+        let formatedFile
+        if(media.name){
+          // document
+           formatedFile = {
+            name: media.name,
+            type: media.type,
+            uri: media.uri,
+            size: media.size,
+          };
+        }else{
+          // media
+          formatedFile = {
+            name: media.fileName,
+            type: media.type,
+            uri: media.uri,
+            size: media.fileSize,
+          };
+        }
+        formData.append('files[]', formatedFile);
       }
     }
     

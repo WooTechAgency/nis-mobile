@@ -64,11 +64,11 @@ export const riskRating =[
 ]
 
 export const TeamLeaderCheckList = [
-  { key: '', title: 'Site Induction completed by all personnel', },
-  { key: '', title: 'SWMS reviewed and understood', },
-  { key: '', title: 'PPE worn (hi-vis, boots, gloves, glasses)', },
-  { key: '', title: 'Emergency evacuation plan reviewed', },
-  { key: '', title: 'Emergency Assembly point identified and communicated', },
+  { key: 1, title: 'Site Induction completed by all personnel', },
+  { key: 2, title: 'SWMS reviewed and understood', },
+  { key: 3, title: 'PPE worn (hi-vis, boots, gloves, glasses)', },
+  { key: 4, title: 'Emergency evacuation plan reviewed', },
+  { key: 5, title: 'Emergency Assembly point identified and communicated', },
   // { key: '', title: 'First Aid kit available and accessible', },
   // { key: '', title: 'Site-specific hazards checked and documented', },
   // { key: '', title: 'All personnel free from the effects of drugs and alcohol', },

@@ -10,8 +10,7 @@ import { RouteName } from '@routes/types';
 import { useGetIncidentTypes } from '@services/hooks/incident/useGetIncidentTypes';
 import { useGetSites } from '@services/hooks/useGetSites';
 import { IncidentReport } from '@services/incident.service';
-import { convertDDMMYYYY } from '@utils/date.util';
-import dayjs from 'dayjs';
+import { convertDDMMYYYY, formatStartDateEndDate } from '@utils/date.util';
 import React from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
 import { TouchableOpacity } from 'react-native';
@@ -52,21 +51,6 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
     navigate(RouteName.PreviewIncident, { incidentId: id })
   }
 
-  const formatStartDateEndDate = (date) => {
-    const { startDate, endDate } = date;
-    if (startDate && endDate) {
-      const monthStartDate = startDate.split('-')[1]
-      const monthEndDate = endDate.split('-')[1]
-      return monthStartDate === monthEndDate
-        ? `${dayjs(startDate).format('D')} - ${dayjs(endDate).format('D MMM')}`
-        : `${dayjs(startDate).format('D MMM')} - ${dayjs(endDate).format('D MMM')}`
-    } else if (startDate) {
-      return `${dayjs(startDate).format('D MMM')}`
-    }
-    return ''
-  }
-
-
   return (
     <View>
       <View className='bg-white mt-6 rounded-[20px] p-6 '>
@@ -74,7 +58,7 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
           <View className='row-center gap-x-4'>
             {type && <SelectedFilter label={type?.label} name='type' setValue={setValue} />}
             {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
-            {date && <SelectedFilter label={formatStartDateEndDate(date)} name='site' setValue={setValue} />}
+            {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
             {!type && !site && !date && <View />}
           </View>
           <View className='flex-row gap-x-4 self-end'>

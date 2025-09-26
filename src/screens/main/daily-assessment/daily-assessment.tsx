@@ -4,7 +4,7 @@ import Loading from '@components/ui/Loading';
 import { SortDirection } from '@constants/interface';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDebounce } from '@hooks/useDebounce';
-import { useGetSwms } from '@services/hooks/swms/useGetSwms';
+import { useGetDsras } from '@services/hooks/dsra/useGetDsras';
 import { ISite } from '@services/site.service';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -34,11 +34,14 @@ export default function DailyAssessment() {
   const sort_direction = watch('sort_direction') as string
 
   const debouncedSearch = useDebounce(search, 500)
-  const { data: swms, isLoading } = useGetSwms({
+  const { data: dsra, isLoading } = useGetDsras({
     search: debouncedSearch && debouncedSearch?.length > 1 ? debouncedSearch : undefined,
+    search_types: 'tablet',
     site_id: site?.id,
     sort_by: 'id',
     sort_direction: sort_direction || SortDirection.ASC,
+    date_from: date?.startDate,
+    date_to: date?.endDate
   })
 
   return (
@@ -49,7 +52,7 @@ export default function DailyAssessment() {
         <DailySiteRickAssessmentTable
           control={control}
           setValue={setValue}
-          swms={swms}
+          dsra={dsra}
         />
       </ScrollView>
       <Loading loading={isLoading} />

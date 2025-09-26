@@ -1,3 +1,4 @@
+import { DSRA } from '@services/dsra.service'
 import { IncidentReport } from '@services/incident.service'
 
 export const flatListClassName = 'm-6 mt-5 py-2 border border-neutral20 rounded-[8px]'
@@ -8,6 +9,7 @@ export const labelClassName = 'text-neutral70'
 export interface PreviewProps {
   allowEdit: boolean
   incident?: IncidentReport
+  dsra?: DSRA
 }
 
 

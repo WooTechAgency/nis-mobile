@@ -2,16 +2,16 @@ import { images } from '@assets/images'
 import HeaderPreview from '@components/common/header-preview'
 import { Image, Text } from '@components/ui'
 import { shadowStyle } from '@constants/config.constants'
-import { PreviewProps } from '@constants/interface'
 import { useToggle } from '@hooks/useToggle'
 import { StackActions } from '@react-navigation/native'
 import { dispatch, goBack } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
 import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context'
+import { PreviewProps } from '@screens/main/incidents/config.incident'
 import React from 'react'
 import { View } from 'react-native'
 
-export default function CheckListPreview({ allowEdit }: PreviewProps) {
+export default function CheckListPreview({ allowEdit, dsra }: PreviewProps) {
   const { assessment: { checkList }, setAssessment } = useAssessmentContext()
   const [collapsed, toggleCollapse] = useToggle(false)
 
@@ -19,6 +19,8 @@ export default function CheckListPreview({ allowEdit }: PreviewProps) {
     dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editingMode: true }))
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.CheckList }))
   }
+
+  const checklist = dsra?.pre_start_checklists || checkList?.checklist
 
   return (
     <View className='mt-6 bg-white rounded-[20px]' style={shadowStyle}>
@@ -33,13 +35,13 @@ export default function CheckListPreview({ allowEdit }: PreviewProps) {
         <>
           <View className='w-full h-[1px] bg-neutral20 ' />
           <View className='p-6 pt-5 gap-y-2 -ml-1'>
-            {checkList?.checklist?.map((item) => (
+            {checklist?.map((item) => (
               <View
-                key={item}
+                key={item.id}
                 className={`flex-row items-center gap-x-1 `}
               >
                 <Image source={images.checkedDisable} className='w-8 h-8' />
-                <Text className=''>{item}</Text>
+                <Text className=''>{item.description}</Text>
               </View>
             ))}
           </View>

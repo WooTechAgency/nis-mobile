@@ -53,3 +53,18 @@ export const formatSecondsToMMSS = (totalSeconds: number) => {
   const ss = String(secs).padStart(2, '0')
   return `${mm}:${ss}`
 }
+
+
+export const formatStartDateEndDate = (date: { startDate: string, endDate: string }) => {
+  const { startDate, endDate } = date;
+  if (startDate && endDate) {
+    const monthStartDate = startDate.split('-')[1]
+    const monthEndDate = endDate.split('-')[1]
+    return monthStartDate === monthEndDate
+      ? `${dayjs(startDate).format('D')} - ${dayjs(endDate).format('D MMM')}`
+      : `${dayjs(startDate).format('D MMM')} - ${dayjs(endDate).format('D MMM')}`
+  } else if (startDate) {
+    return `${dayjs(startDate).format('D MMM')}`
+  }
+  return ''
+}

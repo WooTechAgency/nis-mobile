@@ -77,7 +77,7 @@ export default function DailySite() {
           >
             <View className=''>
               <View className='flex-row  items-center gap-x-3 mb-4'>
-                <Text className='text-base font-semibold'>{item.generalInfo?.location.site_code}</Text>
+                <Text className='text-base font-semibold'>{item.generalInfo?.location?.site_code}</Text>
                 <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG['progress']} `}>
                   <Text className='text-xs font-medium'>{MAP_STATUS_TITLE['progress']}</Text>
                 </View>
@@ -96,27 +96,6 @@ export default function DailySite() {
               onPress={() => onContinue(item.id)}
               {...buttonCls}
             />
-            {/* {item.status === DsraStatus.Complete
-              ? <View className='row-center gap-x-4'>
-                <Button
-                  onPress={onAddHazard}
-                  label='Add hazard'
-                  type='outlined'
-                  {...buttonCls}
-                />
-                <Button
-                  onPress={onViewDetail}
-                  label='View detail'
-                  {...buttonCls}
-                />
-              </View>
-              : <Button
-                label='Continue'
-                onPress={onContinue}
-                {...buttonCls}
-              />
-            } */}
-
           </View>
         ))
       }

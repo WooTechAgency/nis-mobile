@@ -14,7 +14,7 @@ import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 import { useToggle } from '@hooks/useToggle';
-import { ShowDocumentModal } from '@components/modal/show-document-modeal';
+import { ShowDocumentModal } from '@components/modal/show-document-model';
 
 export interface HazardForm {
   description?: string;
@@ -99,7 +99,7 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
       selectedIndex: DailyAssessmentSteps.FirstAid,
       completedSteps: Array.from(newCompletedSteps)
     }))
-    editingMode && navigate(RouteName.Preview)
+    editingMode && navigate(RouteName.DailyAssessmentPreview)
     upsertDailyAssessment({ hazard: form, completedSteps: Array.from(newCompletedSteps) })
   }
 

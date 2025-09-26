@@ -18,7 +18,7 @@ export interface FirstAidForm {
 }
 const formSchema = yup.object().shape({
   name: yup.string().required('Name of on-site First Aider is required'),
-  firstAidLocation: yup.string().notRequired(),
+  firstAidLocation: yup.string().required('First Aid Box Location is required'),
   hospitalLocation: yup.string().notRequired(),
   assemblyPoint: yup.string().notRequired(),
 });
@@ -33,7 +33,8 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
     formState: { errors, },
   } = useForm({
     defaultValues: {
-      name: firstAid?.name
+      name: firstAid?.name,
+      firstAidLocation: firstAid?.firstAidLocation,
     },
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
@@ -51,7 +52,7 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
       selectedIndex: DailyAssessmentSteps.CheckList,
       completedSteps: Array.from(newCompletedSteps)
     }))
-    editingMode && navigate(RouteName.Preview)
+    editingMode && navigate(RouteName.DailyAssessmentPreview)
     upsertDailyAssessment({ firstAid: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
@@ -72,8 +73,6 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
           name='firstAidLocation'
           label='First Aid Box Location'
           placeholder='First Aid Box Location'
-          disabled
-          value={generalInfo?.location.first_aid_box_location}
         />
         <TextInput
           errors={errors}
@@ -93,7 +92,6 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
           disabled
           value={generalInfo?.location.emergency_assembly_point}
         />
-
       </Wrapper>
       <View className=' flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />

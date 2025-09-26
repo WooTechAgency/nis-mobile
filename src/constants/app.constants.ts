@@ -21,3 +21,7 @@ export const supportedOrientations: (
   'portrait',
   'portrait-upside-down',
 ];
+
+export const ROLE_ID = {
+  TEAM_LEADER: 18,
+}

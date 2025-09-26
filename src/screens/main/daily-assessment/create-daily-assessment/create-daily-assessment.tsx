@@ -1,8 +1,12 @@
 import Header from '@components/header'
 import Steps from '@components/steps'
 import { SafeAreaView, ScrollView } from '@components/ui'
+import Loading from '@components/ui/Loading'
+import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
 import { useRoute } from '@react-navigation/native'
+import { useRealm } from '@realm/react'
 import { goBack } from '@routes/navigationRef'
+import { convertModelToDailyAssessment } from '@utils/realm.util'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from '../context'
@@ -11,10 +15,6 @@ import StepFirstAid from './steps/step-first-aid'
 import StepHazards from './steps/step-hazards'
 import StepSignOff from './steps/step-sign-off'
 import StepGeneralInformation from './steps/step-general-info'
-import { convertModelToDailyAssessment } from '@utils/realm.util'
-import { useRealm } from '@realm/react'
-import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
-import Loading from '@components/ui/Loading'
 
 
 const steps = {
