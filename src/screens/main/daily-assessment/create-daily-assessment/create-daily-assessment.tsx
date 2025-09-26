@@ -15,6 +15,7 @@ import StepFirstAid from './steps/step-first-aid'
 import StepHazards from './steps/step-hazards'
 import StepSignOff from './steps/step-sign-off'
 import StepGeneralInformation from './steps/step-general-info'
+import { DSRA, UpdateHazardRequest } from '@services/dsra.service'
 
 
 const steps = {
@@ -28,6 +29,10 @@ const steps = {
 export default function CreateDailyAssessment() {
   const editingMode = useRoute().params?.editingMode as boolean
   const assessmentId = useRoute().params?.assessmentId as string
+  const dsraData = useRoute().params?.dsraData as DSRA
+  // const dsraIdFromBE = useRoute().params?.dsraId as number
+  // const hazardsFromBE = useRoute().params?.hazard as UpdateHazardRequest[]
+  // const methodStatement = useRoute().params?.methodStatement as string
   const realm = useRealm()
   const { assessment: { selectedIndex, enableScroll, completedSteps, generalInfo }, setAssessment } = useAssessmentContext();
   const [loading, setLoading] = useState(false)
@@ -37,7 +42,7 @@ export default function CreateDailyAssessment() {
       case DailyAssessmentSteps.General:
         return <StepGeneralInformation editingMode={editingMode} />
       case DailyAssessmentSteps.Hazards:
-        return <StepHazards editingMode={editingMode} />
+        return <StepHazards editingMode={editingMode} dsraData={dsraData} />
       case DailyAssessmentSteps.FirstAid:
         return <StepFirstAid editingMode={editingMode} />
       case DailyAssessmentSteps.CheckList:
@@ -83,7 +88,7 @@ export default function CreateDailyAssessment() {
   return (
     <SafeAreaView className='bg-neutral-100'>
       <ScrollView scrollEnabled={enableScroll}>
-        <Header title={generalInfo?.location.site_code || 'New DSRA'} isBack onCustomBack={onBack} />
+        <Header title={generalInfo?.location.site_code || dsraData?.site?.site_code || 'New DSRA'} isBack onCustomBack={onBack} />
         <Steps
           classNameWrap='mt-4'
           steps={steps}

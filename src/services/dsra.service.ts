@@ -1,13 +1,13 @@
 import { IPagination } from '@constants/interface';
 import { showErrorMessage } from '@utils/functions.util';
 import baseApi from '.';
+import { UploadedMedia } from './common.service';
+import { Signature } from './incident.service';
 import { ISite } from './site.service';
 import { IUser } from './user.service';
-import { CheckListForm } from '@screens/main/daily-assessment/create-daily-assessment/steps/step-checklist';
-import { Signature } from './incident.service';
-import { UploadedMedia } from './common.service';
 
-const BASE = '/api/swms';
+
+
 
 export interface CreateAssessmentRequest {
   site_id: number,
@@ -19,16 +19,7 @@ export interface CreateAssessmentRequest {
   description_of_work: string,
   site_first_aider_name: string,
   pre_start_checklists: number[],
-  hazards:{
-    description: string,
-    likelihood: string,
-    consequence: string, 
-    consequence_description: string,
-    initial_risk_rating: string,
-    control_measure: string,
-    residual_risk_rating: string,
-    media : number[]
-  }[]
+  hazards: UpdateHazardRequest[]
   signatures?: {
     name?: string;
     role?: string;
@@ -38,6 +29,28 @@ export interface CreateAssessmentRequest {
 export async function createAssessmentApi(request: CreateAssessmentRequest): Promise<any> {
   try {
     const response = await baseApi.post(`api/dsras`,request);
+    return response.data
+  } catch (e: any) {
+    showErrorMessage({ message: e?.message  });
+    throw e;
+  }
+}
+
+export interface UpdateHazardRequest{
+  description: string,
+  likelihood: string,
+  consequence: string, 
+  consequence_description: string,
+  initial_risk_rating: string,
+  control_measure: string,
+  residual_risk_rating: string,
+  medias : number[]
+}
+export async function addMoreHazardsApi(dsraId: number, request: UpdateHazardRequest[]): Promise<any> {
+  try {
+    const response = await baseApi.put(`api/dsras/${dsraId}`,{
+      hazards: request
+    });
     return response.data
   } catch (e: any) {
     showErrorMessage({ message: e?.message  });

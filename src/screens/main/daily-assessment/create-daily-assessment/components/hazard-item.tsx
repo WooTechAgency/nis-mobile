@@ -18,10 +18,12 @@ interface Props {
   control: Control<any, any>;
   onDeleteHazard: (index: number) => void
   trigger: UseFormTrigger<any>
+  allowShowPreview?: boolean
+  submitted: boolean
 }
 
-export function HazardItem({ control, classNameWrap, errors, setValue, index, name, onDeleteHazard, trigger }: Props) {
-  const [showPreview, toggleShowPreview] = useToggle(false)
+export function HazardItem({ control, classNameWrap, errors, setValue, index, name, onDeleteHazard, trigger, submitted }: Props) {
+  const [showPreview, toggleShowPreview] = useToggle(submitted)
   const likelihood = useWatch({ control, name: `${name}.likelihood` })
   const consequence = useWatch({ control, name: `${name}.consequence` })
   const hazard = useWatch({ control, name })
@@ -31,7 +33,6 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
     if (validForm) {
       toggleShowPreview()
     }
-    // toggleShowPreview()
   }
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
           index={index}
           onDeleteHazard={onDeleteHazard}
           hazard={hazard}
+          submitted={submitted}
         />
         : <>
           <TextInput
@@ -126,7 +128,6 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
           />
         </>
       }
-
     </Wrapper>
   );
 }

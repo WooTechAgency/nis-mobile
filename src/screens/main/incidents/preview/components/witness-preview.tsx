@@ -51,7 +51,7 @@ export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
                 <Text className={`${labelClassName} w-[23%]`}>{item?.phone}</Text>
                 <Text className={`${labelClassName} grow`}>{item?.email || '0123'}</Text>
                 <Text className={`${labelClassName} w-[20%] underline `}>
-                  {((item?.documents && item.documents.length > 0) || (item.media && item.media.length > 0)) ? "Yes" : 'No'}
+                  {((item?.documents && item.documents.length > 0) || (item.medias && item.medias.length > 0)) ? "Yes" : 'No'}
                 </Text>
               </View>
             )}

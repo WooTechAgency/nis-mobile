@@ -1,21 +1,30 @@
 import { images } from '@assets/images';
+import { ShowDocumentModal } from '@components/modal/show-document-model';
 import { Button, Image, Wrapper, YesNoForm } from '@components/ui';
+import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useEffect } from 'react';
+import { useToggle } from '@hooks/useToggle';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
+import { addMoreHazardsApi, DSRA, UpdateHazardRequest } from '@services/dsra.service';
+import { useQueryClient } from '@tanstack/react-query';
+import { convertHazardForm, convertHazardFromBE } from '@utils/functions.util';
+import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import * as yup from 'yup';
 import { SelectItem } from '../../config.assessment';
 import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
-import { HazardItem } from '../components/hazard-item';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
 import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
-import { useToggle } from '@hooks/useToggle';
-import { ShowDocumentModal } from '@components/modal/show-document-model';
+import { HazardItem } from '../components/hazard-item';
+import { QUERY_KEY } from '@constants/keys.constants';
 
+export interface Props {
+  editingMode: boolean,
+  dsraData: DSRA
+}
 export interface HazardForm {
   description?: string;
   medias?: Asset[];
@@ -55,9 +64,11 @@ const formSchema = yup.object().shape({
     ).nullable(),
 });
 
-export default function StepHazards({ editingMode }: { editingMode: boolean }) {
+export default function StepHazards({ editingMode, dsraData }: Props) {
   const { setAssessment, assessment: { completedSteps, generalInfo, hazard } } = useAssessmentContext();
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
+  const queryClient = useQueryClient()
+  const [loading, setLoading] = useState(false)
   const [showDocument, toggleShowDocument] = useToggle(false)
   const {
     control,
@@ -68,8 +79,8 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      haveHazards: hazard?.haveHazards || false,
-      hazards: hazard?.hazards || []
+      haveHazards: hazard?.haveHazards || !!dsraData?.hazards || false,
+      hazards: hazard?.hazards || convertHazardFromBE(dsraData?.hazards || []) || []
     },
     mode: 'all',
     resolver: yupResolver(formSchema),
@@ -88,7 +99,11 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
   };
 
   const onBack = () => {
-    setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.General }))
+    if (!!dsraData?.id) {
+      navigate(RouteName.DailyAssessmentPreview, { dsraId: dsraData?.id })
+    } else {
+      setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.General }))
+    }
   }
 
   const onSubmit = (form: HazardsForm) => {
@@ -103,6 +118,21 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
     upsertDailyAssessment({ hazard: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
+  const onAddMoreHazard = async (form: HazardsForm) => {
+    const updatedHazards = form?.hazards?.filter((item) => !item?.dsra_id)
+    console.log('updatedHazards ', updatedHazards)
+    if (updatedHazards && updatedHazards.length > 0) {
+      const payload = convertHazardForm(updatedHazards || [])
+      try {
+        setLoading(true)
+        await addMoreHazardsApi(dsraData?.id, payload)
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEY.DSRAS] })
+      } finally {
+        setLoading(false)
+      }
+    }
+    navigate(RouteName.DailyAssessmentPreview, { dsraId: dsraData?.id })
+  }
 
   const removeField = (index: number) => {
     remove(index)
@@ -111,8 +141,6 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
   const onCheckSWMS = () => {
     toggleShowDocument()
   }
-
-  console.log('generalInfo ', generalInfo)
 
   useEffect(() => {
     if (!haveHazards) {
@@ -125,21 +153,21 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
   return (
     <View className='mt-6 gap-y-8'>
       {/* check hazard */}
-      <Wrapper className={`mt-[0px] gap-y-8`}>
-        <View className='row-center gap-x-6'>
+      <Wrapper className={`mt-[0px] gap-y-8`} pointerEvents={!!dsraData?.id ? 'none' : undefined}>
+        <View className='row-center gap-x-6' >
           <TextInput
             classNameWrap='flex-1 '
             errors={errors}
             control={control}
             name={`methodStatement`}
             label='Please describe the hazard'
-            value={generalInfo?.methodStatement}
+            value={generalInfo?.methodStatement || dsraData?.site?.swms?.swms_name}
             editable={false}
             classNameInput='text-[#4A4646]'
           />
           <Button
             onPress={onCheckSWMS}
-            label='Check SWMS '
+            label='Check SWMS'
             className='w-[280px] '
           />
         </View>
@@ -158,6 +186,7 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
             return (
               <View key={item.id} style={{ zIndex: 50 - index }}>
                 <HazardItem
+                  submitted={!!item?.dsra_id} // dsra_id is a field get from BE
                   index={index}
                   classNameWrap='mt-6'
                   control={control}
@@ -178,16 +207,21 @@ export default function StepHazards({ editingMode }: { editingMode: boolean }) {
           />
         </>
       }
-
       <View className='mt-6 flex-row gap-x-6'>
         <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
-        <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
+        <Button
+          label={editingMode ? 'Save' : 'Next'}
+          onPress={handleSubmit(!!dsraData?.id ? onAddMoreHazard : onSubmit)}
+          className='flex-1'
+        />
       </View>
+
       <ShowDocumentModal
         visible={showDocument}
         toggleModal={toggleShowDocument}
-        url={generalInfo?.location.swms.attachment}
+        url={generalInfo?.location.swms.attachment || dsraData?.site?.swms?.attachment}
       />
+      <Loading loading={loading} />
     </View>
   )
 }

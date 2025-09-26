@@ -72,7 +72,6 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
 
 
   const onSubmit = (form: GeneralForm) => {
-    console.log('form ', form)
     const newCompletedSteps = new Set<number>([DailyAssessmentSteps.General, ...(completedSteps || [])]);
     setAssessment((prev) => ({
       ...prev,

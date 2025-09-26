@@ -7,7 +7,7 @@ import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
 import { showSuccess } from '@lib/toast'
 import { StackActions, useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
-import { dispatch, goBack } from '@routes/navigationRef'
+import { dispatch, goBack, navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
 import { createAssessmentApi, CreateAssessmentRequest } from '@services/dsra.service'
 import { useGetDsraDetail } from '@services/hooks/dsra/useGetDsraDetail'
@@ -21,6 +21,7 @@ import GeneralPreview from './create-daily-assessment/components/previews/genera
 import SignOffPreview from './create-daily-assessment/components/previews/sign-off-preview'
 import HazardPreview from './create-daily-assessment/components/previews/hazard-preview'
 import { useAppSelector } from '@hooks/common'
+import { convertHazardForm } from '@utils/functions.util'
 
 export default function DailyAssessmentPreview() {
   const dsraId = useRoute().params?.dsraId as number
@@ -35,13 +36,20 @@ export default function DailyAssessmentPreview() {
   const { data, isLoading } = useGetDsraDetail(dsraId)
 
   const onAddHazard = () => {
-    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editingMode: true }))
+    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment,
+      {
+        editingMode: true,
+        dsraData: data,
+        dsraId: dsraId,
+        // hazard: data?.hazards,
+        // methodStatement: data?.site?.swms?.swms_name
+      }))
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Hazards }))
   }
 
   const onCustomBack = () => {
     if (data) {
-      return goBack();
+      return dispatch(StackActions.popTo(RouteName.DailyAssessment))
     }
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Signing }))
     dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, { editingMode: false }))
@@ -58,16 +66,7 @@ export default function DailyAssessmentPreview() {
       site_first_aider_name: firstAid?.name || '',
       first_aid_box_location: firstAid?.firstAidLocation || '',
       pre_start_checklists: checkList?.checklist?.map((item) => item.id) || [],
-      hazards: hazard?.hazards?.map((item) => ({
-        description: item.description || '',
-        likelihood: item.likelihood?.title || '',
-        consequence: item.consequence?.title || '',
-        consequence_description: item.consequenceDes || '',
-        initial_risk_rating: item.initialRiskRating?.title || '',
-        control_measure: item.controlMeasure || '',
-        residual_risk_rating: item.residualRiskRating?.title,
-        media: item.medias?.map((media) => media.id) || [],
-      })),
+      hazards: convertHazardForm(hazard?.hazards || []),
       signatures: [
         {
           name: userInfo?.full_name || '',
@@ -85,7 +84,6 @@ export default function DailyAssessmentPreview() {
     }
     try {
       setLoading(true)
-      console.log('payload ', payload)
       await createAssessmentApi(payload)
       showSuccess({ title: 'Create a new daily assessment successfully' })
       realm.write(() => {

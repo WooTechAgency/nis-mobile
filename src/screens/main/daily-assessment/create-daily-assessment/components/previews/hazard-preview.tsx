@@ -1,15 +1,15 @@
 import HeaderPreview from '@components/common/header-preview'
 import { shadowStyle } from '@constants/config.constants'
 import { useToggle } from '@hooks/useToggle'
-import { dispatch, goBack } from '@routes/navigationRef'
+import { StackActions } from '@react-navigation/native'
+import { dispatch } from '@routes/navigationRef'
+import { RouteName } from '@routes/types'
 import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context'
 import { PreviewProps } from '@screens/main/incidents/config.incident'
+import { convertHazardFromBE } from '@utils/functions.util'
 import React from 'react'
 import { View } from 'react-native'
 import HazardItemPreview from './hazard-item-preview'
-import { RouteName } from '@routes/types'
-import { StackActions } from '@react-navigation/native'
-import { consequenceOptions, likeliHoodOptions, riskRating } from '@screens/main/daily-assessment/config.assessment'
 
 export default function HazardPreview({ allowEdit, dsra }: PreviewProps) {
   const { assessment: { hazard }, setAssessment } = useAssessmentContext()
@@ -20,19 +20,7 @@ export default function HazardPreview({ allowEdit, dsra }: PreviewProps) {
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Hazards }))
   }
 
-  const hazards = hazard?.hazards || dsra?.hazards.map((item) => ({
-    ...item,
-    consequenceDes: item.consequence_description,
-    controlMeasure: item.control_measure,
-    likelihood: likeliHoodOptions.find((option) => option.title === item.likelihood),
-    consequence: consequenceOptions.find((option) => option.title === item.consequence),
-    initialRiskRating: riskRating.flat().find((option) => option.title === item.initial_risk_rating),
-    residualRiskRating: riskRating.flat().find((option) => option.title === item.residual_risk_rating),
-    medias: item.media.map((_media) => ({
-      uri: _media.url,
-    })),
-  }))
-
+  const hazards = hazard?.hazards || convertHazardFromBE(dsra?.hazards || []) || []
 
   return (
     <View className='mt-6 bg-white rounded-[20px]' style={shadowStyle}>

@@ -12,6 +12,7 @@ interface Props {
   onDeleteHazard?: (index: number) => void
   index: number,
   hazard: HazardForm
+  submitted?: boolean
 }
 
 interface ValueItem {
@@ -19,7 +20,7 @@ interface ValueItem {
   value?: string
 }
 
-export default function HazardItemPreview({ hazard, toggleShowPreview, onDeleteHazard, index }: Props) {
+export default function HazardItemPreview({ hazard, toggleShowPreview, onDeleteHazard, index, submitted }: Props) {
   const [visibleConfirmDelete, toggleConfirmDelete] = useToggle(false)
   const allowAction = !!onDeleteHazard && !!toggleShowPreview
 
@@ -74,7 +75,7 @@ export default function HazardItemPreview({ hazard, toggleShowPreview, onDeleteH
         label='Control Measures'
         value={hazard?.controlMeasure}
       />
-      {allowAction &&
+      {allowAction && !submitted &&
         <>
           <View className='flex-row gap-x-4'>
             <Button
