@@ -5,9 +5,8 @@ import { DocumentForm } from '@components/ui/DocumentForm';
 import { TextInput } from '@components/ui/TextInput';
 import { useToggle } from '@hooks/useToggle';
 import React from 'react';
-import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
+import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue } from 'react-hook-form';
 import { View } from 'react-native';
-import { useIncidentContext } from '../../context';
 
 interface Props {
   index: number
@@ -21,8 +20,6 @@ interface Props {
 
 export function WitnessItem({ control, errors, setValue, index, name, remove }: Props) {
   const [visibleConfirmRemove, toggleConfirmRemove] = useToggle()
-  const { setIncident } = useIncidentContext()
-
 
   const onRemove = () => {
     remove(index)
@@ -31,9 +28,9 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
   return (
     <Wrapper className='mt-8'>
       <View className='row-center justify-between'>
-        <Title label={`Signee ${index + 1}`} />
+        <Title label={`Witness ${index + 1}`} />
         <Button
-          label='Delete Signee'
+          label='Delete witness'
           type='outlined-small'
           classNameLabel='text-xs font-medium'
           className='w-[135px]'
@@ -77,8 +74,8 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
       <CommonModal
         visible={visibleConfirmRemove}
         toggleModal={toggleConfirmRemove}
-        title='Delete Signee'
-        des='Are you sure you want to delete this signee'
+        title='Delete Witness'
+        des='Are you sure you want to delete this witness'
         btnPositiveText='Delete'
         btnNegativeText='Cancel'
         onPositive={onRemove}

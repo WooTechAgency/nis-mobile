@@ -28,7 +28,6 @@ export default function CreateIncident() {
   const realm = useRealm();
   const editingMode = useRoute().params?.editingMode as boolean
   const incidentId = useRoute().params?.incidentId as string
-  console.log('incidentId ', incidentId)
   const [loading, setLoading] = useState(false)
 
   const { incident: { selectedIndex, enableScroll, completedSteps, generalInfo }, setIncident } = useIncidentContext();
@@ -79,11 +78,16 @@ export default function CreateIncident() {
     }
   }, [incidentId])
 
+  useEffect(() => {
+    return () => {
+      setIncident(initialIncident)
+    }
+  }, [])
+
   return (
     <SafeAreaView>
       <ScrollView scrollEnabled={enableScroll}>
         <Header title={generalInfo?.siteLocation.site_code || 'New Incident'} isBack onCustomBack={onBack} />
-
         <Steps
           classNameWrap='mt-4'
           steps={steps}

@@ -71,6 +71,7 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
           control={control}
           setValue={setValue}
           name='firstAidLocation'
+          errors={errors}
           label='First Aid Box Location'
           placeholder='First Aid Box Location'
         />

@@ -33,7 +33,7 @@ export function InvolvedPersonItem({ control, errors, setValue, index, name, rem
       <View className='row-center justify-between'>
         <Title label={`Person ${index + 1}`} className='text-base' />
         <Button
-          label='Delete Signee'
+          label='Delete Person'
           type='outlined-small'
           classNameLabel='text-xs font-medium'
           className='w-[135px]'

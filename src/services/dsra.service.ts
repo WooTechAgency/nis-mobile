@@ -91,8 +91,8 @@ export interface DSRA {
 }
 
 export interface GetSwmsParams extends IPagination{
-  site_id: number
-  search_types: string
+  site_id?: number
+  search_types?: string
 }
 export async function getDsraApi(params?: GetSwmsParams): Promise<DSRA[]> {
   try {

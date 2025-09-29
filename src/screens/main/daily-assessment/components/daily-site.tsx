@@ -3,12 +3,17 @@ import Title from '@components/title'
 import { Button, Image, Text } from '@components/ui'
 import { useAppSelector } from '@hooks/common'
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
+import { StackActions } from '@react-navigation/native'
 import { useQuery } from '@realm/react'
-import { navigate } from '@routes/navigationRef'
+import { dispatch, navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { useGetDsrasToday } from '@services/hooks/dsra/useGetDsras'
 import { convertModelToDailyAssessment } from '@utils/realm.util'
+import dayjs from 'dayjs'
 import React from 'react'
 import { View, } from 'react-native'
+import { DailyAssessmentSteps, useAssessmentContext } from '../context'
+import { DSRA } from '@services/dsra.service'
 
 enum DsraStatus {
   Complete = 'complete',
@@ -30,26 +35,58 @@ const buttonCls = {
   classNameLabel: 'font-regular'
 }
 export default function DailySite() {
+  const { setAssessment } = useAssessmentContext()
 
   const { userInfo } = useAppSelector((state) => state.authentication)
 
+  const { data: dsraToday } = useGetDsrasToday({
+    date_from: dayjs(new Date()).format('YYYY-MM-DD'),
+    date_to: dayjs(new Date()).format('YYYY-MM-DD'),
+    search_types: 'tablet',
+  })
+
+
   const inprogressAssessments =
     useQuery(DailyAssessmentModel, (collection) => {
-      return collection.filtered('creatorId == $0', userInfo?.id);
-    }).map(assessment => ({
-      ...assessment,
-      ...convertModelToDailyAssessment(assessment)
-    }))
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      const startOfTomorrow = new Date(startOfToday);
+      startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
+
+      return collection.filtered(
+        'creatorId == $0 AND createdAt >= $1 AND createdAt < $2',
+        userInfo?.id ?? 0,
+        startOfToday,
+        startOfTomorrow,
+      );
+    }).map(assessment => {
+      const generalInfo = JSON.parse(assessment.generalInfo || '{}')
+      const hazard = JSON.parse(assessment.hazard || '{}')
+      return {
+        id: assessment.id,
+        site_code: generalInfo?.location?.site_code,
+        site_name: generalInfo?.location?.site_name,
+        hazardsLength: hazard?.hazards?.length,
+        status: 'progress',
+      }
+    })
+
+  const mergedData = [...inprogressAssessments || [], ...dsraToday || []]
 
   const onContinue = (id: string) => {
     navigate(RouteName.CreateDailyAssessment, { assessmentId: id })
 
   }
-  const onAddHazard = () => {
+  const onAddHazard = (dsraData: DSRA) => {
+    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, {
+      editingMode: true,
+      dsraData: dsraData,
+    }))
+    setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Hazards }))
 
   }
-  const onViewDetail = () => {
-
+  const onViewDetail = (id: number) => {
+    navigate(RouteName.DailyAssessmentPreview, { dsraId: id })
   }
 
   return (
@@ -64,38 +101,55 @@ export default function DailySite() {
       </View>
       {/* today */}
       <Title label='Today' className='mt-6' />
-      {inprogressAssessments.length === 0
+      {mergedData.length === 0
         ?
         <View className='row-center justify-between rounded-[20px] p-6 border border-border mt-6'>
           <Text className='text-neutral60 '>No DSRAs logged today</Text>
         </View>
         :
-        inprogressAssessments.map((item) => (
+        mergedData.map((item) => (
           <View
-            className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-6 '
+            className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-6'
             key={item.id}
           >
             <View className=''>
               <View className='flex-row  items-center gap-x-3 mb-4'>
-                <Text className='text-base font-semibold'>{item.generalInfo?.location?.site_code}</Text>
-                <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG['progress']} `}>
-                  <Text className='text-xs font-medium'>{MAP_STATUS_TITLE['progress']}</Text>
+                <Text className='text-base font-semibold'>{item?.site_code}</Text>
+                <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG[item.status as DsraStatus]} `}>
+                  <Text className='text-xs font-medium'>{MAP_STATUS_TITLE[item.status as DsraStatus]}</Text>
                 </View>
               </View>
               <View className='flex-row  items-center gap-x-1'>
                 <Image source={images.location} className='w-8 h-8' />
-                <Text className='text-base'>{item.generalInfo?.location.site_name}</Text>
+                <Text className='text-base'>{item?.site_name}</Text>
               </View>
               <View className='flex-row  items-center gap-x-1'>
                 <Image source={images.warning} className='w-8 h-8' />
-                <Text className='text-base'>{`${item?.hazard?.hazards?.length || 0} new hazards`}</Text>
+                <Text className='text-base'>{`${item?.hazardsLength || 0} new hazards`}</Text>
               </View>
             </View>
-            <Button
-              label='Continue'
-              onPress={() => onContinue(item.id)}
-              {...buttonCls}
-            />
+            {item.status === 'progress' ? (
+              <Button
+                label='Continue'
+                onPress={() => onContinue(item.id)}
+                {...buttonCls}
+              />
+            ) : (
+              <View className='flex-row  items-center gap-x-4'>
+                <Button
+                  label='Add hazard'
+                  onPress={() => onAddHazard(item)}
+                  {...buttonCls}
+                  type='outlined'
+                />
+                <Button
+                  label='View Detail'
+                  onPress={() => onViewDetail(item.id)}
+                  {...buttonCls}
+                />
+              </View>
+
+            )}
           </View>
         ))
       }

@@ -50,7 +50,7 @@ export const useLLM = () => {
       });
       setLLMContext(llamaContext);
       console.log(`Load model ${fileName} successfully`);
-      showSuccess({title: 'The AI model was successfully loaded'})
+      // showSuccess({title: 'The AI model was successfully loaded'})
       return true;
     } catch (error) {
       Alert.alert('Error Loading Model', error instanceof Error ? error.message : 'An unknown error occurred.');

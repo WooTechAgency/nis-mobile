@@ -38,7 +38,7 @@ export const convertHazardFromBE = (hazards: UpdateHazardRequest[]) => {
     consequence: consequenceOptions.find((option) => option.title === hazard.consequence),
     initialRiskRating: riskRating.flat().find((option) => option.title === hazard.initial_risk_rating),
     residualRiskRating: riskRating.flat().find((option) => option.title === hazard.residual_risk_rating),
-    medias: hazard.medias.map((_media) => ({
+    medias: hazard?.medias?.map((_media) => ({
       uri: _media?.url,
     })),
   }))

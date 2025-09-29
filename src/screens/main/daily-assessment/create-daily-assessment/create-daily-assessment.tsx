@@ -6,16 +6,16 @@ import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
 import { useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
 import { goBack } from '@routes/navigationRef'
+import { DSRA } from '@services/dsra.service'
 import { convertModelToDailyAssessment } from '@utils/realm.util'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from '../context'
 import StepCheckList from './steps/step-checklist'
 import StepFirstAid from './steps/step-first-aid'
+import StepGeneralInformation from './steps/step-general-info'
 import StepHazards from './steps/step-hazards'
 import StepSignOff from './steps/step-sign-off'
-import StepGeneralInformation from './steps/step-general-info'
-import { DSRA, UpdateHazardRequest } from '@services/dsra.service'
 
 
 const steps = {
@@ -30,9 +30,7 @@ export default function CreateDailyAssessment() {
   const editingMode = useRoute().params?.editingMode as boolean
   const assessmentId = useRoute().params?.assessmentId as string
   const dsraData = useRoute().params?.dsraData as DSRA
-  // const dsraIdFromBE = useRoute().params?.dsraId as number
-  // const hazardsFromBE = useRoute().params?.hazard as UpdateHazardRequest[]
-  // const methodStatement = useRoute().params?.methodStatement as string
+
   const realm = useRealm()
   const { assessment: { selectedIndex, enableScroll, completedSteps, generalInfo }, setAssessment } = useAssessmentContext();
   const [loading, setLoading] = useState(false)
@@ -84,6 +82,11 @@ export default function CreateDailyAssessment() {
     }
   }, [assessmentId])
 
+  useEffect(() => {
+    return () => {
+      setAssessment(initialAssessment)
+    }
+  }, [])
 
   return (
     <SafeAreaView className='bg-neutral-100'>

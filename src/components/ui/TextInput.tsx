@@ -12,6 +12,7 @@ import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
 import { View } from './View';
+import { useLLMContext } from '@zustand/useLLMContext';
 interface Props extends TextInputProps {
   label?: string;
   labelCls?: string;
@@ -64,7 +65,7 @@ export function TextInput(props: Props) {
   const [promptLoading, setPromptLoading] = useState(false);
   const value = useWatch({ control, name });
   const [oldValue, setOldValue] = useState(value);
-
+  const { llmContext } = useLLMContext()
   const { askModel } = useLLM()
   const { startVoice, stopVoice, recognizedText, isListening, seconds, pauseVoice, resumeVoice, isStopped } = useVoice()
 
@@ -174,7 +175,7 @@ export function TextInput(props: Props) {
             <Button
               className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] disabled:opacity-50'
               onPress={onEnhanceAI}
-              disabled={isListening}
+              disabled={isListening || !llmContext}
             >
               {promptLoading ? <ActivityIndicator size={'small'} /> : <Image source={images.ai} className='w-8 h-8' />}
               <Text className='text-[12px] font-medium '>AI enhance</Text>

@@ -59,7 +59,8 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     defaultValues: {
       location: generalInfo?.location,
       date: generalInfo?.date || new Date(),
-      leader: generalInfo?.leader || { value: userInfo?.id, label: userInfo?.full_name },
+      // leader: generalInfo?.leader || { value: userInfo?.id, label: userInfo?.full_name },
+      leader: generalInfo?.leader,
       project: generalInfo?.project,
       contractor: generalInfo?.contractor,
       methodStatement: generalInfo?.methodStatement,
@@ -69,7 +70,6 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     resolver: yupResolver(formSchema),
   });
   const { data: sites } = useGetSites()
-
 
   const onSubmit = (form: GeneralForm) => {
     const newCompletedSteps = new Set<number>([DailyAssessmentSteps.General, ...(completedSteps || [])]);
@@ -113,7 +113,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
         disabled
       />
       <DropdownPicker
-        classNameWrap='mt-6 z-40'
+        classNameWrap='mt-6'
         setValue={setValue}
         control={control}
         name='leader'
@@ -141,14 +141,12 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
       />
       <TextInput
         classNameWrap='mt-6'
-        errors={errors}
         control={control}
         name='methodStatement'
         label='Safe Work Method Statement'
         placeholder='Safe Work Method Statement'
         disabled
       />
-
       <TextInput
         classNameWrap='mt-6'
         errors={errors}

@@ -67,7 +67,7 @@ export const DropdownPicker = memo((props: Props) => {
   };
 
   return (
-    <View className={`z-50 ${classNameWrap}`}>
+    <View className={`z-40 ${classNameWrap}`}>
       <>
         {label &&
           <Text className={`text-[12px] px-1 bg-white -top-2 absolute left-4 z-10

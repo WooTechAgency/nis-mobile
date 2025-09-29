@@ -24,7 +24,6 @@ export default function InprogressIncidents() {
         userInfo?.id ?? 0,
         startOfToday,
         startOfTomorrow,
-
       );
     }).map(incident => ({
       ...incident,

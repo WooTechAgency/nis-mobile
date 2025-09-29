@@ -3,25 +3,25 @@ import Header from '@components/header'
 import { Button, Image, SafeAreaView, ScrollView } from '@components/ui'
 import Loading from '@components/ui/Loading'
 import { QUERY_KEY } from '@constants/keys.constants'
+import { useAppSelector } from '@hooks/common'
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
 import { showSuccess } from '@lib/toast'
 import { StackActions, useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
-import { dispatch, goBack, navigate } from '@routes/navigationRef'
+import { dispatch } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
 import { createAssessmentApi, CreateAssessmentRequest } from '@services/dsra.service'
 import { useGetDsraDetail } from '@services/hooks/dsra/useGetDsraDetail'
 import { useQueryClient } from '@tanstack/react-query'
+import { convertHazardForm } from '@utils/functions.util'
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from './context'
 import CheckListPreview from './create-daily-assessment/components/previews/checklist-preview'
 import FirstAidPreview from './create-daily-assessment/components/previews/first-aid-preview'
 import GeneralPreview from './create-daily-assessment/components/previews/general-preview'
-import SignOffPreview from './create-daily-assessment/components/previews/sign-off-preview'
 import HazardPreview from './create-daily-assessment/components/previews/hazard-preview'
-import { useAppSelector } from '@hooks/common'
-import { convertHazardForm } from '@utils/functions.util'
+import SignOffPreview from './create-daily-assessment/components/previews/sign-off-preview'
 
 export default function DailyAssessmentPreview() {
   const dsraId = useRoute().params?.dsraId as number
@@ -36,14 +36,11 @@ export default function DailyAssessmentPreview() {
   const { data, isLoading } = useGetDsraDetail(dsraId)
 
   const onAddHazard = () => {
-    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment,
-      {
-        editingMode: true,
-        dsraData: data,
-        dsraId: dsraId,
-        // hazard: data?.hazards,
-        // methodStatement: data?.site?.swms?.swms_name
-      }))
+    console.log('data', data)
+    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, {
+      editingMode: true,
+      dsraData: data,
+    }))
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Hazards }))
   }
 
