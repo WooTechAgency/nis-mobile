@@ -13,6 +13,7 @@ import { store } from './store';
 import { RealmProvider } from '@realm/react';
 import { IncidentModel } from '@lib/models/incident-model';
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model';
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
@@ -37,17 +38,19 @@ function App() {
       {/* <PersistGate loading={null} persistor={persistor}> */}
       <SafeAreaProvider>
         <PaperProvider>
-          <QueryClientProvider client={queryClient}>
-            <RealmProvider {...realmConfig} >
+          <KeyboardProvider>
+            <QueryClientProvider client={queryClient}>
+              <RealmProvider {...realmConfig} >
 
-              <GestureHandlerRootView className='flex-1'>
+                <GestureHandlerRootView className='flex-1'>
 
-                <RootNavigator />
-                <Toast config={toastConfig} position='top' />
-                <ErrorModal />
-              </GestureHandlerRootView>
-            </RealmProvider>
-          </QueryClientProvider>
+                  <RootNavigator />
+                  <Toast config={toastConfig} position='top' />
+                  <ErrorModal />
+                </GestureHandlerRootView>
+              </RealmProvider>
+            </QueryClientProvider>
+          </KeyboardProvider>
         </PaperProvider>
       </SafeAreaProvider>
       {/* </PersistGate> */}

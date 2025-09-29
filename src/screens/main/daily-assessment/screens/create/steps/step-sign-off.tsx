@@ -12,9 +12,9 @@ import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
-import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 import { SigneeItem } from '../components/signee-item';
+import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
+import { useAssessmentContext } from '@screens/main/daily-assessment/context';
 
 function Label({ text }: { text: string }) {
   return (

@@ -3,17 +3,15 @@ import Title from '@components/title'
 import { Button, Image, Text } from '@components/ui'
 import { useAppSelector } from '@hooks/common'
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
-import { StackActions } from '@react-navigation/native'
 import { useQuery } from '@realm/react'
-import { dispatch, navigate } from '@routes/navigationRef'
+import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { DSRA } from '@services/dsra.service'
 import { useGetDsrasToday } from '@services/hooks/dsra/useGetDsras'
-import { convertModelToDailyAssessment } from '@utils/realm.util'
 import dayjs from 'dayjs'
 import React from 'react'
 import { View, } from 'react-native'
 import { DailyAssessmentSteps, useAssessmentContext } from '../context'
-import { DSRA } from '@services/dsra.service'
 
 enum DsraStatus {
   Complete = 'complete',
@@ -34,7 +32,7 @@ const buttonCls = {
   className: 'h-[56px] w-[204px]',
   classNameLabel: 'font-regular'
 }
-export default function DailySite() {
+export default function TodayDailyAssessments() {
   const { setAssessment } = useAssessmentContext()
 
   const { userInfo } = useAppSelector((state) => state.authentication)
@@ -44,7 +42,6 @@ export default function DailySite() {
     date_to: dayjs(new Date()).format('YYYY-MM-DD'),
     search_types: 'tablet',
   })
-
 
   const inprogressAssessments =
     useQuery(DailyAssessmentModel, (collection) => {
@@ -73,15 +70,15 @@ export default function DailySite() {
 
   const mergedData = [...inprogressAssessments || [], ...dsraToday || []]
 
-  const onContinue = (id: string) => {
+  const onContinue = (id: number) => {
     navigate(RouteName.CreateDailyAssessment, { assessmentId: id })
 
   }
   const onAddHazard = (dsraData: DSRA) => {
-    dispatch(StackActions.popTo(RouteName.CreateDailyAssessment, {
+    navigate(RouteName.CreateDailyAssessment, {
       editingMode: true,
       dsraData: dsraData,
-    }))
+    })
     setAssessment((prev) => ({ ...prev, selectedIndex: DailyAssessmentSteps.Hazards }))
 
   }
@@ -138,7 +135,7 @@ export default function DailySite() {
               <View className='flex-row  items-center gap-x-4'>
                 <Button
                   label='Add hazard'
-                  onPress={() => onAddHazard(item)}
+                  onPress={() => onAddHazard(item as DSRA)}
                   {...buttonCls}
                   type='outlined'
                 />

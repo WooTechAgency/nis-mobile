@@ -30,7 +30,7 @@ interface Props {
   control: Control<any, any>,
   setValue: UseFormSetValue<any>,
 }
-export default function DailySiteRickAssessmentTable({ dsra, control, setValue }: Props) {
+export default function CompleteDailyAssessments({ dsra, control, setValue }: Props) {
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleCalendar, toggleVisibleCalendar] = useToggle(false);
 

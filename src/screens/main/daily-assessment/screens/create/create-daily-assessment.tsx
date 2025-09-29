@@ -5,12 +5,13 @@ import Loading from '@components/ui/Loading'
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
 import { useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
-import { goBack } from '@routes/navigationRef'
+import { goBack, navigate } from '@routes/navigationRef'
+import { RouteName } from '@routes/types'
 import { DSRA } from '@services/dsra.service'
 import { convertModelToDailyAssessment } from '@utils/realm.util'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from '../context'
+import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from '../../context'
 import StepCheckList from './steps/step-checklist'
 import StepFirstAid from './steps/step-first-aid'
 import StepGeneralInformation from './steps/step-general-info'
@@ -53,7 +54,9 @@ export default function CreateDailyAssessment() {
   }
 
   const onBack = () => {
-    if (selectedIndex === DailyAssessmentSteps.General) {
+    if (!!dsraData?.id) {
+      goBack()
+    } else if (selectedIndex === DailyAssessmentSteps.General) {
       goBack()
     } else {
       setAssessment((prev) => ({
@@ -91,7 +94,11 @@ export default function CreateDailyAssessment() {
   return (
     <SafeAreaView className='bg-neutral-100'>
       <ScrollView scrollEnabled={enableScroll}>
-        <Header title={generalInfo?.location.site_code || dsraData?.site?.site_code || 'New DSRA'} isBack onCustomBack={onBack} />
+        <Header
+          title={generalInfo?.location.site_code || dsraData?.site?.site_code || 'New DSRA'}
+          isBack
+          onCustomBack={onBack}
+        />
         <Steps
           classNameWrap='mt-4'
           steps={steps}

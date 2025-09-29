@@ -2,11 +2,11 @@ import { Signature } from '@components/signature';
 import Title from '@components/title';
 import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { TextInput } from '@components/ui/TextInput';
+import { useAssessmentContext } from '@screens/main/daily-assessment/context';
 import { useGetRoles } from '@services/hooks/useGetRoles';
 import React from 'react';
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import { View } from 'react-native';
-import { useAssessmentContext } from '../../context';
 
 interface Props {
   index: number

@@ -7,9 +7,9 @@ import { useGetChecklist } from '@services/hooks/dsra/useGetChecklist';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, Text, View } from 'react-native';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
-import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
 import { colors } from '@constants/colors.constants';
+import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context';
+import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
 
 export interface CheckListForm {
   checklist?: GetPreStartChecklist[];

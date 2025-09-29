@@ -1,5 +1,5 @@
 import { Config } from '@constants/config.constants';
-import { showError, showSuccess } from '@lib/toast';
+import { showError } from '@lib/toast';
 import { navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { store } from '@store/index';
@@ -10,6 +10,7 @@ export const api = axios.create({
   baseURL: Config.BASE_URL,
   headers: {
     'Content-type': 'application/json',
+    'device_type': 'tablet'
   },
 });
 

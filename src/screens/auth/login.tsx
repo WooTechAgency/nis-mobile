@@ -50,7 +50,7 @@ export default function Login() {
     Keyboard.dismiss()
     try {
       setLoading(true);
-      const response = await loginApi({ email: data.email, password: data.password });
+      const response = await loginApi({ email: data.email, password: data.password, device_type: 'tablet' });
       mmkv.set(MMKV_KEY.EMAIL, data.email)
       dispatch(setUserInfo({ ...response.user, token: response.token, }));
       navigationRef.dispatch(StackActions.replace(RouteName.MainNavigator));
@@ -112,15 +112,6 @@ export default function Login() {
         </View>
       </ScrollView>
       <Loading loading={loading} />
-      {/* <CommonModal
-        visible={visibleLoginError}
-        toggleModal={toggleLoginError}
-        btnPositiveText='Try again'
-        btnNegativeText='Forgot password?'
-        onNegative={onForgotPassword}
-        title='Login failed'
-        des='The email address or password you entered is incorrect.'
-      /> */}
     </View>
   );
 }

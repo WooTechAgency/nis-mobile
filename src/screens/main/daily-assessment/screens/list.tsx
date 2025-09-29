@@ -9,8 +9,8 @@ import { ISite } from '@services/site.service';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import DailySite from './components/daily-site';
-import DailySiteRickAssessmentTable from './components/dsra-table';
+import CompleteDailyAssessments from '../components/complete-daily-assessments';
+import TodayDailyAssessments from '../components/today-daily-assessments';
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -20,7 +20,7 @@ const formSchema = yup.object().shape({
 });
 
 
-export default function DailyAssessment() {
+export default function DailyAssessmentsList() {
   const { control, setValue, watch } = useForm({
     resolver: yupResolver(formSchema),
     defaultValues: {
@@ -48,8 +48,8 @@ export default function DailyAssessment() {
     <SafeAreaView className=''>
       <ScrollView>
         <Header title='Daily Site Risk Assessment' isBack={false} />
-        <DailySite />
-        <DailySiteRickAssessmentTable
+        <TodayDailyAssessments />
+        <CompleteDailyAssessments
           control={control}
           setValue={setValue}
           dsra={dsra}

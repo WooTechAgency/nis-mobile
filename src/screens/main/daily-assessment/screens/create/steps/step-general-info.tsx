@@ -6,19 +6,18 @@ import { shadowStyle } from '@constants/config.constants';
 import { IDropdown } from '@constants/interface';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector } from '@hooks/common';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
+import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context';
+import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
+import { IUser } from '@services/authentication.service';
 import { useGetSites } from '@services/hooks/useGetSites';
+import { useGetUsersByPermission } from '@services/hooks/useGetUsers';
 import { ISite } from '@services/site.service';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
-import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
-import { ROLE_ID } from '@constants/app.constants';
-import { useGetUsersByRole } from '@services/hooks/useGetUsers';
-import { IUser } from '@services/authentication.service';
 
 export const currentEmploymentStatus = [
   { value: 1, label: 'Full time' },
@@ -48,7 +47,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   const { setAssessment, assessment: { completedSteps, generalInfo } } = useAssessmentContext();
   const { userInfo } = useAppSelector(state => state.authentication)
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
-  const { data: leaders } = useGetUsersByRole(ROLE_ID.TEAM_LEADER)
+  const { data: leaders } = useGetUsersByPermission()
 
   const {
     control,
@@ -59,8 +58,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     defaultValues: {
       location: generalInfo?.location,
       date: generalInfo?.date || new Date(),
-      // leader: generalInfo?.leader || { value: userInfo?.id, label: userInfo?.full_name },
-      leader: generalInfo?.leader,
+      leader: generalInfo?.leader || { value: userInfo?.id, label: userInfo?.full_name },
       project: generalInfo?.project,
       contractor: generalInfo?.contractor,
       methodStatement: generalInfo?.methodStatement,

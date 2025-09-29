@@ -3,15 +3,15 @@ import Title from '@components/title';
 import { Button, Image, Text } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { DocumentPickerResponse } from '@react-native-documents/picker';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { WitnessItem } from '../components/witness-item';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
 import { useUpsertIncident } from '../../useUpsertIncident';
+import { WitnessItem } from '../components/witness-item';
 
 export interface Witness {
   name?: string;

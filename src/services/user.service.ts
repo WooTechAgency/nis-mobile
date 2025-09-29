@@ -81,3 +81,14 @@ export async function getUsersByRoleApi(roleId: number): Promise<IUser[]> {
     throw error;
   }
 }
+
+export async function getUsersByPermission(): Promise<IUser[]> {
+  try {
+    const response = await baseApi.get(`${BASE_SERVICE}/by-permission`,
+      {resource: 'device_access', action: 'tablet'});
+    return response?.data?.data || [];
+  } catch (error: any) {
+    showErrorMessage({ message: error.message });
+    throw error;
+  }
+}

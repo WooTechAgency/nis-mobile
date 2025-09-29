@@ -3,11 +3,12 @@ import { ShowDocumentModal } from '@components/modal/show-document-model';
 import { Button, Image, Wrapper, YesNoForm } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
+import { QUERY_KEY } from '@constants/keys.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
-import { addMoreHazardsApi, DSRA, UpdateHazardRequest } from '@services/dsra.service';
+import { addMoreHazardsApi, DSRA } from '@services/dsra.service';
 import { useQueryClient } from '@tanstack/react-query';
 import { convertHazardForm, convertHazardFromBE } from '@utils/functions.util';
 import React, { useEffect, useState } from 'react';
@@ -15,11 +16,10 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import * as yup from 'yup';
-import { SelectItem } from '../../config.assessment';
-import { DailyAssessmentSteps, useAssessmentContext, } from '../../context';
-import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
+import { DailyAssessmentSteps, useAssessmentContext, } from '@screens/main/daily-assessment/context';
+import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
 import { HazardItem } from '../components/hazard-item';
-import { QUERY_KEY } from '@constants/keys.constants';
+import { SelectItem } from '@screens/main/daily-assessment/config.assessment';
 
 export interface Props {
   editingMode: boolean,
@@ -208,7 +208,7 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
         </>
       }
       <View className='mt-6 flex-row gap-x-6'>
-        <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
+        <Button label={!!dsraData?.id ? 'Cancel' : 'Back'} onPress={onBack} type='outlined' className='flex-1' />
         <Button
           label={editingMode ? 'Save' : 'Next'}
           onPress={handleSubmit(!!dsraData?.id ? onAddMoreHazard : onSubmit)}

@@ -7,8 +7,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Text, View } from 'react-native';
 import * as yup from 'yup';
-import { DailyAssessmentSteps, useAssessmentContext } from '../../context';
-import { useUpsertDailyAssessment } from '../../useUpsertDailyAessment';
+import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context';
+import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
 
 export interface FirstAidForm {
   name?: string;

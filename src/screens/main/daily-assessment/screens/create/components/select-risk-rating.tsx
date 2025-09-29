@@ -3,7 +3,7 @@ import { getMessageError } from '@utils/common.util';
 import React from 'react';
 import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
-import { riskRating } from '../../config.assessment';
+import { riskRating } from '@screens/main/daily-assessment/config.assessment';
 
 
 interface Props {

@@ -44,6 +44,7 @@ export interface IUser {
 export interface LoginApiRequest {
   email: string;
   password: string;
+  device_type: string;
 }
 export interface LoginResponse {
   token: string;

@@ -1,11 +1,14 @@
 import { images } from '@assets/images';
 import { CommonModal } from '@components/modal';
-import { Back, Button, Image, ScrollView, Text } from '@components/ui';
+import { Button, Image, ScrollView, Text } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
+import { colors } from '@constants/colors.constants';
 import { PATTERN } from '@constants/pattern.constant';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useToggle } from '@hooks/useToggle';
+import { showSuccess } from '@lib/toast';
 import { StackActions } from '@react-navigation/native';
 import { EnterNewPasswordProps } from '@routes/types';
 import { resetPasswordApi } from '@services/authentication.service';
@@ -13,12 +16,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
-import Logo from './components/logo';
 import BackToLogin from './components/back-to-login';
-import { showSuccess } from '@lib/toast';
-import { useToggle } from '@hooks/useToggle';
+import Logo from './components/logo';
 import { AuthWrapCls } from './login';
-import { colors } from '@constants/colors.constants';
 
 interface Form {
   newPassword: string;

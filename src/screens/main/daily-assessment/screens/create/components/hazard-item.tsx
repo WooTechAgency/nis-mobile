@@ -4,7 +4,7 @@ import { TextInput } from '@components/ui/TextInput';
 import { useToggle } from '@hooks/useToggle';
 import React, { useEffect } from 'react';
 import { Control, FieldErrors, UseFormSetValue, UseFormTrigger, useWatch } from 'react-hook-form';
-import { consequenceOptions, likeliHoodOptions, riskRating } from '../../config.assessment';
+import { consequenceOptions, likeliHoodOptions, riskRating } from '@screens/main/daily-assessment/config.assessment';
 import HazardItemPreview from './previews/hazard-item-preview';
 import InitialRiskRating from './initial-risk-rating';
 import { SelectRiskRating } from './select-risk-rating';
