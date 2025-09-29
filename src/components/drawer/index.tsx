@@ -1,15 +1,14 @@
 import { images } from '@assets/images';
-import { isIpad } from '@constants/app.constants';
+import { Button, Image, SafeAreaView } from '@components/ui';
+import { colors } from '@constants/colors.constants';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { StackActions } from '@react-navigation/native';
+import { RouteName } from '@routes/types';
 import { toggleCollapseDrawer } from '@store/slices/commonSlice';
 import React, { useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import Animated, { Easing, ReduceMotion, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
-import { Button, Image, SafeAreaView, Text } from '@components/ui';
-import { RouteName } from '@routes/types';
-import { colors } from '@constants/colors.constants';
 
 interface Props {
   title?: string;
@@ -49,7 +48,7 @@ function Item({
       {isCloseButton
         ? <Animated.Image
           source={images.arrowLeft3}
-          className='w-6 h-6'
+          className='w-6 h-6 ml-1'
           resizeMode={'contain'}
           style={arrowRotateStyle}
         />
@@ -123,7 +122,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
     { title: 'Jobs', url: images.job, routeIndex: 1 },
     { title: 'Daily assessment', url: images.dailyAssessment, routeIndex: 2 },
     { title: 'Incidents', url: images.incident, routeIndex: 3 },
-    { title: 'Account', url: images.setting, routeIndex: 4 }
+    // { title: 'Account', url: images.setting, routeIndex: 4 }
   ], []);
 
   return (
@@ -153,15 +152,25 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
                 />
               ))}
             </View>
-            <Item
-              url={''}
-              onPress={() => dispatch(toggleCollapseDrawer())}
-              selected={false}
-              collapsedDrawer={collapsedDrawer}
-              opacity={opacity}
-              rotate={rotate}
-              isCloseButton
-            />
+            <View>
+              <Item
+                title={'Account'}
+                url={images.setting}
+                onPress={() => onPress(4)}
+                selected={state.index === 4}
+                collapsedDrawer={collapsedDrawer}
+                opacity={opacity}
+              />
+              <Item
+                url={''}
+                onPress={() => dispatch(toggleCollapseDrawer())}
+                selected={false}
+                collapsedDrawer={collapsedDrawer}
+                opacity={opacity}
+                rotate={rotate}
+                isCloseButton
+              />
+            </View>
           </View>
         </View>
       </SafeAreaView>

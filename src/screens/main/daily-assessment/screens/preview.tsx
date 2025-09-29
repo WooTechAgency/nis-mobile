@@ -17,11 +17,11 @@ import { convertHazardForm } from '@utils/functions.util'
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import { DailyAssessmentSteps, initialAssessment, useAssessmentContext } from '../context'
-import CheckListPreview from './create/components/previews/checklist-preview'
-import FirstAidPreview from './create/components/previews/first-aid-preview'
-import GeneralPreview from './create/components/previews/general-preview'
-import HazardPreview from './create/components/previews/hazard-preview'
-import SignOffPreview from './create/components/previews/sign-off-preview'
+import CheckListPreview from './create-daily-assessment/components/previews/checklist-preview'
+import FirstAidPreview from './create-daily-assessment/components/previews/first-aid-preview'
+import GeneralPreview from './create-daily-assessment/components/previews/general-preview'
+import HazardPreview from './create-daily-assessment/components/previews/hazard-preview'
+import SignOffPreview from './create-daily-assessment/components/previews/sign-off-preview'
 
 export default function DailyAssessmentPreview() {
   const dsraId = useRoute().params?.dsraId as number
@@ -89,6 +89,7 @@ export default function DailyAssessmentPreview() {
       setAssessment(initialAssessment)
       dispatch(StackActions.popToTop());
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.DSRAS] })
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY.DSRAS_TODAY] })
     } finally {
       setLoading(false)
     }

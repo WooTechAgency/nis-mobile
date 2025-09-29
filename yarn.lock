@@ -2088,17 +2088,17 @@
   resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
   integrity sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==
 
-"@tanstack/query-core@5.85.9":
-  version "5.85.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.85.9.tgz#69e800f4d1c42ca4a110469229d8ecca409d477a"
-  integrity sha512-5fxb9vwyftYE6KFLhhhDyLr8NO75+Wpu7pmTo+TkwKmMX2oxZDoLwcqGP8ItKSpUMwk3urWgQDZfyWr5Jm9LsQ==
+"@tanstack/query-core@5.90.2":
+  version "5.90.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.90.2.tgz#ac5d0d0f19a38071db2d21d758b5c35a85d9c1d8"
+  integrity sha512-k/TcR3YalnzibscALLwxeiLUub6jN5EDLwKDiO7q5f4ICEoptJ+n9+7vcEFy5/x/i6Q+Lb/tXrsKCggf5uQJXQ==
 
-"@tanstack/react-query@^5.83.0":
-  version "5.85.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.85.9.tgz#d27315b3f327af31237d513e505f3e6a2cad5739"
-  integrity sha512-2T5zgSpcOZXGkH/UObIbIkGmUPQqZqn7esVQFXLOze622h4spgWf5jmvrqAo9dnI13/hyMcNsF1jsoDcb59nJQ==
+"@tanstack/react-query@^5.90.2":
+  version "5.90.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.90.2.tgz#2f045931b7d44bef02c5261fedba75ef1a418726"
+  integrity sha512-CLABiR+h5PYfOWr/z+vWFt5VsOA2ekQeRQBFSKlcoW6Ndx/f8rfyVmq4LbgOM4GG2qtxAxjLYLOpCNTYm4uKzw==
   dependencies:
-    "@tanstack/query-core" "5.85.9"
+    "@tanstack/query-core" "5.90.2"
 
 "@types/babel__core@^7.1.14":
   version "7.20.5"
@@ -6954,6 +6954,11 @@ react-native-paper@^5.14.5:
     "@callstack/react-theme-provider" "^3.0.9"
     color "^3.1.2"
     use-latest-callback "^0.2.3"
+
+react-native-permissions@^5.4.2:
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-5.4.2.tgz#206c0e440cff2ce047514995457bd73a9924fd8b"
+  integrity sha512-XNMoG1fxrB9q73MLn/ZfTaP7pS8qPu0KWypbeFKVTvoR+JJ3O7uedMOTH/mts9bTG+GKhShOoZ+k0CR63q9jwA==
 
 react-native-popover-view@^6.1.0:
   version "6.1.0"

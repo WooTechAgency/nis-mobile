@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import CompleteDailyAssessments from '../components/complete-daily-assessments';
 import TodayDailyAssessments from '../components/today-daily-assessments';
+import { PER_PAGE } from '@constants/app.constants';
+import { QUERY_KEY } from '@constants/keys.constants';
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -34,25 +36,32 @@ export default function DailyAssessmentsList() {
   const sort_direction = watch('sort_direction') as string
 
   const debouncedSearch = useDebounce(search, 500)
-  const { data: dsra, isLoading } = useGetDsras({
+  const { data: dsra, isLoading, fetchNextPage, hasNextPage, isFetching } = useGetDsras({
     search: debouncedSearch && debouncedSearch?.length > 1 ? debouncedSearch : undefined,
     search_types: 'tablet',
     site_id: site?.id,
     sort_by: 'id',
     sort_direction: sort_direction || SortDirection.ASC,
     date_from: date?.startDate,
-    date_to: date?.endDate
+    date_to: date?.endDate,
   })
 
   return (
     <SafeAreaView className=''>
-      <ScrollView>
+      <ScrollView
+        queryKey={QUERY_KEY.DSRAS}
+        hasNextPage={hasNextPage}
+        fetchNextPage={fetchNextPage}
+        isFetching={isFetching}
+      >
         <Header title='Daily Site Risk Assessment' isBack={false} />
         <TodayDailyAssessments />
         <CompleteDailyAssessments
           control={control}
           setValue={setValue}
           dsra={dsra}
+          isFetching={isFetching}
+          hasNextPage={hasNextPage}
         />
       </ScrollView>
       <Loading loading={isLoading} />

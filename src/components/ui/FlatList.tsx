@@ -1,6 +1,7 @@
 import { ActivityIndicator, FlatList as FlatListComponent, FlatListProps, RefreshControl } from 'react-native';
 import React, { ReactNode } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { colors } from '@constants/colors.constants';
 // import Empty from '../empty/NotificationEmpty';
 
 interface Props extends FlatListProps<any> {
@@ -19,9 +20,7 @@ export function FlatList(props: Props) {
     isLoading,
     skeletonFlatList,
     onEndReached,
-    emptyComponent,
     horizontal,
-    classNameEmptyWrap,
     isFetching,
   } = props;
   const queryClient = useQueryClient();
@@ -46,7 +45,7 @@ export function FlatList(props: Props) {
       showsVerticalScrollIndicator={false}
       onEndReachedThreshold={onEndReached ? 0.5 : undefined}
       refreshControl={!horizontal && queryKey ? <RefreshControl refreshing={false} onRefresh={onRefresh} /> : undefined}
-      ListFooterComponent={() => isFetching && <ActivityIndicator className='my-4' />}
+      ListFooterComponent={() => isFetching && <ActivityIndicator className='my-4' color={colors.primary} />}
     >
       {children}
     </FlatListComponent>

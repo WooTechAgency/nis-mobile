@@ -1,6 +1,7 @@
 import { View, ActivityIndicator } from 'react-native';
 import React from 'react';
 import { ViewProps } from 'react-native';
+import { colors } from '@constants/colors.constants';
 
 interface Props extends ViewProps {
   loading?: boolean;

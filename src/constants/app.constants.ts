@@ -5,7 +5,7 @@ export const isIpad = width > 640;
 export const isAndroid = Platform.OS === 'android';
 export const isIOS = Platform.OS === 'ios';
 
-export const PER_PAGE = 10
+export const PER_PAGE = 15
 
 
 export const supportedOrientations: (

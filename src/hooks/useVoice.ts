@@ -1,7 +1,8 @@
 import { isIOS } from '@constants/app.constants';
 import Voice from '@react-native-voice/voice';
 import { useEffect, useRef, useState } from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid, Platform, Alert, Linking } from 'react-native';
+import { check, request, PERMISSIONS, RESULTS, openSettings } from 'react-native-permissions';
 
 export function useVoice() {
   const [recognizedText, setRecognizedText] = useState('');
@@ -35,10 +36,52 @@ export function useVoice() {
     };
   }, []);
 
+  const showPermissionDeniedAlert = (permissionType: string) => {
+    Alert.alert(
+      'Permission Denied',
+      `This app needs ${permissionType} permission to use voice recording. Please go to Settings to enable this permission.`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Open Settings',
+          onPress: () => {
+            if (Platform.OS === 'ios') {
+              openSettings();
+            } else {
+              Linking.openSettings();
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const requestPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+      if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+        showPermissionDeniedAlert('microphone');
+        return false;
+      }
+      return true;
+    } else if (Platform.OS === 'ios') {
+      // Check microphone permission
+      const microphoneStatus = await check(PERMISSIONS.IOS.MICROPHONE);
+      if (microphoneStatus === RESULTS.BLOCKED) {
+        showPermissionDeniedAlert('microphone');
+        return false;
+      }
+      // Check speech recognition permission
+      const speechStatus = await check(PERMISSIONS.IOS.SPEECH_RECOGNITION);
+      if (speechStatus === RESULTS.BLOCKED) {
+        showPermissionDeniedAlert('speech recognition');
+        return false;
+      }
+
+      return true;
     }
     return true;
   };
@@ -46,7 +89,6 @@ export function useVoice() {
   const onSpeechStart = () => {
     console.log('Speech started');
     setIsListening(true);
-    // Timer is started in startVoice to ensure immediate UI updates
   };
 
   const onSpeechEnd = () => {
@@ -55,19 +97,15 @@ export function useVoice() {
     stopTimer();
   };
 
-  const onSpeechPartialResults = (e: any) => {
-    // console.log('onSpeechPartialResults:', e.value);
-  };
-
   const onSpeechResults = (e: any) => {
     console.log('Speech results:', e.value[0]);
     setRecognizedText(e.value[0]);
   };
 
   const startVoice = async (resetText: boolean = true) => {
-    console.log('startVoice() resetText: ', resetText);
     shouldResetOnSpeechStartRef.current = resetText;
     const hasPermission = await requestPermission();
+    console.log('hasPermission: ', hasPermission);
     if (hasPermission) {
       try {
         // proactively update UI and start timer immediately for both platforms
@@ -81,7 +119,6 @@ export function useVoice() {
         Voice.onSpeechStart = onSpeechStart;
         Voice.onSpeechEnd = onSpeechEnd;
         Voice.onSpeechResults = onSpeechResults;
-        Voice.onSpeechPartialResults = onSpeechPartialResults;
         await Voice.start('en-US');
       } catch (e) {
         console.error(e);

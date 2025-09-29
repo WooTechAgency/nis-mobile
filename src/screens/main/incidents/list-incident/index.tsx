@@ -16,6 +16,7 @@ import { View } from 'react-native'
 import * as yup from 'yup'
 import IncidentTable from './components/incident-table'
 import InprogressIncidents from './components/inprogress-incidents'
+import { QUERY_KEY } from '@constants/keys.constants'
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -41,7 +42,7 @@ export default function Incidents() {
   const sort_direction = watch('sort_direction') as string
 
   const debouncedSearch = useDebounce(search, 500)
-  const { data: incidents, isLoading } = useGetIncidentReports({
+  const { data: incidents, isLoading, fetchNextPage, hasNextPage, isFetching } = useGetIncidentReports({
     search: debouncedSearch && debouncedSearch.length > 1 ? debouncedSearch : undefined,
     site_id: site?.id,
     incident_type_id: type?.id,
@@ -53,7 +54,12 @@ export default function Incidents() {
 
   return (
     <SafeAreaView>
-      <ScrollView>
+      <ScrollView
+        queryKey={QUERY_KEY.INCIDENT_REPORTS}
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+        isFetching={isFetching}
+      >
         <Header
           title='Incident'
           isBack={false}
@@ -78,6 +84,7 @@ export default function Incidents() {
           incidents={incidents}
           control={control}
           setValue={setValue}
+          isFetching={isFetching}
         />
       </ScrollView>
       <Loading loading={isLoading} />

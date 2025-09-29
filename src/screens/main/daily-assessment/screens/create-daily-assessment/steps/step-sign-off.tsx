@@ -14,7 +14,7 @@ import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { SigneeItem } from '../components/signee-item';
 import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
-import { useAssessmentContext } from '@screens/main/daily-assessment/context';
+import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context';
 
 function Label({ text }: { text: string }) {
   return (
@@ -161,6 +161,7 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
                 errors={errors}
                 name={`signees.${index}`}
                 trigger={trigger}
+                remove={remove}
               />
             </View>
           );

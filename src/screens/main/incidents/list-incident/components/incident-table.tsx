@@ -27,9 +27,10 @@ const rowCls = 'text-[16px] text-neutral70'
 interface Props {
   control: Control<any, any>,
   setValue: UseFormSetValue<any>,
-  incidents: IncidentReport[] | undefined
+  incidents: IncidentReport[] | undefined,
+  isFetching?: boolean,
 }
-export default function IncidentTable({ control, setValue, incidents }: Props) {
+export default function IncidentTable({ control, setValue, incidents, isFetching }: Props) {
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleType, toggleVisibleType] = useToggle(false);
   const [visibleCalendar, toggleVisibleCalendar] = useToggle(false)
@@ -96,6 +97,7 @@ export default function IncidentTable({ control, setValue, incidents }: Props) {
           scrollEnabled={false}
           data={incidents}
           keyExtractor={(item) => item.id}
+          isFetching={isFetching}
           ListHeaderComponent={
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <TouchableOpacity

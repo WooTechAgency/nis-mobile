@@ -1,19 +1,18 @@
 import { images } from '@assets/images';
 import SelectedFilter from '@components/common/selected-filter';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
+import CalendarPicker from '@components/ui/CalendarPicker';
 import DropdownMenu from '@components/ui/DropdownMenu';
 import { TextInput } from '@components/ui/TextInput';
+import { SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
-import { useGetSites } from '@services/hooks/useGetSites';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import { DSRA } from '@services/dsra.service';
+import { useGetSites } from '@services/hooks/useGetSites';
 import { convertDDMMYYYY, formatStartDateEndDate } from '@utils/date.util';
 import React from 'react';
 import { Control, UseFormSetValue, useWatch } from 'react-hook-form';
-import { SortDirection } from '@constants/interface';
-import CalendarPicker from '@components/ui/CalendarPicker';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
-
 
 interface Props {
   control: Control<any, any>
@@ -29,8 +28,9 @@ interface Props {
   dsra?: DSRA[]
   control: Control<any, any>,
   setValue: UseFormSetValue<any>,
+  isFetching?: boolean;
 }
-export default function CompleteDailyAssessments({ dsra, control, setValue }: Props) {
+export default function CompleteDailyAssessments({ dsra, control, setValue, isFetching, }: Props) {
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleCalendar, toggleVisibleCalendar] = useToggle(false);
 
@@ -98,6 +98,7 @@ export default function CompleteDailyAssessments({ dsra, control, setValue }: Pr
           scrollEnabled={false}
           data={dsra}
           keyExtractor={(item) => item.id}
+          isFetching={isFetching}
           ListHeaderComponent={
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <Button

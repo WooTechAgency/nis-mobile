@@ -1,4 +1,4 @@
-import { ICheckBoxDescription } from '@constants/interface';
+import { ICheckBoxDescription, IPagination, IPaginationResponse } from '@constants/interface';
 import { showErrorMessage } from '@utils/functions.util';
 import baseApi from '.';
 import { ISite } from './site.service';
@@ -121,19 +121,18 @@ export interface InvolvedPerson {
   created_at: string;
   updated_at: string;
 }
-export interface GetIncidentParams{
-  search?: string | undefined |  null
+export interface GetIncidentResponse {
+  data: IncidentReport[];
+  meta: IPaginationResponse;
+}
+export interface GetIncidentParams extends IPagination{
   site_id?: number
   incident_type_id?: number
-  date_from?: string;
-  date_to?: string
-  sort_by?: string;
-  sort_direction?: string;
 }
-export async function getIncidentReportsApi(params: GetIncidentParams): Promise<IncidentReport[]> {
+export async function getIncidentReportsApi(params: GetIncidentParams): Promise<GetIncidentResponse> {
   try {
     const response = await baseApi.get(`api/incident-reports`,params);
-    return response.data.data
+    return response.data
   } catch (e: any) {
     showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
     throw e;

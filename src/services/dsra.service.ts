@@ -1,4 +1,4 @@
-import { IPagination } from '@constants/interface';
+import { IPagination, IPaginationResponse } from '@constants/interface';
 import { showErrorMessage } from '@utils/functions.util';
 import baseApi from '.';
 import { UploadedMedia } from './common.service';
@@ -94,10 +94,15 @@ export interface GetSwmsParams extends IPagination{
   site_id?: number
   search_types?: string
 }
-export async function getDsraApi(params?: GetSwmsParams): Promise<DSRA[]> {
+
+export interface GetDsraResponse {
+  data: DSRA[]
+  meta: IPaginationResponse
+}
+export async function getDsraApi(params?: GetSwmsParams): Promise<GetDsraResponse> {
   try {
     const response = await baseApi.get(`api/dsras`,params);
-    return response.data.data
+    return response.data
   } catch (e: any) {
     showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch DSRAs' });
     throw e;
