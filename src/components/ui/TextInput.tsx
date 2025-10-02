@@ -4,7 +4,8 @@ import { useLLM } from '@hooks/useLLM';
 import { useVoice } from '@hooks/useVoice';
 import { getMessageError } from '@utils/common.util';
 import { formatSecondsToMMSS } from '@utils/date.util';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { useLLMContext } from '@zustand/useLLMContext';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { Control, FieldErrors, UseFormSetValue, useController, useWatch } from 'react-hook-form';
 import { StyleProp, TextInput as TextInputComponent, TextInputProps, TextStyle } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
@@ -12,7 +13,6 @@ import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
 import { View } from './View';
-import { useLLMContext } from '@zustand/useLLMContext';
 interface Props extends TextInputProps {
   label?: string;
   labelCls?: string;
@@ -65,9 +65,10 @@ export function TextInput(props: Props) {
   const [promptLoading, setPromptLoading] = useState(false);
   const value = useWatch({ control, name });
   const [oldValue, setOldValue] = useState(value);
+  const lastRecognizedTextRef = useRef('');
   const { llmContext } = useLLMContext()
   const { askModel } = useLLM()
-  const { startVoice, stopVoice, recognizedText, isListening, seconds, pauseVoice, resumeVoice, isStopped } = useVoice()
+  const { startVoice, stopVoice, recognizedText, isListening, seconds, pauseVoice, resumeVoice, isStopped, isAnyVoiceActive } = useVoice(name)
 
   const resetInput = () => {
     setValue && setValue(name, '');
@@ -76,6 +77,7 @@ export function TextInput(props: Props) {
   const onUseVoice = () => {
     startVoice()
     setOldValue(value)
+    lastRecognizedTextRef.current = ''; // Reset ref when starting new voice session
   }
 
   const onEnhanceAI = async () => {
@@ -90,10 +92,11 @@ export function TextInput(props: Props) {
   }
 
   useEffect(() => {
-    if (recognizedText && setValue) {
+    if (recognizedText && setValue && recognizedText !== lastRecognizedTextRef.current) {
+      lastRecognizedTextRef.current = recognizedText;
       setValue(name, `${oldValue || ''} ${recognizedText}`.trim(), { shouldValidate: true })
     }
-  }, [name, recognizedText])
+  }, [name, oldValue, recognizedText, setValue])
 
   return (
     <View className={`${classNameWrap}`}>
@@ -140,8 +143,9 @@ export function TextInput(props: Props) {
             {isStopped
               ?
               <Button
-                className='flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] '
+                className={`flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] ${isAnyVoiceActive ? 'opacity-50' : ''}`}
                 onPress={onUseVoice}
+                disabled={isAnyVoiceActive}
               >
                 <Image source={images.voice} className='w-8 h-8' />
                 <Text className='text-[12px] font-medium '>Use Voice</Text>

@@ -17,6 +17,7 @@ import * as yup from 'yup'
 import IncidentTable from './components/incident-table'
 import InprogressIncidents from './components/inprogress-incidents'
 import { QUERY_KEY } from '@constants/keys.constants'
+import { useAppSelector } from '@hooks/common'
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -34,6 +35,7 @@ export default function Incidents() {
       sort_direction: SortDirection.ASC
     }
   });
+  const { userInfo } = useAppSelector((state) => state.authentication)
 
   const search = watch('search')
   const date = watch('date') as any
@@ -49,7 +51,8 @@ export default function Incidents() {
     sort_by: 'id',
     sort_direction: sort_direction || SortDirection.ASC,
     date_from: date?.startDate,
-    date_to: date?.endDate
+    date_to: date?.endDate,
+    author_id: userInfo?.id
   })
 
   return (

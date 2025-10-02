@@ -41,6 +41,7 @@ export default function TodayDailyAssessments() {
     date_from: dayjs(new Date()).format('YYYY-MM-DD'),
     date_to: dayjs(new Date()).format('YYYY-MM-DD'),
     search_types: 'tablet',
+    author_id: userInfo?.id
   })
 
   const inprogressAssessments =

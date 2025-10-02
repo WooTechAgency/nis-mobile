@@ -128,6 +128,7 @@ export interface GetIncidentResponse {
 export interface GetIncidentParams extends IPagination{
   site_id?: number
   incident_type_id?: number
+  author_id?: number
 }
 export async function getIncidentReportsApi(params: GetIncidentParams): Promise<GetIncidentResponse> {
   try {

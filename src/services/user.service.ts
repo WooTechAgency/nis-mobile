@@ -84,8 +84,8 @@ export async function getUsersByRoleApi(roleId: number): Promise<IUser[]> {
 
 export async function getUsersByPermission(): Promise<IUser[]> {
   try {
-    const response = await baseApi.get(`${BASE_SERVICE}/by-permission`,
-      {resource: 'device_access', action: 'tablet'});
+    const response = await baseApi.get(`${BASE_SERVICE}/device-access`,
+      {device_type: 'tablet',});
     return response?.data?.data || [];
   } catch (error: any) {
     showErrorMessage({ message: error.message });

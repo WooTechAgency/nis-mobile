@@ -6,8 +6,7 @@ import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-nat
 interface Props extends KeyboardAwareScrollViewProps {
   isContentCenter?: boolean;
   hasRef?: (ref: any) => void;
-  onEndReached?: () => void;
-  onEndReachedThreshold?: number;
+
   fetchNextPage?: () => void;
   hasNextPage?: boolean;
   isFetching?: boolean;
@@ -15,7 +14,7 @@ interface Props extends KeyboardAwareScrollViewProps {
   queryKey?: string;
 }
 export function ScrollView(props: Props) {
-  const { onEndReached, onEndReachedThreshold = 0.1, fetchNextPage, hasNextPage, isFetching, onRefreshCallback, queryKey, ...restProps } = props;
+  const { fetchNextPage, hasNextPage, isFetching, onRefreshCallback, queryKey, ...restProps } = props;
   const queryClient = useQueryClient();
 
 

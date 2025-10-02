@@ -2,6 +2,7 @@ import Header from '@components/header';
 import { SafeAreaView, ScrollView } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { SortDirection } from '@constants/interface';
+import { QUERY_KEY } from '@constants/keys.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDebounce } from '@hooks/useDebounce';
 import { useGetDsras } from '@services/hooks/dsra/useGetDsras';
@@ -11,8 +12,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import CompleteDailyAssessments from '../components/complete-daily-assessments';
 import TodayDailyAssessments from '../components/today-daily-assessments';
-import { PER_PAGE } from '@constants/app.constants';
-import { QUERY_KEY } from '@constants/keys.constants';
+import { useAppSelector } from '@hooks/common';
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -23,6 +23,7 @@ const formSchema = yup.object().shape({
 
 
 export default function DailyAssessmentsList() {
+  const { userInfo } = useAppSelector((state) => state.authentication)
   const { control, setValue, watch } = useForm({
     resolver: yupResolver(formSchema),
     defaultValues: {
@@ -44,6 +45,7 @@ export default function DailyAssessmentsList() {
     sort_direction: sort_direction || SortDirection.ASC,
     date_from: date?.startDate,
     date_to: date?.endDate,
+    author_id: userInfo?.id
   })
 
   return (

@@ -93,6 +93,7 @@ export interface DSRA {
 export interface GetSwmsParams extends IPagination{
   site_id?: number
   search_types?: string
+  author_id?: number
 }
 
 export interface GetDsraResponse {

@@ -1,5 +1,5 @@
 import { QUERY_KEY } from '@constants/keys.constants';
-import { getUsersApi, getUsersByPermission, getUsersByRoleApi } from '@services/user.service';
+import { getUsersApi, getUsersByPermission,  } from '@services/user.service';
 import { useQuery } from '@tanstack/react-query';
 
 export const useGetUsers = () => {
