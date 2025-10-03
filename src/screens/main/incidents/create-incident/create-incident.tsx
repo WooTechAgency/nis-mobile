@@ -5,7 +5,6 @@ import Loading from '@components/ui/Loading'
 import { IncidentModel } from '@lib/models/incident-model'
 import { useRoute } from '@react-navigation/native'
 import { useRealm } from '@realm/react'
-import { goBack } from '@routes/navigationRef'
 import { convertModelToIncident } from '@utils/realm.util'
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
@@ -48,17 +47,6 @@ export default function CreateIncident() {
     }
   }
 
-  const onBack = () => {
-    if (selectedIndex === IncidentSteps.General) {
-      goBack()
-    } else {
-      setIncident((prev) => ({
-        ...prev!,
-        selectedIndex: prev!.selectedIndex - 1,
-      }));
-    }
-  }
-
   const loadIncident = async (incidentId: string) => {
     setLoading(true);
     const incidentInDB = realm.objectForPrimaryKey(IncidentModel, incidentId)
@@ -87,7 +75,7 @@ export default function CreateIncident() {
   return (
     <SafeAreaView>
       <ScrollView scrollEnabled={enableScroll}>
-        <Header title={generalInfo?.siteLocation.site_code || 'New Incident'} isBack onCustomBack={onBack} />
+        <Header title={generalInfo?.siteLocation.site_code || 'New Incident'} isBack />
         <Steps
           classNameWrap='mt-4'
           steps={steps}

@@ -7,7 +7,7 @@ export interface SelectItem {
   index: number
 }
 export const likeliHoodOptions = [
-  { key: 'low', title: 'Rare', bg: colors.neutral40, index:4  },
+  { key: 'low', title: 'Rare', bg: colors.neutral20, index:4  },
   { key: 'unlikely', title: 'Unlikely', bg: colors.neutral50, index:3  },
   { key: 'medium', title: 'Possible', bg: colors.orange1, index:2 },
   { key: 'high', title: 'Likely', bg: colors.orange3, index:1 },
@@ -15,7 +15,7 @@ export const likeliHoodOptions = [
 ];
 
 export const consequenceOptions = [
-  { key: 'low', title: 'Minor', bg: colors.neutral40,  index:3 },
+  { key: 'low', title: 'Minor', bg: colors.neutral20,  index:3 },
   { key: 'medium', title: 'Moderate', bg: colors.orange1,index:2},
   { key: 'high', title: 'Major',  bg: colors.orange3,index:1},
   { key: 'Almost Certain', title: 'Catastrophic', bg: colors.negative30, index:0   },

@@ -17,8 +17,8 @@ export interface FirstAidForm {
   assemblyPoint?: string;
 }
 const formSchema = yup.object().shape({
-  name: yup.string().required('Name of on-site First Aider is required'),
-  firstAidLocation: yup.string().required('First Aid Box Location is required'),
+  name: yup.string().notRequired(),
+  firstAidLocation: yup.string().notRequired(),
   hospitalLocation: yup.string().notRequired(),
   assemblyPoint: yup.string().notRequired(),
 });
@@ -87,8 +87,8 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
         <TextInput
           errors={errors}
           control={control}
-          name='location'
-          label='Location'
+          name='assemblyPoint'
+          label='Emergency Assembly Point'
           placeholder='Emergency Assembly Point'
           disabled
           value={generalInfo?.location.emergency_assembly_point}

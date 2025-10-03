@@ -82,7 +82,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   }
 
   const onSelectSite = (site: ISite) => {
-    setValue('methodStatement', site.swms.swms_name, { shouldValidate: true })
+    setValue('methodStatement', site?.swms?.swms_name, { shouldValidate: true })
   }
 
   return (
@@ -126,7 +126,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
         errors={errors}
         control={control}
         name='project'
-        label='Project'
+        label='Project*'
         placeholder='Enter project'
       />
       <TextInput

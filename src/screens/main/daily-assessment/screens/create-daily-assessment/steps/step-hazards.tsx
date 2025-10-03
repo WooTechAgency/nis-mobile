@@ -139,7 +139,10 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
   }
 
   const onCheckSWMS = () => {
-    toggleShowDocument()
+    const url = generalInfo?.location.swms.attachment || dsraData?.site?.swms?.attachment
+    if (url) {
+      navigate(RouteName.ShowDocument, { url })
+    }
   }
 
   useEffect(() => {
@@ -151,7 +154,7 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
   }, [haveHazards])
 
   return (
-    <View className='mt-6 gap-y-8'>
+    <View className='mt-8'>
       {/* check hazard */}
       <Wrapper className={`mt-[0px] gap-y-8`} pointerEvents={!!dsraData?.id ? 'none' : undefined}>
         <View className='row-center gap-x-6' >
@@ -160,7 +163,7 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
             errors={errors}
             control={control}
             name={`methodStatement`}
-            label='Please describe the hazard'
+            label='Please describe the hazard*'
             value={generalInfo?.methodStatement || dsraData?.site?.swms?.swms_name}
             editable={false}
             classNameInput='text-[#4A4646]'
@@ -201,13 +204,14 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
           })}
           <Button
             onPress={addField}
+            className='mt-6'
             iconButton={<Image source={images.plus} className='w-8 h-8' />}
             label='Add Hazard'
             type='small'
           />
         </>
       }
-      <View className='mt-6 flex-row gap-x-6'>
+      <View className='mt-8 flex-row gap-x-6'>
         <Button label={!!dsraData?.id ? 'Cancel' : 'Back'} onPress={onBack} type='outlined' className='flex-1' />
         <Button
           label={editingMode ? 'Save' : 'Next'}
@@ -215,12 +219,6 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
           className='flex-1'
         />
       </View>
-
-      <ShowDocumentModal
-        visible={showDocument}
-        toggleModal={toggleShowDocument}
-        url={generalInfo?.location.swms.attachment || dsraData?.site?.swms?.attachment}
-      />
       <Loading loading={loading} />
     </View>
   )

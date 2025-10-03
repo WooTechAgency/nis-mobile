@@ -1,3 +1,4 @@
+import { isIOS } from '@constants/app.constants';
 import Voice from '@react-native-voice/voice';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Linking, PermissionsAndroid, Platform } from 'react-native';
@@ -59,27 +60,29 @@ export function useVoice(instanceId?: string) {
   };
 
   useEffect(() => {
-    // Register global listener để nhận thông báo về voice state changes
-    const globalListener = () => {
+    if(isIOS){
+      // Register global listener để nhận thông báo về voice state changes
+      const globalListener = () => {
+        setIsAnyVoiceActive(globalVoiceManager.currentInstanceId !== null);
+      };
+      
+      globalVoiceManager.globalListeners.add(globalListener);
+      
+      // Set initial state
       setIsAnyVoiceActive(globalVoiceManager.currentInstanceId !== null);
-    };
-    
-    globalVoiceManager.globalListeners.add(globalListener);
-    
-    // Set initial state
-    setIsAnyVoiceActive(globalVoiceManager.currentInstanceId !== null);
-    
-    return () => {
-      stopTimer();
-      // Clean up this instance from global manager
-      if (globalVoiceManager.currentInstanceId === id) {
-        globalVoiceManager.currentInstanceId = null;
-        notifyGlobalListeners(); // Notify other instances
-      }
-      globalVoiceManager.callbacks.delete(id);
-      globalVoiceManager.globalListeners.delete(globalListener);
-      Voice.removeAllListeners();
-    };
+      
+      return () => {
+        stopTimer();
+        // Clean up this instance from global manager
+        if (globalVoiceManager.currentInstanceId === id) {
+          globalVoiceManager.currentInstanceId = null;
+          notifyGlobalListeners(); // Notify other instances
+        }
+        globalVoiceManager.callbacks.delete(id);
+        globalVoiceManager.globalListeners.delete(globalListener);
+        Voice.removeAllListeners();
+      };
+    }
   }, [id]);
 
   const showPermissionDeniedAlert = (permissionType: string) => {

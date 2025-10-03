@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { RefreshControl } from 'react-native';
 import { KeyboardAwareScrollView, KeyboardAwareScrollViewProps } from 'react-native-keyboard-controller';
+import { View } from './View';
 
 interface Props extends KeyboardAwareScrollViewProps {
   isContentCenter?: boolean;
@@ -59,10 +60,12 @@ export function ScrollView(props: Props) {
       contentContainerStyle={[props.isContentCenter && { flexGrow: 1, alignItems: 'center' }]}
       onScroll={handleScroll}
       scrollEventThrottle={400}
+      bottomOffset={30}
       refreshControl={<RefreshControl refreshing={false} onRefresh={onRefresh} />}
       {...restProps}
     >
       {props.children}
+      <View className='h-[60px]' />
     </KeyboardAwareScrollView>
   );
 }

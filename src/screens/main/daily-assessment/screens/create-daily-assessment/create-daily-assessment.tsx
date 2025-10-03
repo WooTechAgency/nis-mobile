@@ -52,19 +52,6 @@ export default function CreateDailyAssessment() {
     }
   }
 
-  const onBack = () => {
-    if (!!dsraData?.id) {
-      goBack()
-    } else if (selectedIndex === DailyAssessmentSteps.General) {
-      goBack()
-    } else {
-      setAssessment((prev) => ({
-        ...prev!,
-        selectedIndex: prev!.selectedIndex - 1,
-      }));
-    }
-  }
-
   const loadDailyAssessment = async (assessmentId: string) => {
     setLoading(true);
     const assessmentInDB = realm.objectForPrimaryKey(DailyAssessmentModel, assessmentId)
@@ -96,7 +83,6 @@ export default function CreateDailyAssessment() {
         <Header
           title={generalInfo?.location.site_code || dsraData?.site?.site_code || 'New DSRA'}
           isBack
-          onCustomBack={onBack}
         />
         <Steps
           classNameWrap='mt-4'

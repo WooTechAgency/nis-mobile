@@ -29,12 +29,11 @@ const MAP_STATUS_BG = {
 }
 
 const buttonCls = {
-  className: 'h-[56px] w-[204px]',
+  className: 'h-[56px] w-[170px]',
   classNameLabel: 'font-regular'
 }
 export default function TodayDailyAssessments() {
   const { setAssessment } = useAssessmentContext()
-
   const { userInfo } = useAppSelector((state) => state.authentication)
 
   const { data: dsraToday } = useGetDsrasToday({
@@ -137,6 +136,12 @@ export default function TodayDailyAssessments() {
                 <Button
                   label='Add hazard'
                   onPress={() => onAddHazard(item as DSRA)}
+                  {...buttonCls}
+                  type='outlined'
+                />
+                <Button
+                  label='View SWMS'
+                  onPress={() => navigate(RouteName.ShowDocument, { url: item.site?.swms?.attachment })}
                   {...buttonCls}
                   type='outlined'
                 />

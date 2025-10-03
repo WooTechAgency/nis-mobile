@@ -3,7 +3,7 @@ import Header from '@components/header'
 import { Button, Image, SafeAreaView, ScrollView } from '@components/ui'
 import Loading from '@components/ui/Loading'
 import { TextInput } from '@components/ui/TextInput'
-import { ICheckBoxDescription, SortDirection } from '@constants/interface'
+import { ICheckBoxDescription, SortBy, SortDirection } from '@constants/interface'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useDebounce } from '@hooks/useDebounce'
 import { navigate } from '@routes/navigationRef'
@@ -25,6 +25,7 @@ const formSchema = yup.object().shape({
   type: yup.object().notRequired(),
   date: yup.object().notRequired(),
   markedDates: yup.object().notRequired(),
+  sort_by: yup.string().notRequired(),
   sort_direction: yup.string().notRequired()
 });
 
@@ -32,6 +33,7 @@ export default function Incidents() {
   const { control, setValue, watch } = useForm({
     resolver: yupResolver(formSchema),
     defaultValues: {
+      sort_by: SortBy.ID,
       sort_direction: SortDirection.ASC
     }
   });
@@ -42,13 +44,13 @@ export default function Incidents() {
   const type = watch('type') as ICheckBoxDescription
   const site = watch('site') as ISite
   const sort_direction = watch('sort_direction') as string
-
+  const sort_by = watch('sort_by') as string
   const debouncedSearch = useDebounce(search, 500)
   const { data: incidents, isLoading, fetchNextPage, hasNextPage, isFetching } = useGetIncidentReports({
     search: debouncedSearch && debouncedSearch.length > 1 ? debouncedSearch : undefined,
     site_id: site?.id,
     incident_type_id: type?.id,
-    sort_by: 'id',
+    sort_by: sort_by,
     sort_direction: sort_direction || SortDirection.ASC,
     date_from: date?.startDate,
     date_to: date?.endDate,
@@ -73,7 +75,7 @@ export default function Incidents() {
             control={control}
             name='search'
             className='w-full rounded-[100px] h-[42px] text-[14px] pr-[60px] bg-white border-0'
-            placeholder='Search for DSRA'
+            placeholder='Search for incident'
             iconRight={<Image source={images.search} className='w-[48px] h-[48px] absolute top-[10%] right-4' />}
           />
           <Button

@@ -4,7 +4,7 @@ import { Button, FlatList, Image, Text, View } from '@components/ui';
 import CalendarPicker from '@components/ui/CalendarPicker';
 import DropdownMenu from '@components/ui/DropdownMenu';
 import { TextInput } from '@components/ui/TextInput';
-import { SortDirection } from '@constants/interface';
+import { SortBy, SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
@@ -43,21 +43,19 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
   const site = useWatch({ control, name: 'site' })
   const date = useWatch({ control, name: 'date' })
   const sort_direction = useWatch({ control, name: 'sort_direction' })
+  const sort_by = useWatch({ control, name: 'sort_by' })
   const isASC = sort_direction === SortDirection.ASC
 
   return (
     <View className='mt-8 gap-y-6'>
-      <>
-        <Text className='font-semibold text-[20px]'>{'All'}</Text>
-        <TextInput
-          classNameWrap='flex-1'
-          control={control}
-          name='search'
-          className='w-full rounded-[100px] h-[42px] text-[14px] pr-[60px] bg-white'
-          placeholder='Search for DSRA'
-          iconRight={<Image source={images.search} className='w-[48px] h-[48px] absolute top-[10%] right-4' />}
-        />
-      </>
+      <Text className='font-semibold text-[20px]'>{'All'}</Text>
+      <TextInput
+        control={control}
+        name='search'
+        className='w-full rounded-[100px] h-[42px] text-[14px] pr-[60px] bg-white border-0'
+        placeholder='Search for DSRA'
+        iconRight={<Image source={images.search} className='w-[48px] h-[48px] absolute top-[10%] right-4' />}
+      />
       <View className='bg-white rounded-[20px] p-6 '>
         <View className='flex-row items-center justify-between'>
           {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
@@ -103,12 +101,24 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <Button
                 className={`flex-row items-center gap-x-2 ${percent.id}`}
-                onPress={() => setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)}
+                onPress={() => {
+                  setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
+                  setValue('sort_by', SortBy.ID)
+                }}
               >
-                <Text className={`${headerCls} text-neutral80`}>{'DSRA ID'}</Text>
-                <Image source={images.arrowDown} className='w-4 h-4' />
+                <Text className={`${headerCls} ${sort_by === SortBy.ID && 'text-neutral80'}`}>{'DSRA ID'}</Text>
+                {sort_by === SortBy.ID && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
               </Button>
-              <Text className={`${percent.date} ${headerCls}`}>{"Date"}</Text>
+              <Button
+                className={`flex-row items-center gap-x-2 ${percent.date}`}
+                onPress={() => {
+                  setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
+                  setValue('sort_by', SortBy.CREATED_AT)
+                }}
+              >
+                <Text className={`${headerCls} ${sort_by === SortBy.CREATED_AT && 'text-neutral80'}`}>{'Date'}</Text>
+                {sort_by === SortBy.CREATED_AT && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
+              </Button>
               <Text className={`flex-grow ${headerCls}`}>{'Site'}</Text>
               <Text className={`${percent.hazard} ${headerCls}`}>{'Additional Hazards'}</Text>
             </View>

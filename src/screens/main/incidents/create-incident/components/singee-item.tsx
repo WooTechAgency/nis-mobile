@@ -1,16 +1,15 @@
+import { CommonModal } from '@components/modal';
 import { Signature } from '@components/signature';
 import Title from '@components/title';
+import { Button, Wrapper } from '@components/ui';
 import { DropdownPicker } from '@components/ui/DropdownPicker';
 import { TextInput } from '@components/ui/TextInput';
+import { useToggle } from '@hooks/useToggle';
 import { useGetRoles } from '@services/hooks/useGetRoles';
 import React from 'react';
-import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue, UseFormTrigger, useWatch } from 'react-hook-form';
+import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import { View } from 'react-native';
 import { useIncidentContext } from '../../context';
-import { Button, Wrapper } from '@components/ui';
-import { useToggle } from '@hooks/useToggle';
-import { CommonModal } from '@components/modal';
-import { useAppSelector } from '@hooks/common';
 
 interface Props {
   index: number
@@ -27,9 +26,6 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
   const [visibleConfirmRemove, toggleConfirmRemove] = useToggle()
   const { setIncident } = useIncidentContext()
   const { data: roles } = useGetRoles()
-  const { userInfo } = useAppSelector((state) => state.authentication)
-  const signee = useWatch({ control, name })
-  console.log('signee ', signee)
 
   const onStartSign = () => {
     setIncident((prev) => ({ ...prev, selectedIndex: prev?.selectedIndex ?? 0, enableScroll: false }))
@@ -43,21 +39,19 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
     remove(index)
   }
 
-  const isOwnerSubmitted = (signee.name === userInfo?.full_name) && (signee.role.id === userInfo?.role.id) && !!signee.signature
+  // const isOwnerSubmitted = (signee.name === userInfo?.full_name) && (signee.role.id === userInfo?.role.id) && !!signee.signature
 
   return (
     <Wrapper className='mt-8'>
       <View className='row-center justify-between'>
         <Title label={`Signee ${index + 1}`} />
-        {isOwnerSubmitted &&
-          <Button
-            label='Delete Signee'
-            type='outlined-small'
-            classNameLabel='text-xs font-medium'
-            className='w-[135px]'
-            onPress={toggleConfirmRemove}
-          />
-        }
+        <Button
+          label='Delete Signee'
+          type='outlined-small'
+          classNameLabel='text-xs font-medium'
+          className='w-[135px]'
+          onPress={toggleConfirmRemove}
+        />
       </View>
       <View className='flex-row items-start gap-x-4 mt-6'>
         <TextInput
@@ -67,7 +61,6 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
           name={`${name}.name`}
           label='Name'
           placeholder='Enter name'
-          disabled={isOwnerSubmitted}
         />
         <DropdownPicker
           classNameWrap='flex-1'
@@ -78,7 +71,6 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
           placeholder="Select role"
           listValue={roles}
           errors={errors}
-          disabled={isOwnerSubmitted}
         />
       </View>
       <Signature
@@ -90,7 +82,6 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
         setValue={setValue}
         trigger={trigger}
         errors={errors}
-        disabled={isOwnerSubmitted}
       />
       <CommonModal
         visible={visibleConfirmRemove}

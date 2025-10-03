@@ -49,22 +49,6 @@ export function ShowDocumentModal(props: Props) {
     return supportedFormats.includes(extension);
   };
 
-  const getDocumentUrl = (url: string): string => {
-    const extension = getFileExtension(url);
-
-    // For PDF files, use Google Docs viewer
-    if (extension === 'pdf') {
-      return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
-    }
-
-    // For Word documents, use Google Docs viewer
-    if (['doc', 'docx'].includes(extension)) {
-      return `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
-    }
-
-    // For other formats, try to open directly
-    return url;
-  };
 
   if (!visible) return null;
 
@@ -74,7 +58,6 @@ export function ShowDocumentModal(props: Props) {
       animationType='fade'
       transparent={true}
       supportedOrientations={supportedOrientations}
-      presentationStyle="fullScreen"
     >
       <View className='flex-1 bg-black'>
         <View className='flex-1'>
@@ -110,7 +93,7 @@ export function ShowDocumentModal(props: Props) {
                 </View>
               ) : (
                 <WebView
-                  source={{ uri: getDocumentUrl(url) }}
+                  source={{ uri: url }}
                   onLoad={handleDocumentLoad}
                   onError={handleDocumentError}
                   style={{ flex: 1 }}

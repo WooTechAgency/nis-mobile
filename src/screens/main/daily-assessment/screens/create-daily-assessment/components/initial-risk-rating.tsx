@@ -27,7 +27,7 @@ export default function InitialRiskRating({ control, name, errors }: Props) {
             <Text className='font-medium'>{initialRiskRating?.title}</Text>
           </View>
           : <View className='rounded-[14px] h-[56px] w-[200px] center border border-border'>
-            <Text className='text-xs text-neutral70'>{`Select parameters above\nto a define a Risk Rating`}</Text>
+            <Text className='text-xs text-neutral70'>{`Select parameters above\nto define a Risk rating`}</Text>
           </View>
         }
       </View>

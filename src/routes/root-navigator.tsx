@@ -11,6 +11,7 @@ import { JSX } from 'react';
 import { MainNavigator } from './main-mavigator';
 import { navigationRef } from './navigationRef';
 import { RootStackParamList, RouteName, } from './types';
+import ShowDocument from '@screens/main/daily-assessment/screens/show-document';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -33,6 +34,8 @@ function RootNavigator(): JSX.Element {
         <Stack.Screen name={RouteName.EnterCode} component={EnterCode} />
         <Stack.Screen name={RouteName.EnterNewPassword} component={EnterNewPassword} />
         <Stack.Screen name={RouteName.MainNavigator} component={MainNavigator} />
+        <Stack.Screen name={RouteName.ShowDocument} component={ShowDocument} />
+
         {/* <Stack.Screen
           name='MainNavigator'
           component={MainStackNavigator}

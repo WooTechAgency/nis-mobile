@@ -3,7 +3,7 @@ import SelectedFilter from '@components/common/selected-filter';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
 import CalendarPicker from '@components/ui/CalendarPicker';
 import DropdownMenu from '@components/ui/DropdownMenu';
-import { SortDirection } from '@constants/interface';
+import { SortBy, SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
@@ -46,6 +46,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
   const type = useWatch({ control, name: 'type' })
   const date = useWatch({ control, name: 'date' })
   const sortDirection = useWatch({ control, name: 'sort_direction' })
+  const sortBy = useWatch({ control, name: 'sort_by' })
   const isASC = sortDirection === SortDirection.ASC
 
   const onGoToDetail = (id: number) => {
@@ -102,12 +103,24 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <TouchableOpacity
                 className={`flex-row items-center gap-x-2 ${percent.id}`}
-                onPress={() => setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)}
+                onPress={() => {
+                  setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
+                  setValue('sort_by', SortBy.ID)
+                }}
               >
-                <Text className={`${headerCls} text-neutral80`}>{'Incident ID'}</Text>
-                <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />
+                <Text className={`${headerCls} ${sortBy === SortBy.ID && 'text-neutral80'}`}>{'Incident ID'}</Text>
+                {sortBy === SortBy.ID && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
               </TouchableOpacity>
-              <Text className={`${percent.date} ${headerCls}`}>{"Date of Incident"}</Text>
+              <TouchableOpacity
+                className={`flex-row items-center gap-x-2 ${percent.date} ${headerCls} ${sortBy === SortBy.DATE_OF_REPORT && 'text-neutral80'}`}
+                onPress={() => {
+                  setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
+                  setValue('sort_by', SortBy.DATE_OF_REPORT)
+                }}
+              >
+                <Text className={`${headerCls} ${sortBy === SortBy.DATE_OF_REPORT && 'text-neutral80'}`}>{"Date of Incident"}</Text>
+                {sortBy === SortBy.DATE_OF_REPORT && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
+              </TouchableOpacity>
               <Text className={`${percent.type}  ${headerCls}`}>{'Incident Type'}</Text>
               <Text className={`flex-grow ${headerCls}`}>{'Site'}</Text>
             </View>

@@ -1,5 +1,5 @@
 import { images } from '@assets/images';
-import { isAndroid } from '@constants/app.constants';
+import { isAndroid, isIOS } from '@constants/app.constants';
 import { useLLM } from '@hooks/useLLM';
 import { useVoice } from '@hooks/useVoice';
 import { getMessageError } from '@utils/common.util';
@@ -13,6 +13,7 @@ import { Button } from './Button';
 import { Image } from './Image';
 import { Text } from './Text';
 import { View } from './View';
+
 interface Props extends TextInputProps {
   label?: string;
   labelCls?: string;
@@ -138,7 +139,7 @@ export function TextInput(props: Props) {
         {iconLeft && iconLeft}
         {iconRight && iconRight}
         {isShowClose && field.value && <Image onPress={resetInput} source={images.close} className='w-12 h-12 ' classNameButton='absolute right-1 top-1' />}
-        {hasVoice && setValue &&
+        {isIOS && hasVoice && setValue &&
           <View className='flex-row mt-2 gap-x-4 absolute right-4 bottom-4 z-50 bg-white'>
             {isStopped
               ?

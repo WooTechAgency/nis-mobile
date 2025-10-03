@@ -13,6 +13,13 @@ export enum SortDirection{
   DESC = 'desc'
 }
 
+export enum SortBy {
+  ID = 'id',
+  DATE = 'date',
+  CREATED_AT = 'created_at',
+  DATE_OF_REPORT = 'date_of_report',
+}
+
 export interface IPagination{
   search?: string | undefined |  null
   date_from?: string;

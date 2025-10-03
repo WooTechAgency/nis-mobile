@@ -56,7 +56,7 @@ export default function DailyAssessmentPreview() {
     const payload: CreateAssessmentRequest = {
       site_id: generalInfo?.location?.id || 0,
       date: dayjs(generalInfo?.date).format('YYYY-MM-DD'),
-      team_leader: generalInfo?.leader?.id || 0,
+      team_leader: generalInfo?.leader?.value,
       project: generalInfo?.project || '',
       principal_contractor: generalInfo?.contractor || '',
       description_of_work: generalInfo?.description || '',

@@ -60,7 +60,7 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
             errors={errors}
             control={control}
             name={`${name}.description`}
-            label='Please describe the hazard'
+            label='Please describe the hazard*'
             placeholder='Describe the hazard........'
             multiline
             hasVoice

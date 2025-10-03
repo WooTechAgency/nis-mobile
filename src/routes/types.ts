@@ -15,6 +15,7 @@ export enum RouteName{
   DailyAssessment = 'DailyAssessment',
   CreateDailyAssessment = 'CreateDailyAssessment',
   DailyAssessmentPreview = 'DailyAssessmentPreview',
+  ShowDocument = 'ShowDocument',
 
   // job
   JobsNavigator = 'JobsNavigator',
