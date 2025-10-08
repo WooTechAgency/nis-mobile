@@ -76,4 +76,6 @@ yarn.lock
 # testing
 /coverage
 
+# react-native-config codegen
+ios/tmp.xcconfig
 .env

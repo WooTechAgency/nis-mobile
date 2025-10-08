@@ -1,20 +1,53 @@
 {
   "extends": "@react-native/typescript-config",
-    "compilerOptions": {
-      "baseUrl": "./src",
-      "paths": {
-        "@assets/*": ["assets/*"],
-        "@components/*": ["components/*"],
-        "@screens/*": ["screens/*"],
-        "@constants/*": ["constants/*"],
-        "@hooks/*": ["hooks/*"],
-        "@store/*": ["store/*"],
-        "@zustand/*": ["zustand/*"],
-        "@utils/*": ["utils/*"],
-        "@services/*": ["services/*"],
-        "@routes/*": ["routes/*"],
-        "@lib/*": ["lib/*"],
-        "@models/*": ["models/*"]
-      }
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@assets/*": [
+        "assets/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@screens/*": [
+        "screens/*"
+      ],
+      "@constants/*": [
+        "constants/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@store/*": [
+        "store/*"
+      ],
+      "@zustand/*": [
+        "zustand/*"
+      ],
+      "@utils/*": [
+        "utils/*"
+      ],
+      "@services/*": [
+        "services/*"
+      ],
+      "@routes/*": [
+        "routes/*"
+      ],
+      "@lib/*": [
+        "lib/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ]
     }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/Pods"
+  ]
 }
