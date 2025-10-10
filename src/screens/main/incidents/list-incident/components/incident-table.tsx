@@ -61,7 +61,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
             {type && <SelectedFilter label={type?.label} name='type' setValue={setValue} />}
             {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
             {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
-            {!type && !site && !date && <View />}
+            {/* {!type && !site && !date && <View />} */}
           </View>
           <View className='flex-row gap-x-4 self-end'>
             <Button

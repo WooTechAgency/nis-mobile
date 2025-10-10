@@ -1,4 +1,4 @@
-import { isAndroid, isIpad } from '@constants/app.constants';
+import { isIpad } from '@constants/app.constants';
 import React, { memo, useEffect, useState } from 'react';
 import { Control, FieldErrors, UseFormSetValue, useWatch } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
@@ -24,7 +24,7 @@ interface Props {
   onSelectCallback?: (item: IDropdown | any) => void
 }
 
-export const DropdownPicker = memo((props: Props) => {
+export const DropdownPicker2 = memo((props: Props) => {
   const {
     setValue,
     name,
@@ -74,7 +74,6 @@ export const DropdownPicker = memo((props: Props) => {
         }
         <Dropdown
           disable={disabled}
-          dropdownPosition='auto'
           data={listValue || []}
           labelField="label"
           valueField="value"
@@ -90,14 +89,6 @@ export const DropdownPicker = memo((props: Props) => {
             height: 56,
             borderRadius: 14,
           }}
-          autoScroll
-          renderItem={(item: any, selected?: boolean) => {
-            return (
-              <View className='py-2 px-4 border-b border-neutral20'>
-                <Text className={`${selected && 'font-semibold'}`}>{item?.label}</Text>
-              </View>
-            );
-          }}
           placeholderStyle={{
             color: messageError ? colors.red : colors.gray,
             fontSize: isIpad ? 16 : 14,
@@ -108,7 +99,7 @@ export const DropdownPicker = memo((props: Props) => {
           }}
           containerStyle={{
             borderColor: colors.border,
-            marginVertical: 4,
+            marginVertical: 8,
             backgroundColor: 'white',
             borderRadius: 14,
             // shadow
@@ -117,8 +108,6 @@ export const DropdownPicker = memo((props: Props) => {
             shadowOffset: { width: -2, height: 4 },
             shadowColor: 'rgba(0, 0, 50, 0.2)',
             elevation: 5,
-            marginTop: isAndroid ? 16 : 4,
-            overflow: 'hidden',
           }}
           itemTextStyle={{
             color: colors.black,
@@ -129,6 +118,18 @@ export const DropdownPicker = memo((props: Props) => {
             tintColor: colors.neutral70,
           }}
           maxHeight={300}
+          renderRightIcon={() => (
+            <View style={{
+              width: 0,
+              height: 0,
+              borderLeftWidth: 6,
+              borderRightWidth: 6,
+              borderTopWidth: 6,
+              borderLeftColor: 'transparent',
+              borderRightColor: 'transparent',
+              borderTopColor: colors.neutral70,
+            }} />
+          )}
         />
         {messageError && <Text className="text-red mt-[6] text-[11px]">{messageError}</Text>}
       </>

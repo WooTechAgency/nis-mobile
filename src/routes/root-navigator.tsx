@@ -12,6 +12,7 @@ import { MainNavigator } from './main-mavigator';
 import { navigationRef } from './navigationRef';
 import { RootStackParamList, RouteName, } from './types';
 import ShowDocument from '@screens/main/daily-assessment/screens/show-document';
+import GlobalStatusBar from '@components/ui/StatusBar';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -27,24 +28,27 @@ function RootNavigator(): JSX.Element {
   };
 
   return (
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName={handleRouteInitScreen()} screenOptions={{ headerShown: false }}>
-        <Stack.Screen name={RouteName.Login} component={Login} />
-        <Stack.Screen name={RouteName.ForgotPassword} component={ForgotPassword} />
-        <Stack.Screen name={RouteName.EnterCode} component={EnterCode} />
-        <Stack.Screen name={RouteName.EnterNewPassword} component={EnterNewPassword} />
-        <Stack.Screen name={RouteName.MainNavigator} component={MainNavigator} />
-        <Stack.Screen name={RouteName.ShowDocument} component={ShowDocument} />
+    <>
+      <GlobalStatusBar />
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator initialRouteName={handleRouteInitScreen()} screenOptions={{ headerShown: false }}>
+          <Stack.Screen name={RouteName.Login} component={Login} />
+          <Stack.Screen name={RouteName.ForgotPassword} component={ForgotPassword} />
+          <Stack.Screen name={RouteName.EnterCode} component={EnterCode} />
+          <Stack.Screen name={RouteName.EnterNewPassword} component={EnterNewPassword} />
+          <Stack.Screen name={RouteName.MainNavigator} component={MainNavigator} />
+          <Stack.Screen name={RouteName.ShowDocument} component={ShowDocument} />
 
-        {/* <Stack.Screen
+          {/* <Stack.Screen
           name='MainNavigator'
           component={MainStackNavigator}
           options={{ headerShown: false, title: 'MainStackNavigator' }}
         /> */}
 
-      </Stack.Navigator>
-      <Loading loading={loading} />
-    </NavigationContainer>
+        </Stack.Navigator>
+        <Loading loading={loading} />
+      </NavigationContainer>
+    </>
   );
 }
 

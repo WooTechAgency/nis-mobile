@@ -34,6 +34,7 @@ const formSchema = yup.object().shape({
       'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
     ),
   confirmPassword: yup.string()
+    .required('New password is required')
     .oneOf([yup.ref('newPassword'), null], 'Password confirmation does not match the new password.')
 
 });
@@ -47,7 +48,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
   const {
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
@@ -97,7 +98,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
             control={control}
             isShowError={false}
             name='newPassword'
-            label='New password'
+            label='Password'
             placeholder='Enter your new password'
             secureTextEntry={!showNewPassword}
             labelOverlap

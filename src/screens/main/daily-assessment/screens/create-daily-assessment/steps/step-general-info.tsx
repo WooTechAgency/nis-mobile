@@ -1,6 +1,7 @@
 import { Button } from '@components/ui';
 import { DatePickerInput } from '@components/ui/DatePickerInput';
 import { DropdownPicker } from '@components/ui/DropdownPicker';
+import { DropdownPicker2 } from '@components/ui/DropdownPicker2';
 import { TextInput } from '@components/ui/TextInput';
 import { shadowStyle } from '@constants/config.constants';
 import { IDropdown } from '@constants/interface';

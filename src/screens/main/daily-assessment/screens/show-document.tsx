@@ -1,4 +1,5 @@
 import { Button, SafeAreaView, Text, View } from '@components/ui';
+import { isIOS } from '@constants/app.constants';
 import { useRoute } from '@react-navigation/native';
 import { goBack } from '@routes/navigationRef';
 import React from 'react';
@@ -16,7 +17,7 @@ export default function ShowDocument() {
     <SafeAreaView className=''>
       <View className='flex-1'>
         <WebView
-          source={{ uri: url }}
+          source={{ uri: isIOS ? url : `https://docs.google.com/gview?embedded=true&url=${url}` }}
           style={{ flex: 1 }}
           startInLoadingState={true}
           renderLoading={() => (

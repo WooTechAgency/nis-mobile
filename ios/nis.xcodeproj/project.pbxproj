@@ -16,10 +16,10 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		89BD60F5499748ED945A65A5 /* Poppins-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A6DCBAB0B594C9987881750 /* Poppins-Thin.ttf */; };
 		9C0D25E3CA2C412ABA17F915 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 194CDC2097354212BFE42BFF /* Poppins-SemiBold.ttf */; };
+		B7E608A6FDC74B1DAFD02B1A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C970D41BD79F4AA8887B29BF /* Config.xcconfig */; };
 		C2C501E6749C47E39142468E /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61D6B1EC74594F069C155C1C /* Poppins-Light.ttf */; };
 		DCAE654228E54F1CAA596301 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		E82607A7B22E4E578C564B91 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 28586228648E4E4E93372F93 /* Poppins-Bold.ttf */; };
-		B7E608A6FDC74B1DAFD02B1A /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = C970D41BD79F4AA8887B29BF /* Config.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,8 +39,8 @@
 		796108795FFA4C15A1B9A001 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = nis/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		95A5D9614BD948C48C7A1815 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
+		C970D41BD79F4AA8887B29BF /* Config.xcconfig */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		C970D41BD79F4AA8887B29BF /* Config.xcconfig */ = {isa = PBXFileReference; name = "Config.xcconfig"; path = "Config.xcconfig"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = text.xcconfig; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,6 +365,7 @@
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C970D41BD79F4AA8887B29BF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -442,10 +443,10 @@
 				USE_HERMES = true;
 			};
 			name = Debug;
-			baseConfigurationReference = C970D41BD79F4AA8887B29BF /* Config.xcconfig */;
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C970D41BD79F4AA8887B29BF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -515,7 +516,6 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
-			baseConfigurationReference = C970D41BD79F4AA8887B29BF /* Config.xcconfig */;
 		};
 /* End XCBuildConfiguration section */
 

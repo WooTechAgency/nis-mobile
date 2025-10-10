@@ -58,9 +58,10 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
       />
       <View className='bg-white rounded-[20px] p-6 '>
         <View className='flex-row items-center justify-between'>
-          {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
-          {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
-          {!site && !date && <View />}
+          <View className='flex-row gap-x-4'>
+            {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
+            {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
+          </View>
           <View className='flex-row gap-x-4 self-end'>
             <Button
               className='row-center justify-center w-[135px] h-8 border border-primary rounded-lg '

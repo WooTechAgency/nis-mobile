@@ -129,6 +129,7 @@ export function TextInput(props: Props) {
           {...props}
           className={`text-black h-[56] border font-regular px-4 py-0 rounded-[14px] text-[16px] border-border w-full
            ${multiline && 'h-[112] sm:h-[144] py-4'}
+            ${isAndroid && 'pt-1'}
             ${disabled && 'text-neutral40 border-neutral20'} 
             ${iconRight || isShowClose && 'pr-10'} 
             ${className}

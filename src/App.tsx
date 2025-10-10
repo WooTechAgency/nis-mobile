@@ -14,6 +14,7 @@ import { RealmProvider } from '@realm/react';
 import { IncidentModel } from '@lib/models/incident-model';
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model';
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import GlobalStatusBar from '@components/ui/StatusBar';
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
@@ -41,9 +42,7 @@ function App() {
           <KeyboardProvider>
             <QueryClientProvider client={queryClient}>
               <RealmProvider {...realmConfig} >
-
                 <GestureHandlerRootView className='flex-1'>
-
                   <RootNavigator />
                   <Toast config={toastConfig} position='top' />
                   <ErrorModal />

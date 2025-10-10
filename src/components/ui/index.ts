@@ -20,3 +20,4 @@ export * from './CheckboxDescriptionForm';
 export * from './MediaForm';
 export * from './DropdownMenu';
 export * from './CalendarPicker';
+export * from './StatusBar';
