@@ -13,6 +13,7 @@ import { navigationRef } from './navigationRef';
 import { RootStackParamList, RouteName, } from './types';
 import ShowDocument from '@screens/main/daily-assessment/screens/show-document';
 import GlobalStatusBar from '@components/ui/StatusBar';
+import BootSplash from "react-native-bootsplash";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,7 +31,10 @@ function RootNavigator(): JSX.Element {
   return (
     <>
       <GlobalStatusBar />
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer
+        ref={navigationRef}
+        onReady={() => BootSplash.hide()}
+      >
         <Stack.Navigator initialRouteName={handleRouteInitScreen()} screenOptions={{ headerShown: false }}>
           <Stack.Screen name={RouteName.Login} component={Login} />
           <Stack.Screen name={RouteName.ForgotPassword} component={ForgotPassword} />
