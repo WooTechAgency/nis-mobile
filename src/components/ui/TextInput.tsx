@@ -36,6 +36,8 @@ interface Props extends TextInputProps {
   setValue?: UseFormSetValue<any>;
   hasVoice?: boolean
   styleLabel?: StyleProp<TextStyle>
+  formatPhone?: boolean
+  formatName?: boolean
 }
 
 export function TextInput(props: Props) {
@@ -59,7 +61,9 @@ export function TextInput(props: Props) {
     hasVoice,
     classNameInput,
     setValue,
-    styleLabel
+    styleLabel,
+    formatPhone,
+    formatName
   } = props;
   const { field } = useController({ control: control, name: name });
   const messageError = getMessageError(errors, name);
@@ -70,6 +74,29 @@ export function TextInput(props: Props) {
   const { llmContext } = useLLMContext()
   const { askModel } = useLLM()
   const { startVoice, stopVoice, recognizedText, isListening, seconds, pauseVoice, resumeVoice, isStopped, isAnyVoiceActive } = useVoice(name)
+
+  const formatPhoneInput = (text: string) => {
+    // Remove any characters that are not numbers or +
+    let formatted = text.replace(/[^0-9+]/g, '');
+    // Ensure only one + symbol and it's at the beginning
+    const plusCount = (formatted.match(/\+/g) || []).length;
+    if (plusCount > 1) {
+      // Keep only the first + and remove others
+      formatted = '+' + formatted.replace(/\+/g, '');
+    } else if (plusCount === 1 && !formatted.startsWith('+')) {
+      // Move + to the beginning if it's not already there
+      formatted = '+' + formatted.replace(/\+/g, '');
+    }
+    return formatted;
+  };
+
+  const formatNameInput = (text: string) => {
+    // Remove any characters that are not alphabetic or spaces
+    let formatted = text.replace(/[^a-zA-Z\s]/g, '');
+    // Remove multiple consecutive spaces and replace with single space
+    formatted = formatted.replace(/\s+/g, ' ');
+    return formatted;
+  };
 
   const resetInput = () => {
     setValue && setValue(name, '');
@@ -118,7 +145,17 @@ export function TextInput(props: Props) {
           value={field.value}
           autoCorrect={false}
           autoComplete='off'
-          onChangeText={field.onChange}
+          onChangeText={(text) => {
+            if (formatPhone) {
+              const formatted = formatPhoneInput(text);
+              field.onChange(formatted);
+            } else if (formatName) {
+              const formatted = formatNameInput(text);
+              field.onChange(formatted);
+            } else {
+              field.onChange(text);
+            }
+          }}
           onBlur={field.onBlur}
           placeholder={placeholder || ''}
           autoCapitalize={name?.toLowerCase().includes('email') ? 'none' : autoCapitalize}

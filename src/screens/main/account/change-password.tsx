@@ -26,11 +26,13 @@ const formSchema = yup.object().shape({
   currentPassword: yup.string().required('Current password is required!'),
   newPassword: yup
     .string()
+    .required('New password is required!')
     .matches(
       PATTERN.PASSWORD,
       'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
     ),
   confirmPassword: yup.string()
+    .required('Confirm password is required!')
     .oneOf([yup.ref('newPassword'), null], 'Password confirmation does not match the new password.')
 
 });
@@ -54,9 +56,9 @@ export default function ChangePassword() {
   const onSavePassword = (data: Form) => {
     setLoading(true);
     changePasswordApi({
-      current_password: data.currentPassword,
-      new_password: data.newPassword,
-      new_password_confirmation: data.confirmPassword,
+      current_password: data.currentPassword.trim(),
+      new_password: data.newPassword.trim(),
+      new_password_confirmation: data.confirmPassword.trim(),
     })
       .then((res) => {
         showSuccess({ title: 'Password updated successfully!' })
@@ -65,6 +67,7 @@ export default function ChangePassword() {
       })
       .finally(() => setLoading(false));
   };
+  console.log(errors);
 
   const isPasswordError = errors.newPassword?.message;
 
@@ -79,7 +82,6 @@ export default function ChangePassword() {
           <TextInput
             errors={errors}
             control={control}
-            isShowError={false}
             name='currentPassword'
             label='Current Password'
             placeholder='Enter your current password'
@@ -99,7 +101,6 @@ export default function ChangePassword() {
             classNameWrap='mt-8'
             errors={errors}
             control={control}
-            isShowError={false}
             name='newPassword'
             label='New password'
             placeholder='Enter your new password'
@@ -115,12 +116,11 @@ export default function ChangePassword() {
               </Button>
             }
           />
-          <Text className={`ml-4 mt-1 ${isPasswordError && 'text-red'}`}>Password must be at least 8 characters and include uppercase, lowercase, number, and special character.</Text>
+          {!errors.newPassword && <Text className={`ml-4 text-[12px] mt-1 `}>Password must be at least 8 characters and include uppercase, lowercase, number, and special character.</Text>}
           <TextInput
             classNameWrap='mt-8'
             errors={errors}
             control={control}
-            isShowError={true}
             name='confirmPassword'
             label='Confirm Password'
             placeholder='Re-enter your new password'

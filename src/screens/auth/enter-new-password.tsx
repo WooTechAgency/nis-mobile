@@ -67,8 +67,8 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
     resetPasswordApi({
       token: code,
       email,
-      password: data.newPassword,
-      password_confirmation: data.newPassword,
+      password: data.newPassword.trim(),
+      password_confirmation: data.newPassword.trim(),
     })
       .then(() => {
         showSuccess({ title: 'Your password has been reset' })

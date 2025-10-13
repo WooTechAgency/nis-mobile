@@ -31,7 +31,14 @@ const formSchema = yup.object().shape({
   lastName: yup.string().required('Last name is required'),
   company: yup.string().notRequired(),
   role: yup.string().notRequired(),
-  phone: yup.string().notRequired(),
+  phone: yup.string()
+    .notRequired()
+    .test('phone-format', 'Phone number can only contain numbers and one + symbol', function (value) {
+      if (!value) return true; // Allow empty values since it's not required
+      const phoneRegex = /^\+?[0-9]+$/;
+      const plusCount = (value.match(/\+/g) || []).length;
+      return phoneRegex.test(value) && plusCount <= 1;
+    }),
   email: yup.string().notRequired(),
 });
 
@@ -90,6 +97,8 @@ export default function UpdateAccount() {
                 name='firstName'
                 label='First name'
                 errors={errors}
+                formatName={true}
+                maxLength={50}
               />
               <TextInput
                 classNameWrap='flex-1'
@@ -97,6 +106,8 @@ export default function UpdateAccount() {
                 name='lastName'
                 label='Last name'
                 errors={errors}
+                formatName={true}
+                maxLength={50}
               />
             </View>
             <TextInput
@@ -130,6 +141,8 @@ export default function UpdateAccount() {
               label='Phone Number'
               labelOverlap
               keyboardType='phone-pad'
+              formatPhone={true}
+              errors={errors}
             />
             <View className='mt-6 flex-row gap-x-4'>
               <Button label='Cancel' onPress={goBack} type='outlined' className='flex-1' classNameLabel='' />
