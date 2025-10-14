@@ -1,4 +1,3 @@
-
 import ErrorModal from '@components/modal/error-modal';
 import { toastConfig } from '@lib/toast';
 import RootNavigator from '@routes/root-navigator';
@@ -15,6 +14,21 @@ import { IncidentModel } from '@lib/models/incident-model';
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model';
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import GlobalStatusBar from '@components/ui/StatusBar';
+import * as Sentry from '@sentry/react-native';
+
+Sentry.init({
+  dsn: 'https://50612f8932251d36185fc34bd850eaba@o4508839267008512.ingest.us.sentry.io/4510163831291904',
+  sendDefaultPii: true,
+  // Enable Logs
+  enableLogs: true,
+  // Configure Session Replay
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1,
+  integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
+
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // spotlight: __DEV__,
+});
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
@@ -60,4 +74,4 @@ function App() {
   );
 }
 
-export default App;
+export default Sentry.wrap(App);
