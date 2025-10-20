@@ -3,13 +3,16 @@ import Title from '@components/title'
 import { Button, Image, Text } from '@components/ui'
 import { useAppSelector } from '@hooks/common'
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model'
+import { useFocusEffect } from '@react-navigation/native'
 import { useQuery } from '@realm/react'
 import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { getCurrentUserApi } from '@services/authentication.service'
 import { DSRA } from '@services/dsra.service'
 import { useGetDsrasToday } from '@services/hooks/dsra/useGetDsras'
+import { showErrorMessage } from '@utils/functions.util'
 import dayjs from 'dayjs'
-import React from 'react'
+import React, { useState } from 'react'
 import { View, } from 'react-native'
 import { DailyAssessmentSteps, useAssessmentContext } from '../context'
 
@@ -35,8 +38,9 @@ const buttonCls = {
 export default function TodayDailyAssessments() {
   const { setAssessment } = useAssessmentContext()
   const { userInfo } = useAppSelector((state) => state.authentication)
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  const { data: dsraToday } = useGetDsrasToday({
+  const { data: dsraToday, refetch } = useGetDsrasToday({
     date_from: dayjs(new Date()).format('YYYY-MM-DD'),
     date_to: dayjs(new Date()).format('YYYY-MM-DD'),
     search_types: 'tablet',
@@ -56,7 +60,7 @@ export default function TodayDailyAssessments() {
         startOfToday,
         startOfTomorrow,
       );
-    }).map(assessment => {
+    }, [refreshKey]).map(assessment => {
       const generalInfo = JSON.parse(assessment.generalInfo || '{}')
       const hazard = JSON.parse(assessment.hazard || '{}')
       return {
@@ -86,6 +90,27 @@ export default function TodayDailyAssessments() {
     navigate(RouteName.DailyAssessmentPreview, { dsraId: id })
   }
 
+  const checkPermissionAndRedirect = async () => {
+    try {
+      const user = await getCurrentUserApi()
+      const permission = user?.role?.permissions?.DSRA?.find((permission) => permission.action === 'create')
+      if (permission) {
+        navigate(RouteName.CreateDailyAssessment)
+      } else {
+        showErrorMessage({ message: 'You do not have permission to perform this action' })
+      }
+    } catch (error) {
+      showErrorMessage({ message: 'You do not have permission to perform this action' })
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      refetch()
+      setRefreshKey(prev => prev + 1);
+    }, [refetch])
+  );
+
   return (
     <View>
       <View className='row-center h-[104px]  justify-between rounded-[20px] p-6 border border-border' >
@@ -93,7 +118,7 @@ export default function TodayDailyAssessments() {
         <Button
           label='Complete DSRA'
           classNameLabel='font-regular'
-          onPress={() => navigate(RouteName.CreateDailyAssessment)}
+          onPress={checkPermissionAndRedirect}
         />
       </View>
       {/* today */}
@@ -111,7 +136,7 @@ export default function TodayDailyAssessments() {
           >
             <View className=''>
               <View className='flex-row  items-center gap-x-3 mb-4'>
-                <Text className='text-base font-semibold'>{item?.site_code}</Text>
+                <Text className='text-base font-semibold'>{item?.dsra_code}</Text>
                 <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG[item.status as DsraStatus]} `}>
                   <Text className='text-xs font-medium'>{MAP_STATUS_TITLE[item.status as DsraStatus]}</Text>
                 </View>

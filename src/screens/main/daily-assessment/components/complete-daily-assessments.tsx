@@ -9,6 +9,7 @@ import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { DSRA } from '@services/dsra.service';
+import { useGetIncidentsFilterOptions } from '@services/hooks/useGetFilter';
 import { useGetSites } from '@services/hooks/useGetSites';
 import { convertDDMMYYYY, formatStartDateEndDate } from '@utils/date.util';
 import React from 'react';
@@ -34,10 +35,10 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleCalendar, toggleVisibleCalendar] = useToggle(false);
 
-  const { data: sites } = useGetSites();
+  const { data: incidentsFilterOptions } = useGetIncidentsFilterOptions();
 
   const filters = [
-    { icon: images.location, name: 'site', title: 'Site', listValue: sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
+    { icon: images.location, name: 'site', title: 'Site', listValue: incidentsFilterOptions?.sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
   ]
 
   const site = useWatch({ control, name: 'site' })

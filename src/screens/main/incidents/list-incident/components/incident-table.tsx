@@ -7,8 +7,7 @@ import { SortBy, SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
-import { useGetIncidentTypes } from '@services/hooks/incident/useGetIncidentTypes';
-import { useGetSites } from '@services/hooks/useGetSites';
+import { useGetIncidentsFilterOptions } from '@services/hooks/useGetFilter';
 import { IncidentReport } from '@services/incident.service';
 import { convertDDMMYYYY, formatStartDateEndDate } from '@utils/date.util';
 import React from 'react';
@@ -34,12 +33,11 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleType, toggleVisibleType] = useToggle(false);
   const [visibleCalendar, toggleVisibleCalendar] = useToggle(false)
-  const { data: sites } = useGetSites();
-  const { data: incidentTypes } = useGetIncidentTypes();
+  const { data: incidentsFilterOptions } = useGetIncidentsFilterOptions();
 
   const filters = [
-    { icon: images.incidentType, name: 'type', title: 'Incident Type', listValue: incidentTypes, visible: visibleType, toggleVisible: toggleVisibleType },
-    { icon: images.location, name: 'site', title: 'Site', listValue: sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
+    { icon: images.incidentType, name: 'type', title: 'Incident Type', listValue: incidentsFilterOptions?.incident_types || [], visible: visibleType, toggleVisible: toggleVisibleType },
+    { icon: images.location, name: 'site', title: 'Site', listValue: incidentsFilterOptions?.sites || [], visible: visibleSites, toggleVisible: toggleVisibleSites },
   ]
 
   const site = useWatch({ control, name: 'site' })
@@ -99,6 +97,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
           data={incidents}
           keyExtractor={(item) => item.id}
           isFetching={isFetching}
+          ListEmptyComponent={<Text className='text-neutral40'>{'No incidents found'}</Text>}
           ListHeaderComponent={
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <TouchableOpacity

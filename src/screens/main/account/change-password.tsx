@@ -102,7 +102,7 @@ export default function ChangePassword() {
             errors={errors}
             control={control}
             name='newPassword'
-            label='New password'
+            label='New Password'
             placeholder='Enter your new password'
             secureTextEntry={!showNewPassword}
             labelOverlap

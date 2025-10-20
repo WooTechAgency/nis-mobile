@@ -34,8 +34,24 @@ export interface IUser {
   full_name: string
   email:string
   phone:string
-  role: IRole
-  permissions: string
+  role: {
+    id: number
+    name: string
+   permissions:{
+    DSRA:{
+      id: number
+      name: string
+      resource: string
+      action: string
+    }[],
+    incident_reports:{
+      id: number
+      name: string
+      resource: string
+      action: string
+    }[]
+   }
+  }
   token: string
   role_id: number;
   company_id: number;
@@ -44,7 +60,7 @@ export interface IUser {
 export interface LoginApiRequest {
   email: string;
   password: string;
-  device_type: string;
+  // device_type: string;
 }
 export interface LoginResponse {
   token: string;

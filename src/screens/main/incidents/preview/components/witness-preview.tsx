@@ -23,7 +23,7 @@ export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
     <View className='mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
         allowEdit={allowEdit}
-        label='Witness'
+        label='Witnesses'
         onEdit={onEdit}
         collapsed={collapsed}
         toggleCollapse={toggleCollapse}
@@ -37,6 +37,7 @@ export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
             showsVerticalScrollIndicator={false}
             data={witness?.witnesses || incident?.witnesses}
             keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={<Text className='ml-4 mt-2 text-neutral60'>Not witnesses found</Text>}
             ListHeaderComponent={
               <View className={`${headerClassName}`}>
                 <Text className={`${labelClassName} w-[23%]`}>{'Name'}</Text>

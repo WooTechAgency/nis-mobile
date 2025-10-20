@@ -105,7 +105,7 @@ export default function DailyAssessmentPreview() {
     <SafeAreaView>
       <ScrollView>
         <Header
-          title={generalInfo?.location?.site_code || data?.site?.site_code || 'New DSRA'}
+          title={generalInfo?.location?.site_code || data?.dsra_code || 'New DSRA'}
           isBack
           onCustomBack={onCustomBack}
           rightComponent={

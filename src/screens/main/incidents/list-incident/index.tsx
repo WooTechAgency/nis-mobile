@@ -4,20 +4,22 @@ import { Button, Image, SafeAreaView, ScrollView } from '@components/ui'
 import Loading from '@components/ui/Loading'
 import { TextInput } from '@components/ui/TextInput'
 import { ICheckBoxDescription, SortBy, SortDirection } from '@constants/interface'
+import { QUERY_KEY } from '@constants/keys.constants'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useAppSelector } from '@hooks/common'
 import { useDebounce } from '@hooks/useDebounce'
 import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { getCurrentUserApi } from '@services/authentication.service'
 import { useGetIncidentReports } from '@services/hooks/incident/useGetIncidentReports'
 import { ISite } from '@services/site.service'
+import { showErrorMessage } from '@utils/functions.util'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { View } from 'react-native'
 import * as yup from 'yup'
 import IncidentTable from './components/incident-table'
 import InprogressIncidents from './components/inprogress-incidents'
-import { QUERY_KEY } from '@constants/keys.constants'
-import { useAppSelector } from '@hooks/common'
 
 const formSchema = yup.object().shape({
   search: yup.string().notRequired(),
@@ -57,6 +59,20 @@ export default function Incidents() {
     author_id: userInfo?.id
   })
 
+  const checkPermissionAndRedirect = async () => {
+    try {
+      const user = await getCurrentUserApi()
+      const permission = user?.role?.permissions?.incident_reports?.find((permission) => permission.action === 'create')
+      if (permission) {
+        navigate(RouteName.CreateIncident)
+      } else {
+        showErrorMessage({ message: 'You do not have permission to perform this action' })
+      }
+    } catch (error) {
+      showErrorMessage({ message: 'You do not have permission to perform this action' })
+    }
+  }
+
   return (
     <SafeAreaView>
       <ScrollView
@@ -81,7 +97,7 @@ export default function Incidents() {
           <Button
             label='Report Incident'
             className='flex-row h-[56px] w-[197px] bg-primary rounded-[14px] center'
-            onPress={() => navigate(RouteName.CreateIncident)}
+            onPress={checkPermissionAndRedirect}
           />
         </View>
         <InprogressIncidents />

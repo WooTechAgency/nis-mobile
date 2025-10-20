@@ -25,9 +25,9 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
   const incidentTypes = incident?.incidentTypes.filter((item) => !!item.description) || data?.incident_types
 
   return (
-    <View className='mt-4 bg-white rounded-[20px]'>
+    <View className='mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
-        label='Overview'
+        label='Incident'
         onEdit={onEdit}
         collapsed={collapsed}
         toggleCollapse={toggleCollapse}

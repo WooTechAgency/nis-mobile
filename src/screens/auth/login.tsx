@@ -50,7 +50,7 @@ export default function Login() {
     Keyboard.dismiss()
     try {
       setLoading(true);
-      const response = await loginApi({ email: data.email.trim(), password: data.password.trim(), device_type: 'tablet' });
+      const response = await loginApi({ email: data.email.trim(), password: data.password.trim() });
       mmkv.set(MMKV_KEY.EMAIL, data.email)
       dispatch(setUserInfo({ ...response.user, token: response.token, }));
       navigationRef.dispatch(StackActions.replace(RouteName.MainNavigator));
