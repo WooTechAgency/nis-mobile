@@ -127,8 +127,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   }
 
   const onSubmit = (form: IncidentForm) => {
-    console.log('form ', form)
-
+    form = { ...form, incidentTypes: form.incidentTypes?.filter((item) => item.selected) }
     const newCompletedSteps = new Set([IncidentSteps.Incident, ...(completedSteps || [])]);
     setIncident((prev) => ({
       ...prev,

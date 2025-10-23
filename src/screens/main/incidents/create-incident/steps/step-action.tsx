@@ -41,7 +41,7 @@ const formSchema = yup.object().shape({
     ),
   actionSelected: yup
     .boolean()
-    .oneOf([true], "Please select at least one incident type"),
+    .oneOf([true], "Please select at least one immediate action taken"),
 });
 
 export default function StepAction({ editingMode }: { editingMode: boolean }) {
@@ -76,6 +76,7 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
   }
 
   const onSubmit = (form: ActionForm) => {
+    form = { ...form, actions: form.actions?.filter((item) => item.selected) }
     Keyboard.dismiss()
     const newCompletedSteps = new Set([IncidentSteps.Action, ...(completedSteps || [])]);
     setIncident((prev) => ({

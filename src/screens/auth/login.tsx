@@ -14,7 +14,7 @@ import { RouteName } from '@routes/types';
 import { loginApi } from '@services/authentication.service';
 import { mmkv } from '@store/mkkv';
 import { setUserInfo } from '@store/slices/authenticationSlice';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
@@ -32,6 +32,7 @@ export default function Login() {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
@@ -42,6 +43,12 @@ export default function Login() {
     resolver: yupResolver(formSchema),
   });
 
+  useEffect(() => {
+    const email = mmkv.getString(MMKV_KEY.EMAIL)
+    if (email) {
+      setValue('email', email)
+    }
+  }, [])
 
   const toggleShowVisiblePassword = () => {
     setVisiblePassword(!visiblePassword);

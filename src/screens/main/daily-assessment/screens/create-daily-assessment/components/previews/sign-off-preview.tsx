@@ -43,6 +43,7 @@ export default function SignOffPreview({ allowEdit, dsra }: PreviewProps) {
             showsVerticalScrollIndicator={false}
             data={data}
             keyExtractor={(item, index) => index.toString()}
+            ListEmptyComponent={<Text className='ml-4 mt-2 text-neutral60'>No sign offs provided</Text>}
             ListHeaderComponent={
               <View className={`${headerClassName}`}>
                 <Text className={`${labelClassName} w-[25%]`}>{'Name'}</Text>

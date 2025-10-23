@@ -31,7 +31,7 @@ export interface ISite {
 
 export async function getSitesApi(): Promise<ISite[]> {
   try {
-    const response = await baseApi.get(`${BASE}/basic`);
+    const response = await baseApi.get(`${BASE}/basic?per_page=100`);
     console.log('response', response.data.data)
     return response.data.data
   } catch (e: any) {

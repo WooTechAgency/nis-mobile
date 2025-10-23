@@ -1,25 +1,25 @@
 import { images } from '@assets/images';
-import { ShowDocumentModal } from '@components/modal/show-document-model';
 import { Button, Image, Wrapper, YesNoForm } from '@components/ui';
-import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { QUERY_KEY } from '@constants/keys.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
+import { SelectItem } from '@screens/main/daily-assessment/config.assessment';
+import { DailyAssessmentSteps, useAssessmentContext, } from '@screens/main/daily-assessment/context';
+import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
 import { addMoreHazardsApi, DSRA } from '@services/dsra.service';
 import { useQueryClient } from '@tanstack/react-query';
 import { convertHazardForm, convertHazardFromBE } from '@utils/functions.util';
-import React, { useEffect, useState } from 'react';
+import { useLoadingZ } from '@zustand/useLoadingZ';
+import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import { Asset } from 'react-native-image-picker';
 import * as yup from 'yup';
-import { DailyAssessmentSteps, useAssessmentContext, } from '@screens/main/daily-assessment/context';
-import { useUpsertDailyAssessment } from '@screens/main/daily-assessment/useUpsertDailyAessment';
 import { HazardItem } from '../components/hazard-item';
-import { SelectItem } from '@screens/main/daily-assessment/config.assessment';
+import debounce from 'lodash/debounce';
+import { useDebounce, useDebounceCallback } from '@hooks/useDebounce';
 
 export interface Props {
   editingMode: boolean,
@@ -68,7 +68,7 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
   const { setAssessment, assessment: { completedSteps, generalInfo, hazard } } = useAssessmentContext();
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
   const queryClient = useQueryClient()
-  const [loading, setLoading] = useState(false)
+  const { setLoading } = useLoadingZ()
   const {
     control,
     handleSubmit,
@@ -119,7 +119,6 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
 
   const onAddMoreHazard = async (form: HazardsForm) => {
     const updatedHazards = form?.hazards?.filter((item) => !item?.dsra_id)
-    console.log('updatedHazards ', updatedHazards)
     if (updatedHazards && updatedHazards.length > 0) {
       const payload = convertHazardForm(updatedHazards || [])
       try {
@@ -143,6 +142,10 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
       navigate(RouteName.ShowDocument, { url })
     }
   }
+
+  // Create debounced versions of submit functions
+  const debouncedOnAddMoreHazard = useDebounceCallback(onAddMoreHazard, 400);
+  const debouncedOnSubmit = useDebounceCallback(onSubmit, 100);
 
   useEffect(() => {
     if (!haveHazards) {
@@ -217,11 +220,10 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
         <Button label={!!dsraData?.id ? 'Cancel' : 'Back'} onPress={onBack} type='outlined' className='flex-1' />
         <Button
           label={editingMode ? 'Save' : 'Next'}
-          onPress={handleSubmit(!!dsraData?.id ? onAddMoreHazard : onSubmit)}
+          onPress={handleSubmit(!!dsraData?.id ? debouncedOnAddMoreHazard : debouncedOnSubmit)}
           className='flex-1'
         />
       </View>
-      <Loading loading={loading} />
     </View>
   )
 }

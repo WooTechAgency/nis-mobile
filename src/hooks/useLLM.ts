@@ -97,9 +97,11 @@ ${prompt}<|im_end|>
     }
     const result = await  llmContext.completion({
       prompt: promptStructure,
-      n_predict: 200,
-      temperature: 0.7,
+      n_predict: 500,
       stop: stopWords,
+      top_p: 1,
+      temperature: 0,
+      penalty_present: 0.5,
     });
     return result.text
   };

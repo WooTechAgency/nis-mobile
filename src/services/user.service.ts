@@ -64,7 +64,7 @@ export interface IUser {
 }
 export async function getUsersApi(): Promise<IUser[]> {
   try {
-    const response = await baseApi.get(`${BASE_SERVICE}/basic`);
+    const response = await baseApi.get(`${BASE_SERVICE}/basic?per_page=100`);
     return response?.data?.data || [];
   } catch (error: any) {
     showErrorMessage({ message: error.message });
