@@ -9,6 +9,7 @@ import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
 import { DSRA } from '@services/dsra.service';
+import { useGetIncidentsFilterOptions } from '@services/hooks/useGetFilter';
 import { useGetSites } from '@services/hooks/useGetSites';
 import { convertDDMMYYYY, formatStartDateEndDate } from '@utils/date.util';
 import React from 'react';
@@ -34,10 +35,10 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
   const [visibleSites, toggleVisibleSites] = useToggle(false);
   const [visibleCalendar, toggleVisibleCalendar] = useToggle(false);
 
-  const { data: sites } = useGetSites();
+  const { data: incidentsFilterOptions } = useGetIncidentsFilterOptions();
 
   const filters = [
-    { icon: images.location, name: 'site', title: 'Site', listValue: sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
+    { icon: images.location, name: 'site', title: 'Site', listValue: incidentsFilterOptions?.sites, visible: visibleSites, toggleVisible: toggleVisibleSites },
   ]
 
   const site = useWatch({ control, name: 'site' })
@@ -98,6 +99,7 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
           data={dsra}
           keyExtractor={(item) => item.id}
           isFetching={isFetching}
+          ListEmptyComponent={<Text className='text-neutral40'>No daily assessments found</Text>}
           ListHeaderComponent={
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <Button
@@ -126,7 +128,7 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
           }
           renderItem={({ item }: { item: DSRA }) => (
             <Button
-              className='flex-row h-[56px] items-center border-t border-neutral20'
+              className='flex-row min-h-[56px] items-center border-t border-neutral20'
               onPress={() => navigate(RouteName.DailyAssessmentPreview, { dsraId: item.id })}
             >
               <Text className={`${percent.id} ${rowCls}`}>{item.dsra_code}</Text>

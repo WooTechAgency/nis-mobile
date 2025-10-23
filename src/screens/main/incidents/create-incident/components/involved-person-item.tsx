@@ -83,6 +83,7 @@ export function InvolvedPersonItem({ control, errors, setValue, index, name, rem
             errors={errors}
             control={control}
             name={`${name}.phoneNumber`}
+            formatPhone={true}
             label='Phone number*'
             keyboardType='phone-pad'
             placeholder='Enter phone number'

@@ -25,9 +25,9 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
   const incidentTypes = incident?.incidentTypes.filter((item) => !!item.description) || data?.incident_types
 
   return (
-    <View className='mt-4 bg-white rounded-[20px]'>
+    <View className='mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
-        label='Overview'
+        label='Incident'
         onEdit={onEdit}
         collapsed={collapsed}
         toggleCollapse={toggleCollapse}
@@ -46,7 +46,7 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
               data={incident?.involvedPersons || data?.involved_people}
               keyExtractor={(item, index) => index.toString()}
               ListHeaderComponent={
-                <View className={`${headerClassName}`}>
+                <View className={`${headerClassName} gap-x-2`}>
                   <Text className={`${labelClassName} w-[20%]`}>{'Name'}</Text>
                   <Text className={`${labelClassName} w-[20%]`}>{'Role'}</Text>
                   <Text className={`${labelClassName} w-[15%]`}>{'Injury?'}</Text>
@@ -54,11 +54,11 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
                 </View>
               }
               renderItem={({ item, index }: { item: InvolvedPerson, index: number }) => (
-                <View className={`${itemClassName}  ${index !== (incident?.involvedPersons?.length || data?.involved_people?.length || 0) - 1 && 'border-b'}`}>
+                <View className={`${itemClassName} gap-x-2 ${index !== (incident?.involvedPersons?.length || data?.involved_people?.length || 0) - 1 && 'border-b'}`}>
                   <Text className={`${labelClassName}  w-[20%]`}>{item?.name}</Text>
                   <Text className={`${labelClassName}  w-[20%]`}>{item?.role}</Text>
                   <Text className={`${labelClassName}  w-[15%]`}>{item?.injured ? 'Yes' : 'No'}</Text>
-                  <Text className={`${labelClassName}  grow`}>{item?.treatment || item?.treatment_required || ''}</Text>
+                  <Text className={`${labelClassName}  grow shrink `}>{item?.treatment || item?.treatment_required || ''}</Text>
                 </View>
               )}
             />

@@ -22,6 +22,7 @@ export default function GeneralPreview({ allowEdit, incident }: PreviewProps) {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.General }))
   }
 
+
   return (
     <View className='mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
@@ -43,7 +44,7 @@ export default function GeneralPreview({ allowEdit, incident }: PreviewProps) {
             </View>
             <View className='flex-row gap-x-4'>
               <ValueItem label='Completed by' value={generalInfo?.completedBy || incident?.author.full_name} classNameWrap={`${width}`} />
-              <ValueItem label='Role / Position' value={generalInfo?.role || 'TODO: Waiting backend fixed'} classNameWrap={`${width}`} />
+              <ValueItem label='Role / Position' value={generalInfo?.role || incident?.author.role?.name} classNameWrap={`${width}`} />
             </View>
           </View>
           <View className=' h-[1px] bg-neutral20 mx-6 ' />
@@ -51,7 +52,7 @@ export default function GeneralPreview({ allowEdit, incident }: PreviewProps) {
           <View className='p-6 pt-5 gap-y-4'>
             <Title label='Incident Detail' className='text-base mb-4' />
             <View className='flex-row gap-x-4'>
-              <ValueItem label='Date of Incident' value={convertDDMMYYYY(generalInfo?.dateOfIncident || incident?.date_of_report)} classNameWrap={`${width}`} />
+              <ValueItem label='Date of Incident' value={convertDDMMYYYY(generalInfo?.dateOfIncident || incident?.date_time_of_incident)} classNameWrap={`${width}`} />
               <ValueItem label='Time of Incident' value={convertHHMM(generalInfo?.timeOfIncident || incident?.date_time_of_incident)} classNameWrap='w-[50%] ' />
             </View>
             <View className='flex-row gap-x-4'>

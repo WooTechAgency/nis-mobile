@@ -1,3 +1,4 @@
+import { showError } from '@lib/toast';
 import { uploadFilesApi, UploadMediasDirectory } from '@services/common.service';
 import { useLoadingZ } from '@zustand/useLoadingZ';
 import { useState, useCallback } from 'react';
@@ -15,14 +16,14 @@ interface UseImagePicker{
   setValue: UseFormSetValue<any>;
   name: string;
   control: Control<any, any>;
+  maxImage?: number
 }
-export function useImagePicker({name,setValue,control}: UseImagePicker) {
+export function useImagePicker({name,setValue,control,maxImage}: UseImagePicker) {
   const [error, setError] = useState<string | null>(null);
   const [didCancel, setDidCancel] = useState(false);
   const {setLoading} = useLoadingZ()
 
   const currentMedias = useWatch({control, name}) || [];
-
   const handleResponse =  async (response: ImagePickerResponse) => {
     setDidCancel(false);
     setError(null);
@@ -36,11 +37,27 @@ export function useImagePicker({name,setValue,control}: UseImagePicker) {
       return;
     }
     if (response.assets) {
+      const maxAllowed = maxImage || 5;
+      const currentCount = currentMedias.length;
+      const newAssetsCount = response.assets.length;
+      
+      // Check if adding new images would exceed the limit
+      if (currentCount + newAssetsCount > maxAllowed) {
+        const remainingSlots = maxAllowed - currentCount;
+        if (remainingSlots <= 0) {
+          showError({ title: 'You can only select up to 5 images' });  
+          return;
+        }
+        showError({ title: 'You can only select up to 5 images' });  
+        return;
+      }
+
       try{
         setLoading(true)
         // upload image to server
         const mediaResult = await uploadFilesApi({ files: response.assets, directory: UploadMediasDirectory.HAZARD })
-        setValue(name, [...currentMedias,...response.assets.map(asset => ({...asset, id: mediaResult.uploaded_media[0].id})) ]);
+        console.log('mediaResult ', mediaResult)
+        setValue(name, [...currentMedias,...response.assets.map((asset,index) => ({...asset, id: mediaResult.uploaded_media[index].id})) ]);
       }finally{
         setLoading(false)
       }
@@ -50,22 +67,39 @@ export function useImagePicker({name,setValue,control}: UseImagePicker) {
   const pickFromLibrary = useCallback(
     (options?: ImageLibraryOptions) => {
       setError(null);
+      const maxAllowed = maxImage || 5;
+      const currentCount = currentMedias.length;
+      const remainingSlots = maxAllowed - currentCount;
+      
+      if (remainingSlots <= 0) {
+        showError({ title: 'You can only select up to 5 images' });  
+        return;
+      }
+      
       launchImageLibrary(
         {
           mediaType: 'photo',
-          selectionLimit: 10,
+          selectionLimit: remainingSlots,
           includeBase64: false,
           ...options,
         },
         handleResponse,
       );
     },
-    [currentMedias],
+    [currentMedias, maxImage],
   );
 
   const takePhoto = useCallback(
     (options?: CameraOptions) => {
       setError(null);
+      const maxAllowed = maxImage || 5;
+      const currentCount = currentMedias.length;
+      
+      if (currentCount >= maxAllowed) {
+        showError({ title: 'You can only select up to 5 images' });  
+        return;
+      }
+      
       launchCamera(
         {
           mediaType: 'photo',
@@ -75,7 +109,7 @@ export function useImagePicker({name,setValue,control}: UseImagePicker) {
         handleResponse,
       );
     },
-    [],
+    [currentMedias, maxImage],
   );
 
   const clear = useCallback(() => {

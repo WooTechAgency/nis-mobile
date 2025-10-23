@@ -81,7 +81,7 @@ export default function CreateDailyAssessment() {
     <SafeAreaView className='bg-neutral-100'>
       <ScrollView scrollEnabled={enableScroll}>
         <Header
-          title={generalInfo?.location.site_code || dsraData?.site?.site_code || 'New DSRA'}
+          title={generalInfo?.location.site_code || dsraData?.dsra_code || 'New DSRA'}
           isBack
         />
         <Steps

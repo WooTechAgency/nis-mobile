@@ -8,7 +8,7 @@ import { useToggle } from '@hooks/useToggle';
 import { StackActions } from '@react-navigation/native';
 import { navigate, navigationRef } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
-import { logoutApi } from '@services/authentication.service';
+import { getCurrentUserApi, logoutApi } from '@services/authentication.service';
 import { useGetCurrentUser } from '@services/hooks/useGetCurrentUser';
 import { setUserInfo } from '@store/slices/authenticationSlice';
 import { useQueryClient } from '@tanstack/react-query';
@@ -16,6 +16,7 @@ import React, { useEffect } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import AccountLogo from './components/account-logo';
+import { showErrorMessage } from '@utils/functions.util';
 
 export default function Account() {
   const dispatch = useDispatch()
@@ -52,6 +53,21 @@ export default function Account() {
 
   }
 
+  const checkPermissionAndRedirect = async () => {
+    try {
+      const user = await getCurrentUserApi()
+      console.log('user ', user)
+      const permission = user?.role?.permissions?.users?.find((permission) => permission.action === 'edit')
+      if (permission) {
+        navigate(RouteName.UpdateAccount)
+      } else {
+        showErrorMessage({ message: 'You do not have permission to perform this action' })
+      }
+    } catch (error) {
+      showErrorMessage({ message: 'You do not have permission to perform this action' })
+    }
+  }
+
   return (
     <SafeAreaView className={``}>
       <Header title='Account details' />
@@ -62,10 +78,10 @@ export default function Account() {
             <Text className='font-semibold text-[16px]'>Profile</Text>
             <Button
               className='w-[135px] h-[36px] flex-row center border border-primary rounded-[8px]'
-              onPress={() => navigate(RouteName.UpdateAccount)}
+              onPress={checkPermissionAndRedirect}
             >
               <Image source={images.edit} className='w-8 h-8' />
-              <Text className='text-[12px] font-medium  '>Edit</Text>
+              <Text className='text-[12px] font-medium'>Edit</Text>
             </Button>
           </View>
           <TextInput

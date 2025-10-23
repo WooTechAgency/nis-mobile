@@ -6,9 +6,6 @@ import { Signature } from './incident.service';
 import { ISite } from './site.service';
 import { IUser } from './user.service';
 
-
-
-
 export interface CreateAssessmentRequest {
   site_id: number,
   date: string, // ISO date (YYYY-MM-DD)

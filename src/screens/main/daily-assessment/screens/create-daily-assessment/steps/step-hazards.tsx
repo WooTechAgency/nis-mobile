@@ -69,7 +69,6 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
   const { upsertDailyAssessment } = useUpsertDailyAssessment()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
-  const [showDocument, toggleShowDocument] = useToggle(false)
   const {
     control,
     handleSubmit,
@@ -163,18 +162,21 @@ export default function StepHazards({ editingMode, dsraData }: Props) {
             errors={errors}
             control={control}
             name={`methodStatement`}
-            label='Please describe the hazard*'
+            label='Safe Work Method Statement'
             value={generalInfo?.methodStatement || dsraData?.site?.swms?.swms_name}
             editable={false}
             classNameInput='text-[#4A4646]'
+            disabled={!!dsraData?.id}
           />
           <Button
             onPress={onCheckSWMS}
             label='Check SWMS'
-            className='w-[280px] '
+            className='w-[280px] h-[56px]  '
+            disabled={!!dsraData?.id}
           />
         </View>
         <YesNoForm
+          classNameWrap={`${!!dsraData?.id && 'opacity-50'}`}
           errors={errors}
           control={control}
           name={`haveHazards`}

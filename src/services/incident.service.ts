@@ -3,6 +3,7 @@ import { showErrorMessage } from '@utils/functions.util';
 import baseApi from '.';
 import { ISite } from './site.service';
 import { IUser } from './user.service';
+import { IRole } from './role.service';
 
 const BASE = '/api/incidents';
 

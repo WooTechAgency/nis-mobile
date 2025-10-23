@@ -21,6 +21,7 @@ interface Props {
   isRerender?: boolean;
   required?: boolean;
   disabled?: boolean;
+  dropdownPosition?: 'auto' | 'top' | 'bottom';
   onSelectCallback?: (item: IDropdown | any) => void
 }
 
@@ -37,7 +38,8 @@ export const DropdownPicker = memo((props: Props) => {
     errors,
     isRerender,
     disabled,
-    onSelectCallback
+    onSelectCallback,
+    dropdownPosition
   } = props;
 
   const selectedItem = useWatch({ name, control });
@@ -74,7 +76,7 @@ export const DropdownPicker = memo((props: Props) => {
         }
         <Dropdown
           disable={disabled}
-          dropdownPosition='auto'
+          dropdownPosition={dropdownPosition || 'auto'}
           data={listValue || []}
           labelField="label"
           valueField="value"
@@ -105,6 +107,8 @@ export const DropdownPicker = memo((props: Props) => {
           selectedTextStyle={{
             color: disabled ? colors.neutral40 : colors.black,
             fontSize: isIpad ? 16 : 14,
+            lineHeight: 30,
+            height: 30,
           }}
           containerStyle={{
             borderColor: colors.border,

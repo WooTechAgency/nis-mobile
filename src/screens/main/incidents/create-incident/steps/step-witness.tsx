@@ -31,8 +31,16 @@ const formSchema = yup.object().shape(
       .of(
         yup.object({
           name: yup.string().required('Name is required'),
-          phone: yup.string().required('Phone is required'),
-          email: yup.string().required('Email is required').email('Email is invalid'),
+          phone: yup.string()
+            .required('Phone is required')
+            .test('phone-format', 'Only digits and at most one +', function (value) {
+              if (!value) return true; // Allow empty values since it's not required
+              const phoneRegex = /^\+?[0-9]+$/;
+              const plusCount = (value.match(/\+/g) || []).length;
+              return phoneRegex.test(value) && plusCount <= 1;
+            })
+          ,
+          email: yup.string().required('Email is required').email('Invalid Email format'),
           documents: yup.array().notRequired(),
         }))
   },

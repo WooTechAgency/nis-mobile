@@ -27,6 +27,9 @@ export function HazardItem({ control, classNameWrap, errors, setValue, index, na
   const likelihood = useWatch({ control, name: `${name}.likelihood` })
   const consequence = useWatch({ control, name: `${name}.consequence` })
   const hazard = useWatch({ control, name })
+  const medias = useWatch({ control, name: `${name}.medias` })
+
+  console.log('medias ', medias)
 
   const onSaveHazard = async () => {
     const validForm = await trigger(name, { shouldFocus: true })

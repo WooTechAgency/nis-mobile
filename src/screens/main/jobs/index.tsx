@@ -1,7 +1,6 @@
 import Header from '@components/header'
-import { SafeAreaView } from '@components/ui'
+import { SafeAreaView, Text } from '@components/ui'
 import React from 'react'
-import { Text } from 'react-native'
 
 export default function Jobs() {
   return (

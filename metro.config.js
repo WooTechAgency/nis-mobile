@@ -12,7 +12,7 @@ const {
  * @type {import('@react-native/metro-config').MetroConfig}
  */
 const config = mergeConfig(getDefaultConfig(__dirname), {
-  /* your config */
+  resetCache: true
 });
 
-module.exports =withSentryConfig(withNativeWind(config, { input: "./global.css" }));
+module.exports = withSentryConfig(withNativeWind(config, { input: "./global.css" }));

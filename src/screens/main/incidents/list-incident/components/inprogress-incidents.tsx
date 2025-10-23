@@ -3,14 +3,16 @@ import Title from '@components/title'
 import { Button, Image } from '@components/ui'
 import { useAppSelector } from '@hooks/common'
 import { IncidentModel } from '@lib/models/incident-model'
+import { useFocusEffect } from '@react-navigation/native'
 import { useQuery } from '@realm/react'
 import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 
 export default function InprogressIncidents() {
   const { userInfo } = useAppSelector((state) => state.authentication)
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const inprogressIncidents =
     useQuery(IncidentModel, (collection) => {
@@ -25,7 +27,7 @@ export default function InprogressIncidents() {
         startOfToday,
         startOfTomorrow,
       );
-    }).map(incident => ({
+    }, [refreshKey]).map(incident => ({
       ...incident,
       generalInfo: JSON.parse(incident.generalInfo || '{}'),
     }))
@@ -33,6 +35,12 @@ export default function InprogressIncidents() {
   const onContinue = (item: any) => {
     navigate(RouteName.CreateIncident, { incidentId: item.id })
   }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setRefreshKey(prev => prev + 1);
+    }, [setRefreshKey])
+  );
 
   return (
     <View className='mt-2'>

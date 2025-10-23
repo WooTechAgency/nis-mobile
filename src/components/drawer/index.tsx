@@ -6,7 +6,7 @@ import { StackActions } from '@react-navigation/native';
 import { RouteName } from '@routes/types';
 import { toggleCollapseDrawer } from '@store/slices/commonSlice';
 import React, { useEffect, useMemo } from 'react';
-import { View } from 'react-native';
+import { Keyboard, View } from 'react-native';
 import Animated, { Easing, ReduceMotion, SharedValue, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
 
@@ -43,7 +43,10 @@ function Item({
        ${selected && 'bg-teal20 rounded-[20px] '}
        ${collapsedDrawer && 'w-[56]'}
        `}
-      onPress={onPress}
+      onPress={() => {
+        Keyboard.dismiss()
+        onPress()
+      }}
     >
       {isCloseButton
         ? <Animated.Image

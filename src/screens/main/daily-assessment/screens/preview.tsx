@@ -82,7 +82,7 @@ export default function DailyAssessmentPreview() {
     try {
       setLoading(true)
       await createAssessmentApi(payload)
-      showSuccess({ title: 'Create a new daily assessment successfully' })
+      showSuccess({ title: 'DSRA created successfully' })
       realm.write(() => {
         realm.delete(realm.objectForPrimaryKey(DailyAssessmentModel, id || 0));
       });
@@ -105,7 +105,7 @@ export default function DailyAssessmentPreview() {
     <SafeAreaView>
       <ScrollView>
         <Header
-          title={generalInfo?.location?.site_code || data?.site?.site_code || 'New DSRA'}
+          title={generalInfo?.location?.site_code || data?.dsra_code || 'New DSRA'}
           isBack
           onCustomBack={onCustomBack}
           rightComponent={

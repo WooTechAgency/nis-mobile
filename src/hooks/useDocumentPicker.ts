@@ -32,7 +32,7 @@ export function useDocumentPicker({ name, setValue, control }: UseDocumentPicker
       const mediaResult = await uploadFilesApi({ files: response, directory: UploadMediasDirectory.WITNESS })
       // Nếu response là mảng và có file
       if (Array.isArray(response) && response.length > 0) {
-        setValue(name, [...currentDocs, {...response[0], id: mediaResult.uploaded_media[0].id} ]);
+        setValue(name, [...currentDocs, {...response[0], id: mediaResult.uploaded_media[0].id, url: mediaResult.uploaded_media[0].url} ]);
       } else {
         showError({title: 'Upload documents failed'})
       }

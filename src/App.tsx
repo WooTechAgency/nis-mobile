@@ -15,19 +15,19 @@ import { Provider } from 'react-redux';
 import "../global.css";
 import { store } from './store';
 
-// Sentry.init({
-//   dsn: 'https://50612f8932251d36185fc34bd850eaba@o4508839267008512.ingest.us.sentry.io/4510163831291904',
-//   sendDefaultPii: true,
-//   // Enable Logs
-//   // enableLogs: true,
-//   // Configure Session Replay
-//   replaysSessionSampleRate: 0.1,
-//   replaysOnErrorSampleRate: 1,
-//   integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
+Sentry.init({
+  dsn: 'https://50612f8932251d36185fc34bd850eaba@o4508839267008512.ingest.us.sentry.io/4510163831291904',
+  sendDefaultPii: true,
+  // Enable Logs
+  enableLogs: true,
+  // Configure Session Replay
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1,
+  integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
 
-//   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-//   // spotlight: __DEV__,
-// });
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // spotlight: __DEV__,
+});
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
@@ -72,5 +72,4 @@ function App() {
   );
 }
 
-export default App
-// export default Sentry.wrap(App);
+export default Sentry.wrap(App);

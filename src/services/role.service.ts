@@ -11,7 +11,7 @@ export interface IRole {
 
 export async function getRolesApi(): Promise<IRole[]> {
   try {
-    const response = await baseApi.get(BASE);
+    const response = await baseApi.get(`${BASE}/basic`);
     return response.data.data
   } catch (e: any) {
     showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });

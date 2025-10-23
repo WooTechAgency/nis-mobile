@@ -26,13 +26,13 @@ const formSchema = yup.object().shape({
   currentPassword: yup.string().required('Current password is required!'),
   newPassword: yup
     .string()
-    .required('Current password is required!')
+    .required('New password is required!')
     .matches(
       PATTERN.PASSWORD,
       'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
     ),
   confirmPassword: yup.string()
-    .required('Current password is required!')
+    .required('Confirm password is required!')
     .oneOf([yup.ref('newPassword'), null], 'Password confirmation does not match the new password.')
 
 });
@@ -102,7 +102,7 @@ export default function ChangePassword() {
             errors={errors}
             control={control}
             name='newPassword'
-            label='New password'
+            label='New Password'
             placeholder='Enter your new password'
             secureTextEntry={!showNewPassword}
             labelOverlap

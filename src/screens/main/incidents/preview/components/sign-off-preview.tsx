@@ -44,7 +44,7 @@ export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
                 <Text className={`${labelClassName} w-[25%]`}>{'Name'}</Text>
                 <Text className={`${labelClassName} w-[25%]`}>{'Role'}</Text>
                 <Text className={`${labelClassName} w-[25%]`}>{'Time & Date'}</Text>
-                <Text className={`${labelClassName} w-[25%]`}>{'Signature'}</Text>
+                <Text className={`${labelClassName} w-[25%] `}>{'Signature'}</Text>
               </View>
             }
             renderItem={({ item, index }: { item: Signee, index: number }) => (

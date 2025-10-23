@@ -153,6 +153,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
           placeholder='Select Site Location'
           listValue={sites}
           errors={errors}
+          dropdownPosition='top'
         />
         <DropdownPicker
           classNameWrap='flex-1'
@@ -163,6 +164,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
           placeholder='Enter supervisor on Site'
           listValue={users}
           errors={errors}
+          dropdownPosition='top'
         />
       </View>
       <Button

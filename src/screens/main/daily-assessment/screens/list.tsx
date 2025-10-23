@@ -10,6 +10,7 @@ import { useGetDsras } from '@services/hooks/dsra/useGetDsras';
 import { ISite } from '@services/site.service';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useFocusEffect } from '@react-navigation/native';
 import * as yup from 'yup';
 import CompleteDailyAssessments from '../components/complete-daily-assessments';
 import TodayDailyAssessments from '../components/today-daily-assessments';
@@ -39,7 +40,7 @@ export default function DailyAssessmentsList() {
   const sort_direction = watch('sort_direction') as string
 
   const debouncedSearch = useDebounce(search, 500)
-  const { data: dsra, isLoading, fetchNextPage, hasNextPage, isFetching } = useGetDsras({
+  const { data: dsra, isLoading, fetchNextPage, hasNextPage, isFetching, refetch } = useGetDsras({
     search: debouncedSearch && debouncedSearch?.length > 1 ? debouncedSearch : undefined,
     search_types: 'tablet',
     site_id: site?.id,
