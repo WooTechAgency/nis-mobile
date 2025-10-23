@@ -30,7 +30,7 @@ export function MediaForm(props: Props) {
 
   const currentMedias: Asset[] = useWatch({ name, control, })
 
-  const { takePhoto, pickFromLibrary } = useImagePicker({ setValue, control, name })
+  const { takePhoto, pickFromLibrary } = useImagePicker({ setValue, control, name, maxImage: 5 })
 
   const onRemove = () => {
     if (selectedDeleteImageRef.current !== undefined) {

@@ -82,7 +82,7 @@ export default function DailyAssessmentPreview() {
     try {
       setLoading(true)
       await createAssessmentApi(payload)
-      showSuccess({ title: 'Create a new daily assessment successfully' })
+      showSuccess({ title: 'DSRA created successfully' })
       realm.write(() => {
         realm.delete(realm.objectForPrimaryKey(DailyAssessmentModel, id || 0));
       });

@@ -45,12 +45,20 @@ const formSchema = yup.object().shape({
         thirdParty: yup.boolean().notRequired(),
         email: yup.string().when('thirdParty', {
           is: true,
-          then: (schema) => schema.required('Email is required').email('Email is invalid'),
+          then: (schema) => schema.required('Email is required').email('Invalid Email format'),
           otherwise: (schema) => schema.strip()
         }),
         phoneNumber: yup.string().when('thirdParty', {
           is: true,
-          then: (schema) => schema.required('Phone number is required'),
+          then: (schema) => schema
+            .required('Phone number is required')
+            .test('phone-format', 'Only digits and at most one +', function (value) {
+              if (!value) return true; // Allow empty values since it's not required
+              const phoneRegex = /^\+?[0-9]+$/;
+              const plusCount = (value.match(/\+/g) || []).length;
+              return phoneRegex.test(value) && plusCount <= 1;
+            })
+          ,
           otherwise: (schema) => schema.strip()
         }),
         injured: yup.boolean().notRequired(),

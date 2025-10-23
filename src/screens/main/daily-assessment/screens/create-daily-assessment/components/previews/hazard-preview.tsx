@@ -10,6 +10,7 @@ import { convertHazardFromBE } from '@utils/functions.util'
 import React from 'react'
 import { View } from 'react-native'
 import HazardItemPreview from './hazard-item-preview'
+import { Text } from '@components/ui'
 
 export default function HazardPreview({ allowEdit, dsra }: PreviewProps) {
   const { assessment: { hazard }, setAssessment } = useAssessmentContext()
@@ -31,21 +32,23 @@ export default function HazardPreview({ allowEdit, dsra }: PreviewProps) {
         toggleCollapse={toggleCollapse}
         allowEdit={allowEdit}
       />
-      <View className='w-full h-[1px] bg-neutral20 ' />
       {!collapsed &&
-        <View className='p-6 pt-5 gap-y-6'>
-          {hazards?.map((item, index) => (
-            <View key={index}>
-              <HazardItemPreview
-                hazard={item}
-                dsra={dsra}
-                index={index}
-              />
-              {hazard?.hazards && hazard?.hazards?.length > 0 && index !== hazard.hazards.length - 1 &&
-                <View className='w-full h-[1px] bg-neutral30' />}
-            </View>
-          ))}
-        </View>
+        <>
+          <View className='w-full h-[1px] bg-neutral20 ' />
+          <View className='p-6 pt-5 gap-y-6'>
+            {hazards && hazards.length > 0 ? hazards?.map((item, index) => (
+              <View key={index}>
+                <HazardItemPreview
+                  hazard={item}
+                  dsra={dsra}
+                  index={index}
+                />
+                {hazard?.hazards && hazard?.hazards?.length > 0 && index !== hazard.hazards.length - 1 &&
+                  <View className='w-full h-[1px] bg-neutral30' />}
+              </View>
+            )) : <Text className='text-neutral40'>No Additional Hazard</Text>}
+          </View>
+        </>
       }
     </View>
   )

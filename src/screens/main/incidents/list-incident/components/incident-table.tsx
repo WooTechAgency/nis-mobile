@@ -99,7 +99,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
           isFetching={isFetching}
           ListEmptyComponent={<Text className='text-neutral40'>{'No incidents found'}</Text>}
           ListHeaderComponent={
-            <View className='flex-row h-10 items-center border-t border-neutral20'>
+            <View className='flex-row h-10 items-center border-t border-neutral20 gap-x-2'>
               <TouchableOpacity
                 className={`flex-row items-center gap-x-2 ${percent.id}`}
                 onPress={() => {
@@ -126,12 +126,12 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
           }
           renderItem={({ item }: { item: IncidentReport }) => (
             <Button
-              className='flex-row h-[56px] items-center border-t border-neutral20'
+              className='flex-row min-h-[56px] items-center border-t border-neutral20 gap-x-2'
               onPress={() => onGoToDetail(item.id)}
             >
               <Text className={`${percent.id} ${rowCls}`}>{item.code}</Text>
-              <Text className={`${percent.date} ${rowCls}`}>{convertDDMMYYYY(item.date_of_report)}</Text>
-              <Text className={`${percent.type}  ${rowCls}`}>{item.incident_types.map((item => item.name)).join(" / ")}</Text>
+              <Text className={`${percent.date} ${rowCls}`}>{convertDDMMYYYY(item.date_time_of_incident)}</Text>
+              <Text className={`${percent.type}  ${rowCls} `}>{item.incident_types.map((item => item.name)).join(" / ")}</Text>
               <Text className={`flex-grow ${rowCls}`}>{item.site.site_name}</Text>
             </Button>
           )}

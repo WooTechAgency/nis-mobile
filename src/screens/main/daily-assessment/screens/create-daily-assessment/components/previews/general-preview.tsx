@@ -7,7 +7,7 @@ import { dispatch } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
 import { DailyAssessmentSteps, useAssessmentContext } from '@screens/main/daily-assessment/context'
 import { PreviewProps } from '@screens/main/incidents/config.incident'
-import { convertUTCDate } from '@utils/date.util'
+import { convertDDMMYYYY, convertUTCDate } from '@utils/date.util'
 import React from 'react'
 import { View } from 'react-native'
 
@@ -35,7 +35,7 @@ export default function GeneralPreview({ allowEdit, dsra }: PreviewProps) {
           <View className='p-6 pt-5 gap-y-4'>
             <View className='flex-row'>
               <ValueItem label='Site location' value={generalInfo?.location.site_name || dsra?.site?.site_name} classNameWrap='flex-1' />
-              <ValueItem label='Date' value={convertUTCDate(generalInfo?.date || dsra?.created_at)} classNameWrap='flex-1' />
+              <ValueItem label='Date' value={convertDDMMYYYY(generalInfo?.date || dsra?.created_at)} classNameWrap='flex-1' />
             </View>
             <ValueItem label='Project' value={generalInfo?.project || dsra?.project} />
             <View className='flex-row'>

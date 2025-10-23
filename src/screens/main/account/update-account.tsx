@@ -33,7 +33,7 @@ const formSchema = yup.object().shape({
   role: yup.string().notRequired(),
   phone: yup.string()
     .notRequired()
-    .test('phone-format', 'Phone number can only contain numbers and one + symbol', function (value) {
+    .test('phone-format', 'Only digits and at most one +', function (value) {
       if (!value) return true; // Allow empty values since it's not required
       const phoneRegex = /^\+?[0-9]+$/;
       const plusCount = (value.match(/\+/g) || []).length;

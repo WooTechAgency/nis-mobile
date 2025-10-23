@@ -7,7 +7,7 @@ import { View } from './View';
 import { Text } from './Text';
 import { Button } from './Button';
 import { getMessageError } from '@utils/common.util';
-import { convertHHMM, convertUTCDate, convertUTCDay } from '@utils/date.util';
+import { convertDDMMYYYY, convertHHMM, convertUTCDate, convertUTCDay } from '@utils/date.util';
 import { Image } from './Image';
 import { images } from '@assets/images';
 import { colors } from '@constants/colors.constants';
@@ -73,7 +73,7 @@ export function DatePickerInput(props: Props) {
     const type = renderMode || mode;
     switch (type) {
       case 'date':
-        return convertUTCDate(field.value)
+        return convertDDMMYYYY(field.value)
       case 'time':
         return convertHHMM(field.value)
       default:

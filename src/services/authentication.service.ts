@@ -50,6 +50,12 @@ export interface IUser {
       resource: string
       action: string
     }[]
+    users:{
+      id: number
+      name: string
+      resource: string
+      action: string
+    }[]
    }
   }
   token: string

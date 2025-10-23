@@ -89,9 +89,8 @@ export default function IncidentPreview() {
     }
     try {
       setLoading(true)
-      console.log('payload ', payload)
       await createIncidentApi(payload)
-      showSuccess({ title: 'Create a new incident successfully' })
+      showSuccess({ title: 'Incident report created successfully' })
       realm.write(() => {
         realm.delete(realm.objectForPrimaryKey(IncidentModel, id || 0));
       });

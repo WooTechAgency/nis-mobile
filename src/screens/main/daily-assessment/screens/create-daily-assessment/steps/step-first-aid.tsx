@@ -56,6 +56,8 @@ export default function StepFirstAid({ editingMode }: { editingMode: boolean }) 
     upsertDailyAssessment({ firstAid: form, completedSteps: Array.from(newCompletedSteps) })
   }
 
+  console.log(generalInfo)
+
   return (
     <View className='gap-y-6'>
       <Wrapper className='gap-y-6'>

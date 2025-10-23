@@ -52,7 +52,7 @@ export default function GeneralPreview({ allowEdit, incident }: PreviewProps) {
           <View className='p-6 pt-5 gap-y-4'>
             <Title label='Incident Detail' className='text-base mb-4' />
             <View className='flex-row gap-x-4'>
-              <ValueItem label='Date of Incident' value={convertDDMMYYYY(generalInfo?.dateOfIncident || incident?.date_of_report)} classNameWrap={`${width}`} />
+              <ValueItem label='Date of Incident' value={convertDDMMYYYY(generalInfo?.dateOfIncident || incident?.date_time_of_incident)} classNameWrap={`${width}`} />
               <ValueItem label='Time of Incident' value={convertHHMM(generalInfo?.timeOfIncident || incident?.date_time_of_incident)} classNameWrap='w-[50%] ' />
             </View>
             <View className='flex-row gap-x-4'>

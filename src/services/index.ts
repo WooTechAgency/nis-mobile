@@ -93,8 +93,9 @@ const handleError = (data: any): Promise<ResponseApi> =>
        store.dispatch(setUserInfo(null));
        showError({title: 'Session expired, please login again.'});
        navigationRef.reset({index: 0, routes: [{ name: RouteName.Login }]})
+    } else if (axios.isAxiosError(data) && !data.response) {
+      return reject(data);
     } else {
-      // isShowError && showPopupError(data.response?.data.message);
       return reject(data.response?.data);
     }
   });

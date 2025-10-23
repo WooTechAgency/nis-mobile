@@ -99,6 +99,7 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
           data={dsra}
           keyExtractor={(item) => item.id}
           isFetching={isFetching}
+          ListEmptyComponent={<Text className='text-neutral40'>No daily assessments found</Text>}
           ListHeaderComponent={
             <View className='flex-row h-10 items-center border-t border-neutral20'>
               <Button
@@ -127,7 +128,7 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
           }
           renderItem={({ item }: { item: DSRA }) => (
             <Button
-              className='flex-row h-[56px] items-center border-t border-neutral20'
+              className='flex-row min-h-[56px] items-center border-t border-neutral20'
               onPress={() => navigate(RouteName.DailyAssessmentPreview, { dsraId: item.id })}
             >
               <Text className={`${percent.id} ${rowCls}`}>{item.dsra_code}</Text>

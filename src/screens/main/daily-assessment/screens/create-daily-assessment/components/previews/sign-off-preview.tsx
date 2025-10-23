@@ -26,7 +26,7 @@ export default function SignOffPreview({ allowEdit, dsra }: PreviewProps) {
   const data = dsra?.signatures || [singing?.teamLeader, ...(singing?.signees || [])];
 
   return (
-    <View className='mt-8 bg-white rounded-[20px]'>
+    <View className='mt-6 bg-white rounded-[20px]'>
       <HeaderPreview
         allowEdit={allowEdit}
         label='Sign off'

@@ -68,10 +68,12 @@ export default function TodayDailyAssessments() {
         site_code: generalInfo?.location?.site_code,
         site_name: generalInfo?.location?.site_name,
         hazardsLength: hazard?.hazards?.length,
+        swms_url: generalInfo?.location?.swms?.attachment,
         status: 'progress',
       }
     })
 
+  console.log(inprogressAssessments)
   const mergedData = [...inprogressAssessments || [], ...dsraToday || []]
 
   const onContinue = (id: number) => {
@@ -136,7 +138,7 @@ export default function TodayDailyAssessments() {
           >
             <View className=''>
               <View className='flex-row  items-center gap-x-3 mb-4'>
-                <Text className='text-base font-semibold'>{item?.dsra_code}</Text>
+                <Text className='text-base font-semibold'>{item?.dsra_code || item?.site_code}</Text>
                 <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG[item.status as DsraStatus]} `}>
                   <Text className='text-xs font-medium'>{MAP_STATUS_TITLE[item.status as DsraStatus]}</Text>
                 </View>
@@ -151,11 +153,21 @@ export default function TodayDailyAssessments() {
               </View>
             </View>
             {item.status === 'progress' ? (
-              <Button
-                label='Continue'
-                onPress={() => onContinue(item.id)}
-                {...buttonCls}
-              />
+              <View className='flex-row  items-center gap-x-4'>
+                <Button
+                  label='View SWMS'
+                  onPress={() => {
+                    navigate(RouteName.ShowDocument, { url: item.swms_url as string })
+                  }}
+                  {...buttonCls}
+                  type='outlined'
+                />
+                <Button
+                  label='Continue'
+                  onPress={() => onContinue(item.id as number)}
+                  {...buttonCls}
+                />
+              </View>
             ) : (
               <View className='flex-row  items-center gap-x-4'>
                 <Button
