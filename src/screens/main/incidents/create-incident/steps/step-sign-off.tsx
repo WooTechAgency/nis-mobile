@@ -3,17 +3,16 @@ import Title from '@components/title';
 import { Button, Image } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector } from '@hooks/common';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import { IRole } from '@services/role.service';
-import { formatRole } from '@utils/functions.util';
 import React from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { SigneeItem } from '../components/singee-item';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
 import { useUpsertIncident } from '../../useUpsertIncident';
+import { SigneeItem } from '../components/singee-item';
 
 export interface SignOffForm {
   signees: Signee[];
@@ -27,9 +26,9 @@ export interface Signee {
 }
 
 const signeeDefault = {
-  name: '',
-  role: '',
-  signature: '',
+  name: undefined,
+  role: undefined,
+  signature: undefined,
   timestamp: new Date(),
 }
 
@@ -59,12 +58,12 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
     control,
     handleSubmit,
     setValue,
-    formState: { errors, },
+    formState: { errors },
     trigger
   } = useForm({
     defaultValues: {
       signees: singing?.signees || [
-        { ...signeeDefault, name: userInfo?.full_name, role: formatRole(userInfo?.role) }
+        { ...signeeDefault, name: userInfo?.full_name, }
       ],
     },
     mode: 'onSubmit',

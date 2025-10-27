@@ -32,11 +32,11 @@ export default function FirstAidPreview({ allowEdit, dsra }: PreviewProps) {
         <>
           <View className='w-full h-[1px] bg-neutral20 ' />
           <View className='p-6 pt-5 gap-y-4'>
-            <View className='flex-row'>
+            <View className='flex-row gap-x-4'>
               <ValueItem label='Name of on-site First Aider' value={firstAid?.name || dsra?.site_first_aider_name} classNameWrap='flex-1' />
               <ValueItem label='First Aid Box Location' value={firstAid?.firstAidLocation || dsra?.first_aid_box_location} classNameWrap='flex-1' />
             </View>
-            <View className='flex-row'>
+            <View className='flex-row gap-x-4'>
               <ValueItem label='Location of Nearest Hospital' value={generalInfo?.location.location_of_nearest_hospital || dsra?.site?.location_of_nearest_hospital} classNameWrap='flex-1' />
               <ValueItem label='Emergency Assembly Point' value={generalInfo?.location.emergency_assembly_point || dsra?.site?.emergency_assembly_point} classNameWrap='flex-1' />
             </View>

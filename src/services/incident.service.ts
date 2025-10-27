@@ -136,7 +136,7 @@ export async function getIncidentReportsApi(params: GetIncidentParams): Promise<
     const response = await baseApi.get(`api/incident-reports`,params);
     return response.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch incidents' });
     throw e;
   }
 }
@@ -147,7 +147,7 @@ export async function getIncidentReportApi(id: number): Promise<IncidentReport> 
     const response = await baseApi.get(`api/incident-reports/${id}`);
     return response.data.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch incidents' });
     throw e;
   }
 }

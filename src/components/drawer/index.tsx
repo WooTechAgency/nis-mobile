@@ -1,9 +1,12 @@
 import { images } from '@assets/images';
 import { Button, Image, SafeAreaView } from '@components/ui';
 import { colors } from '@constants/colors.constants';
+import { useAppSelector } from '@hooks/common';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { StackActions } from '@react-navigation/native';
 import { RouteName } from '@routes/types';
+import { getCurrentUserApi } from '@services/authentication.service';
+import { useGetCurrentUser } from '@services/hooks/useGetCurrentUser';
 import { toggleCollapseDrawer } from '@store/slices/commonSlice';
 import React, { useEffect, useMemo } from 'react';
 import { Keyboard, View } from 'react-native';
@@ -90,7 +93,7 @@ interface DrawerProps extends DrawerContentComponentProps {
 
 export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerProps) {
   const dispatch = useDispatch();
-
+  const { userInfo } = useAppSelector((state) => state.authentication)
   const onPress = (index: number) => {
     if (state.index === index) {
       return navigation.dispatch(StackActions.popToTop());
@@ -120,13 +123,30 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
   }, [collapsedDrawer]);
 
 
-  const menuItems = useMemo(() => [
-    { title: 'Dashboard', url: images.dashboard, routeIndex: 0 },
-    { title: 'Jobs', url: images.job, routeIndex: 1 },
-    { title: 'Daily assessment', url: images.dailyAssessment, routeIndex: 2 },
-    { title: 'Incidents', url: images.incident, routeIndex: 3 },
-    // { title: 'Account', url: images.setting, routeIndex: 4 }
-  ], []);
+
+  const { data: currentUser = userInfo } = useGetCurrentUser()
+
+  const menuItems = useMemo(() => {
+    const items = [
+      { title: 'Dashboard', url: images.dashboard, routeIndex: 0 },
+      { title: 'Jobs', url: images.job, routeIndex: 1 },
+      { title: 'Daily assessment', url: images.dailyAssessment, routeIndex: 2 },
+      { title: 'Incidents', url: images.incident, routeIndex: 3 },
+    ]
+    if (currentUser) {
+      const viewIncidentReportsPermission = currentUser?.role?.permissions?.incident_reports?.find((permission) => permission.action === 'view')
+      const viewDailyAssessmentPermission = currentUser?.role?.permissions?.DSRA?.find((permission) => permission.action === 'view')
+      if (!viewIncidentReportsPermission) {
+        const incidentReportsIndex = items.findIndex((item) => item.title === 'Incidents')
+        items.splice(incidentReportsIndex, 1)
+      }
+      if (!viewDailyAssessmentPermission) {
+        const dailyAssessmentIndex = items.findIndex((item) => item.title === 'Daily assessment')
+        items.splice(dailyAssessmentIndex, 1)
+      }
+    }
+    return items
+  }, [currentUser]);
 
   return (
     <Animated.View className='flex-1 ' style={{ width }}>

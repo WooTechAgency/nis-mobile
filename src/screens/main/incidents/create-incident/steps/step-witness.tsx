@@ -61,6 +61,7 @@ export default function StepWitness({ editingMode }: { editingMode: boolean }) {
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'witnesses',

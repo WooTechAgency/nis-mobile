@@ -103,7 +103,8 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   const { upsertIncident } = useUpsertIncident()
 
   const { setIncident, incident: { completedSteps, incident } } = useIncidentContext()
-  const { data: incidentTypes } = useGetIncidentTypes();
+
+  const { data: incidentTypes } = useGetIncidentTypes(incident?.incidentTypes || []);
   const {
     control,
     handleSubmit,
@@ -114,7 +115,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   } = useForm({
     defaultValues: {
       ...incident,
-      incidentTypes: (incident?.incidentTypes && incidentTypes) ? mapIncidentTypes(incidentTypes, incident?.incidentTypes) : [],
+      incidentTypes: incident?.incidentTypes,
       involvedPersons: incident?.involvedPersons || [{}],
       incidentSelected: incident?.incidentSelected || false,
     },

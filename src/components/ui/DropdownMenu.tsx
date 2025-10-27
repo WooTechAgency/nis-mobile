@@ -37,7 +37,7 @@ export default function DropdownMenu(props: Props) {
       {...props}
       popoverStyle={[{ borderRadius: radius }, props.popoverStyle]}
     >
-      <View className='bg-white rounded-[8px] py-2  min-w-[250px]'>
+      <View className='bg-white rounded-[8px] py-2  w-[250px]'>
         {listValue?.map(((item, index) =>
           <Button
             key={index}
@@ -47,7 +47,7 @@ export default function DropdownMenu(props: Props) {
               onSelect(item)
             }}
           >
-            <Text className={`${selectedValue?.value === item.value && 'font-semibold'}`}>{item.label}</Text>
+            <Text className={`${selectedValue?.value === item.value && 'font-semibold'}`} >{item.label}</Text>
           </Button>
         ))}
       </View>

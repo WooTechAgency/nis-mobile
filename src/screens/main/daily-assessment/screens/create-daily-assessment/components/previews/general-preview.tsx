@@ -33,12 +33,12 @@ export default function GeneralPreview({ allowEdit, dsra }: PreviewProps) {
         <>
           <View className='w-full h-[1px] bg-neutral20 ' />
           <View className='p-6 pt-5 gap-y-4'>
-            <View className='flex-row'>
+            <View className='flex-row gap-x-4'>
               <ValueItem label='Site location' value={generalInfo?.location.site_name || dsra?.site?.site_name} classNameWrap='flex-1' />
               <ValueItem label='Date' value={convertDDMMYYYY(generalInfo?.date || dsra?.created_at)} classNameWrap='flex-1' />
             </View>
             <ValueItem label='Project' value={generalInfo?.project || dsra?.project} />
-            <View className='flex-row'>
+            <View className='flex-row gap-x-4'>
               <ValueItem label='Site Team Leader' value={generalInfo?.leader?.label || dsra?.team_leader_details?.full_name} classNameWrap='flex-1' />
               <ValueItem label='Principal Contractor' value={generalInfo?.contractor || dsra?.principal_contractor} classNameWrap='flex-1' />
             </View>

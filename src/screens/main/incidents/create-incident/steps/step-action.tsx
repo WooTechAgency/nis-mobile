@@ -25,15 +25,6 @@ export interface ActionForm {
   actionSelected: boolean
 }
 
-const mapActions = (actions: Action[], selectedActions: Action[]) => {
-  return actions.map((item) => {
-    return {
-      ...item,
-      selected: selectedActions?.find((action) => action.id === item.id)?.selected || false,
-      description: selectedActions?.find((action) => action.id === item.id)?.description || '',
-    }
-  })
-}
 
 const formSchema = yup.object().shape({
   actions: yup
@@ -59,7 +50,7 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
   const { upsertIncident } = useUpsertIncident()
 
   const { setIncident, incident: { completedSteps, action } } = useIncidentContext()
-  const { data: actions } = useGetTakenActions();
+  const { data: actions } = useGetTakenActions(action?.actions || []);
   const {
     control,
     handleSubmit,
@@ -69,7 +60,7 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
     formState: { errors, },
   } = useForm({
     defaultValues: {
-      actions: (action?.actions && actions) ? mapActions(actions, action.actions) : [],
+      actions: action?.actions,
       actionSelected: action?.actionSelected || false,
     },
     mode: 'onSubmit',

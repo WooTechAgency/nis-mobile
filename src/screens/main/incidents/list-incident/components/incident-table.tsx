@@ -54,12 +54,13 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
   return (
     <View>
       <View className='bg-white mt-6 rounded-[20px] p-6 '>
-        <View className='flex-row items-center justify-between'>
-          <View className='row-center gap-x-4'>
-            {type && <SelectedFilter label={type?.label} name='type' setValue={setValue} />}
-            {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
-            {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
-            {/* {!type && !site && !date && <View />} */}
+        <View className='flex-row items-center justify-between flex-wrap gap-4'>
+          <View className='flex-row items-center justify-between flex-wrap gap-4'>
+            <View className='flex-row gap-x-4 flex-wrap gap-4'>
+              {type && <SelectedFilter label={type?.label} name='type' setValue={setValue} />}
+              {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
+              {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
+            </View>
           </View>
           <View className='flex-row gap-x-4 self-end'>
             <Button
