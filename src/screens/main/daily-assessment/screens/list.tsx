@@ -28,7 +28,7 @@ export default function DailyAssessmentsList() {
   const { control, setValue, watch } = useForm({
     resolver: yupResolver(formSchema),
     defaultValues: {
-      sort_by: SortBy.ID,
+      sort_by: SortBy.DSRA_CODE,
       sort_direction: SortDirection.ASC
     }
   });

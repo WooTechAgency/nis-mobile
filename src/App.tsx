@@ -4,7 +4,6 @@ import { IncidentModel } from '@lib/models/incident-model';
 import { toastConfig } from '@lib/toast';
 import { RealmProvider } from '@realm/react';
 import RootNavigator from '@routes/root-navigator';
-import * as Sentry from '@sentry/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
@@ -14,20 +13,6 @@ import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
 import "../global.css";
 import { store } from './store';
-
-Sentry.init({
-  dsn: 'https://50612f8932251d36185fc34bd850eaba@o4508839267008512.ingest.us.sentry.io/4510163831291904',
-  sendDefaultPii: true,
-  // Enable Logs
-  enableLogs: true,
-  // Configure Session Replay
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1,
-  integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
-
-  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // spotlight: __DEV__,
-});
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
@@ -72,4 +57,4 @@ function App() {
   );
 }
 
-export default Sentry.wrap(App);
+export default App

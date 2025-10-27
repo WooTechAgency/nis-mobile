@@ -34,6 +34,17 @@ export interface IncidentForm {
   incidentTypes: IncidentType[]
   incidentSelected?: boolean
 }
+
+const mapIncidentTypes = (incidentTypes: IncidentType[], selectedIncidentTypes: IncidentType[]) => {
+  return incidentTypes.map((item) => {
+    return {
+      ...item,
+      selected: selectedIncidentTypes?.find((incidentType) => incidentType.id === item.id)?.selected || false,
+      description: selectedIncidentTypes?.find((incidentType) => incidentType.id === item.id)?.description || '',
+    }
+  })
+}
+
 const formSchema = yup.object().shape({
   involvedPersons: yup
     .array()
@@ -92,6 +103,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   const { upsertIncident } = useUpsertIncident()
 
   const { setIncident, incident: { completedSteps, incident } } = useIncidentContext()
+  const { data: incidentTypes } = useGetIncidentTypes();
   const {
     control,
     handleSubmit,
@@ -102,7 +114,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   } = useForm({
     defaultValues: {
       ...incident,
-      incidentTypes: incident?.incidentTypes,
+      incidentTypes: (incident?.incidentTypes && incidentTypes) ? mapIncidentTypes(incidentTypes, incident?.incidentTypes) : [],
       involvedPersons: incident?.involvedPersons || [{}],
       incidentSelected: incident?.incidentSelected || false,
     },
@@ -113,8 +125,6 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
     control,
     name: 'involvedPersons',
   });
-
-  const { data: incidentTypes } = useGetIncidentTypes();
 
   useEffect(() => {
     if (!incident?.incidentTypes && !!incidentTypes) {

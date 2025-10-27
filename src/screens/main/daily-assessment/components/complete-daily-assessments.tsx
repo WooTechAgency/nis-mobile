@@ -101,16 +101,16 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
           isFetching={isFetching}
           ListEmptyComponent={<Text className='text-neutral40'>No daily assessments found</Text>}
           ListHeaderComponent={
-            <View className='flex-row h-10 items-center border-t border-neutral20'>
+            <View className='flex-row h-10 items-center border-t border-neutral20 gap-x-2'>
               <Button
                 className={`flex-row items-center gap-x-2 ${percent.id}`}
                 onPress={() => {
                   setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
-                  setValue('sort_by', SortBy.ID)
+                  setValue('sort_by', SortBy.DSRA_CODE)
                 }}
               >
-                <Text className={`${headerCls} ${sort_by === SortBy.ID && 'text-neutral80'}`}>{'DSRA ID'}</Text>
-                {sort_by === SortBy.ID && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
+                <Text className={`${headerCls} ${sort_by === SortBy.DSRA_CODE && 'text-neutral80'}`}>{'DSRA ID'}</Text>
+                {sort_by === SortBy.DSRA_CODE && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
               </Button>
               <Button
                 className={`flex-row items-center gap-x-2 ${percent.date}`}
@@ -128,12 +128,12 @@ export default function CompleteDailyAssessments({ dsra, control, setValue, isFe
           }
           renderItem={({ item }: { item: DSRA }) => (
             <Button
-              className='flex-row min-h-[56px] items-center border-t border-neutral20'
+              className='flex-row min-h-[56px] items-center border-t border-neutral20 gap-x-2'
               onPress={() => navigate(RouteName.DailyAssessmentPreview, { dsraId: item.id })}
             >
               <Text className={`${percent.id} ${rowCls}`}>{item.dsra_code}</Text>
               <Text className={`${percent.date} ${rowCls}`}>{convertDDMMYYYY(item.created_at)}</Text>
-              <Text className={`flex-grow ${rowCls}`}>{item.site.site_name}</Text>
+              <Text className={`flex-grow ${rowCls} flex-1`} numberOfLines={1}>{item.site.site_name}</Text>
               <Text className={`${percent.hazard} ${rowCls}`}>{item?.hazards?.length || 0}</Text>
             </Button>
           )

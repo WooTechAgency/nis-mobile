@@ -1,6 +1,8 @@
 import Title from '@components/title';
 import { Button, CheckboxDescriptionForm, Text, Wrapper } from '@components/ui';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { navigate } from '@routes/navigationRef';
+import { RouteName } from '@routes/types';
 import { useGetTakenActions } from '@services/hooks/incident/useGetTakenActions';
 import { getMessageError } from '@utils/common.util';
 import React, { useEffect } from 'react';
@@ -8,8 +10,6 @@ import { useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { navigate } from '@routes/navigationRef';
-import { RouteName } from '@routes/types';
 import { useUpsertIncident } from '../../useUpsertIncident';
 
 
@@ -24,6 +24,17 @@ export interface ActionForm {
   actions: Action[]
   actionSelected: boolean
 }
+
+const mapActions = (actions: Action[], selectedActions: Action[]) => {
+  return actions.map((item) => {
+    return {
+      ...item,
+      selected: selectedActions?.find((action) => action.id === item.id)?.selected || false,
+      description: selectedActions?.find((action) => action.id === item.id)?.description || '',
+    }
+  })
+}
+
 const formSchema = yup.object().shape({
   actions: yup
     .array()
@@ -48,6 +59,7 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
   const { upsertIncident } = useUpsertIncident()
 
   const { setIncident, incident: { completedSteps, action } } = useIncidentContext()
+  const { data: actions } = useGetTakenActions();
   const {
     control,
     handleSubmit,
@@ -57,13 +69,12 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
     formState: { errors, },
   } = useForm({
     defaultValues: {
-      actions: action?.actions,
+      actions: (action?.actions && actions) ? mapActions(actions, action.actions) : [],
       actionSelected: action?.actionSelected || false,
     },
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
-  const { data: actions } = useGetTakenActions();
 
   useEffect(() => {
     if (!action?.actions && !!actions) {

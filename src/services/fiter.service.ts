@@ -55,7 +55,7 @@ export async function getUserFilterOptionsApi(params?: GetUserFilterOptionsParam
   }
 }
 
-// INCIDENT ----  Interface cho filter options response
+// DATE_TIME_OF_INCIDENT ----  Interface cho filter options response
 export interface IncidentsFilterOptions {
   sites: Array<FilterOption>;
   incident_types: Array<FilterOption>;

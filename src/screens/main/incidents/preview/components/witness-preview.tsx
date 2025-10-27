@@ -9,6 +9,7 @@ import { Witness } from '../../create-incident/steps/step-witness'
 import HeaderPreview from '@components/common/header-preview.tsx'
 import { StackActions } from '@react-navigation/native'
 import { RouteName } from '@routes/types.ts'
+import { getLastPartOfUrl } from '@utils/functions.util.ts'
 
 export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
   const { incident: { witness }, setIncident } = useIncidentContext()
@@ -51,16 +52,18 @@ export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
                 <Text className={`${labelClassName} w-[23%]`}>{item?.name}</Text>
                 <Text className={`${labelClassName} w-[23%]`}>{item?.phone}</Text>
                 <Text className={`${labelClassName} w-[23%]`}>{item?.email}</Text>
-                <View className={`grow `}>
-                  {item.documents && item.documents.length > 0 && (
+                <View className={`grow shirnk flex-1`}>
+                  {/* khi chua submit -> documents, khi submit -> medias */}
+                  {(item.documents && item.documents.length > 0 || item.medias && item.medias.length > 0) && (
                     <View className='gap-2'>
-                      {item.documents.map((document) => (
+                      {(item.documents || item.medias).map((item, index) => (
                         <TouchableOpacity
+                          key={index}
                           className='flex-row items-center gap-x-2'
-                          onPress={() => navigate(RouteName.ShowDocument, { url: document?.url as string })}
+                          onPress={() => navigate(RouteName.ShowDocument, { url: item?.url as string })}
                         >
                           <View className='w-1 h-1 bg-neutral70 rounded-full' />
-                          <Text className={`underline ${labelClassName}`} key={document.id}>{document.name}</Text>
+                          <Text className={`underline ${labelClassName} `}>{item?.name || item?.original_filename || getLastPartOfUrl(item.path)}</Text>
                         </TouchableOpacity>
                       ))}
                     </View>

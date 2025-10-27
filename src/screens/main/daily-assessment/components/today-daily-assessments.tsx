@@ -133,10 +133,10 @@ export default function TodayDailyAssessments() {
         :
         mergedData.map((item) => (
           <View
-            className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-6'
+            className='flex-row items-end justify-between bg-white  rounded-[20px] p-6 mt-6 gap-x-4 '
             key={item.id}
           >
-            <View className=''>
+            <View className='flex-1'>
               <View className='flex-row  items-center gap-x-3 mb-4'>
                 <Text className='text-base font-semibold'>{item?.dsra_code || item?.site_code}</Text>
                 <View className={`px-[10px] h-[24px] center rounded-full ${MAP_STATUS_BG[item.status as DsraStatus]} `}>
@@ -145,7 +145,7 @@ export default function TodayDailyAssessments() {
               </View>
               <View className='flex-row  items-center gap-x-1'>
                 <Image source={images.location} className='w-8 h-8' />
-                <Text className='text-base'>{item?.site_name}</Text>
+                <Text className='text-base shrink' numberOfLines={1}>{item?.site_name}</Text>
               </View>
               <View className='flex-row  items-center gap-x-1'>
                 <Image source={images.warning} className='w-8 h-8' />
@@ -169,7 +169,7 @@ export default function TodayDailyAssessments() {
                 />
               </View>
             ) : (
-              <View className='flex-row  items-center gap-x-4'>
+              <View className='flex-row items-center gap-x-4'>
                 <Button
                   label='Add hazard'
                   onPress={() => onAddHazard(item as DSRA)}

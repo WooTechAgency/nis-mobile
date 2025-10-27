@@ -58,3 +58,8 @@ export const convertHazardForm = (hazards: HazardForm[]) => {
   }))
 }     
 
+
+export const getLastPartOfUrl = (url: string) => {
+  if (typeof url !== 'string') return '';
+  return url.substring(url.lastIndexOf('/') + 1);
+}

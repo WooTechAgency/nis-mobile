@@ -132,7 +132,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
               <Text className={`${percent.id} ${rowCls}`}>{item.code}</Text>
               <Text className={`${percent.date} ${rowCls}`}>{convertDDMMYYYY(item.date_time_of_incident)}</Text>
               <Text className={`${percent.type}  ${rowCls} `}>{item.incident_types.map((item => item.name)).join(" / ")}</Text>
-              <Text className={`flex-grow ${rowCls}`}>{item.site.site_name}</Text>
+              <Text className={`flex-grow ${rowCls} flex-1`} numberOfLines={1}>{item.site.site_name}</Text>
             </Button>
           )}
         />

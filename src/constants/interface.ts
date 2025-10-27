@@ -17,7 +17,8 @@ export enum SortBy {
   ID = 'id',
   DATE = 'date',
   CREATED_AT = 'created_at',
-  DATE_OF_REPORT = 'date_of_report',
+  DATE_OF_REPORT = 'date_time_of_incident',
+  DSRA_CODE = 'dsra_code',
 }
 
 export interface IPagination{
