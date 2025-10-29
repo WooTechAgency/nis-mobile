@@ -6,6 +6,8 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnable
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 import android.os.Bundle
 import com.zoontek.rnbootsplash.RNBootSplash
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 
 class MainActivity : ReactActivity() {
 
@@ -25,5 +27,19 @@ class MainActivity : ReactActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
       RNBootSplash.init(this, R.style.BootTheme) // ⬅️ initialize the splash screen
       super.onCreate(savedInstanceState) // super.onCreate(null) with react-native-screens
+      
+      // Set device-specific orientation
+      setDeviceOrientation()
+   }
+   
+   private fun setDeviceOrientation() {
+      val isTablet = (resources.configuration.screenLayout and 
+                     Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
+      
+      requestedOrientation = if (isTablet) {
+         ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+      } else {
+         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+      }
    }
 }

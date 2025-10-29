@@ -1,4 +1,4 @@
-import { Back, Button, ScrollView } from '@components/ui';
+import { Back, Button, SafeAreaView, ScrollView } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
@@ -52,10 +52,11 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
   };
 
   return (
-    <View className='flex-1 bg-white '>
+    <SafeAreaView className='flex-1 bg-white'>
+      {!isIpad && <BackToLogin />}
       <ScrollView contentContainerStyle={[
         { flexGrow: 1 },
-        isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+        isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 64 },
       ]}>
         <View className={AuthWrapCls}>
           <Logo />
@@ -75,10 +76,10 @@ export default function EnterCode({ navigation, route }: EnterCodeProps) {
             onPress={onResendCode}
             type='outlined'
           />
-          <BackToLogin />
+          {isIpad && <BackToLogin />}
         </View>
       </ScrollView>
       <Loading loading={loading} />
-    </View>
+    </SafeAreaView>
   );
 }

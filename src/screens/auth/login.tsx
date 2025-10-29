@@ -1,5 +1,5 @@
 import { images } from '@assets/images';
-import { Button, Image, ScrollView, Text } from '@components/ui';
+import { Button, Image, SafeAreaView, ScrollView, Text } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
@@ -72,11 +72,11 @@ export default function Login() {
   };
 
   return (
-    <View className='flex-1 bg-white'>
+    <SafeAreaView className='flex-1 bg-white'>
       <ScrollView
         contentContainerStyle={[
           { flexGrow: 1 },
-          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 94 },
         ]}
       >
         <View className={AuthWrapCls}>
@@ -114,13 +114,13 @@ export default function Login() {
             }
           />
           <Button label='Log in' className='mt-6' onPress={handleSubmit(onLogin)} />
-          <Button onPress={onForgotPassword} className='self-center'>
-            <Text className='mt-3 text-[12px] text-neutral70'>Forgot password?</Text>
+          <Button onPress={onForgotPassword} className='sm:self-center'>
+            <Text className='mt-3 text-[12px] sm:text-neutral70'>Forgot password?</Text>
           </Button>
         </View>
       </ScrollView>
       <Loading loading={loading} />
-    </View>
+    </SafeAreaView>
   );
 }
 

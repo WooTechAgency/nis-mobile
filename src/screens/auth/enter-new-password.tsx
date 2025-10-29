@@ -1,6 +1,6 @@
 import { images } from '@assets/images';
 import { CommonModal } from '@components/modal';
-import { Button, Image, ScrollView, Text } from '@components/ui';
+import { Button, Image, SafeAreaView, ScrollView, Text } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
@@ -84,11 +84,12 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
   const isPasswordError = errors.newPassword?.message;
 
   return (
-    <View className='flex-1 bg-white '>
+    <SafeAreaView className='flex-1 bg-white  '>
+      {!isIpad && <BackToLogin />}
       <ScrollView
         contentContainerStyle={[
           { flexGrow: 1 },
-          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 64 },
         ]}>
         <View className={AuthWrapCls}>
           <Logo />
@@ -134,7 +135,7 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
             }
           />
           <Button label='Reset password' className='mt-6' onPress={handleSubmit(onSavePassword)} />
-          <BackToLogin />
+          {isIpad && <BackToLogin />}
         </View>
       </ScrollView>
       <Loading loading={loading} />
@@ -145,6 +146,6 @@ export default function EnterNewPassword({ navigation, route }: EnterNewPassword
         des='You can now use your new password to log in'
         wrapperClassName='py-[40] px-[32] sm:py-[32] sm:px-[28] '
       />
-    </View>
+    </SafeAreaView>
   );
 }

@@ -30,9 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       launchOptions: launchOptions
     )
 
-      // Force app xoay landscape khi launch
+      // Force app orientation based on device type
    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-      UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+      let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+      let orientation: UIInterfaceOrientation = isIPad ? .landscapeRight : .portrait
+      UIDevice.current.setValue(orientation.rawValue, forKey: "orientation")
       UINavigationController.attemptRotationToDeviceOrientation()
   }
 
@@ -40,7 +42,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-    return .landscapeLeft
+    let isIPad = UIDevice.current.userInterfaceIdiom == .pad
+    return isIPad ? .landscape : .portrait
   }
 }
 

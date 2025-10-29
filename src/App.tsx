@@ -2,21 +2,45 @@ import ErrorModal from '@components/modal/error-modal';
 import { DailyAssessmentModel } from '@lib/models/daily-assessment-model';
 import { IncidentModel } from '@lib/models/incident-model';
 import { toastConfig } from '@lib/toast';
-import { RealmProvider } from '@realm/react';
+import { RealmProvider, useRealm } from '@realm/react';
 import RootNavigator from '@routes/root-navigator';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
+import { Realm } from 'realm';
 import "../global.css";
 import { store } from './store';
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
   deleteRealmIfMigrationNeeded: true
+};
+
+// Component to clean old records when app opens
+const RealmCleaner = () => {
+  const realm = useRealm();
+
+  useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    realm.write(() => {
+      // Delete old incidents
+      const oldIncidents = realm.objects<IncidentModel>('FieldNote').filtered('createdAt < $0', today);
+      realm.delete(oldIncidents);
+
+      // Delete old daily assessments
+      const oldDailyAssessments = realm.objects<DailyAssessmentModel>('DailyAssessmentModel').filtered('createdAt < $0', today);
+      realm.delete(oldDailyAssessments);
+    });
+  }, [realm]);
+
+  return null;
 };
 
 const queryClient = new QueryClient({
@@ -39,7 +63,8 @@ function App() {
         <PaperProvider>
           <KeyboardProvider>
             <QueryClientProvider client={queryClient}>
-              <RealmProvider {...realmConfig} >
+              <RealmProvider {...realmConfig}>
+                <RealmCleaner />
                 <GestureHandlerRootView className='flex-1'>
                   <RootNavigator />
                   <Toast config={toastConfig} position='top' />

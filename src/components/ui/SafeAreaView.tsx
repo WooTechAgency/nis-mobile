@@ -12,7 +12,7 @@ export function SafeAreaView(props: Props) {
   return (
     <SafeAreaViewComponent
       {...props}
-      className={`bg-neutral15  flex-1 px-6 ${props.className}`}
+      className={`bg-neutral15 flex-1 sm:px-6 ${props.className}`}
       edges={isSaveBottom ? ['left', 'right', 'top', 'bottom'] : ['left', 'right', 'top']}
     >
       {props.children}

@@ -1,4 +1,4 @@
-import { Button, ScrollView } from '@components/ui';
+import { Button, SafeAreaView, ScrollView } from '@components/ui';
 import Loading from '@components/ui/Loading';
 import { TextInput } from '@components/ui/TextInput';
 import { isIpad } from '@constants/app.constants';
@@ -41,15 +41,16 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
   };
 
   return (
-    <View className='flex-1 bg-white'>
+    <SafeAreaView className='flex-1 bg-white '>
+      {!isIpad && <BackToLogin />}
       <ScrollView
         contentContainerStyle={[
           { flexGrow: 1 },
-          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 182 },
+          isIpad ? { alignItems: 'center', justifyContent: 'center' } : { marginTop: 64 },
         ]}>
         <View className={AuthWrapCls}>
           <Logo />
-          <View className='gap-y-6 mt-8'>
+          <View className='gap-y-6 mt-24 sm:mt-8'>
             <TextInput
               errors={errors}
               control={control}
@@ -64,10 +65,10 @@ export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
               onPress={handleSubmit(onNext)}
             />
           </View>
-          <BackToLogin />
+          {isIpad && <BackToLogin />}
         </View>
       </ScrollView>
       <Loading loading={loading} />
-    </View>
+    </SafeAreaView>
   );
 }
