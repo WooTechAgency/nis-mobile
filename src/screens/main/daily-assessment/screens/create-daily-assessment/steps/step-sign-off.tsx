@@ -54,7 +54,7 @@ const formSchema = yup.object().shape({
     .notRequired()
     .of(
       yup.object({
-        name: yup.string().required('Name is required'),
+        name: yup.string().trim().required('Name is required'),
         role: yup.object().required('Role is required'),
         signature: yup.string().required('Signature is required'),
         timestamp: yup.date().notRequired()

@@ -28,14 +28,15 @@ interface Form {
 const formSchema = yup.object().shape({
   newPassword: yup
     .string()
+    .trim()
     .required('New password is required')
     .matches(
       PATTERN.PASSWORD,
       'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.'
     ),
-  confirmPassword: yup.string()
+  confirmPassword: yup.string().trim()
     .required('New password is required')
-    .oneOf([yup.ref('newPassword'), null], 'Password confirmation does not match the new password.')
+    .oneOf([yup.ref('newPassword')], 'Password confirmation does not match the new password.')
 
 });
 

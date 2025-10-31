@@ -43,7 +43,7 @@ export default function TodayDailyAssessments() {
   const { data: dsraToday, refetch } = useGetDsrasToday({
     date_from: dayjs(new Date()).format('YYYY-MM-DD'),
     date_to: dayjs(new Date()).format('YYYY-MM-DD'),
-    search_types: 'tablet',
+    search_types: 'mobile',
     author_id: userInfo?.id
   })
 
@@ -76,10 +76,6 @@ export default function TodayDailyAssessments() {
   console.log(inprogressAssessments)
   const mergedData = [...inprogressAssessments || [], ...dsraToday || []]
 
-  const onContinue = (id: number) => {
-    navigate(RouteName.CreateDailyAssessment, { assessmentId: id })
-
-  }
   const onAddHazard = (dsraData: DSRA) => {
     navigate(RouteName.CreateDailyAssessment, {
       editingMode: true,
@@ -92,12 +88,16 @@ export default function TodayDailyAssessments() {
     navigate(RouteName.DailyAssessmentPreview, { dsraId: id })
   }
 
-  const checkPermissionAndRedirect = async () => {
+  const checkPermissionAndRedirect = async (id?: number) => {
     try {
       const user = await getCurrentUserApi()
       const permission = user?.role?.permissions?.DSRA?.find((permission) => permission.action === 'create')
       if (permission) {
-        navigate(RouteName.CreateDailyAssessment)
+        if (id) {
+          navigate(RouteName.CreateDailyAssessment, { assessmentId: id })
+        } else {
+          navigate(RouteName.CreateDailyAssessment)
+        }
       } else {
         showErrorMessage({ message: 'You do not have permission to perform this action' })
       }
@@ -120,7 +120,7 @@ export default function TodayDailyAssessments() {
         <Button
           label='Complete DSRA'
           classNameLabel='font-regular'
-          onPress={checkPermissionAndRedirect}
+          onPress={() => checkPermissionAndRedirect()}
         />
       </View>
       {/* today */}
@@ -164,7 +164,7 @@ export default function TodayDailyAssessments() {
                 />
                 <Button
                   label='Continue'
-                  onPress={() => onContinue(item.id as number)}
+                  onPress={() => checkPermissionAndRedirect(item.id as number)}
                   {...buttonCls}
                 />
               </View>
@@ -184,7 +184,7 @@ export default function TodayDailyAssessments() {
                 />
                 <Button
                   label='View Detail'
-                  onPress={() => onViewDetail(item.id)}
+                  onPress={() => onViewDetail(item.id as number)}
                   {...buttonCls}
                 />
               </View>

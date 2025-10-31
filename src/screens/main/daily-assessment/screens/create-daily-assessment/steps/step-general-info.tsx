@@ -39,10 +39,10 @@ const formSchema = yup.object().shape({
   location: yup.object().required('Location is required'),
   date: yup.date().required('Date is required'),
   leader: yup.object().required('Site team leader is required'),
-  project: yup.string().required('Project is required'),
-  contractor: yup.string().required('Principal contractor is required'),
-  methodStatement: yup.string().required('Method statement is required'),
-  description: yup.string().required('Description is required'),
+  project: yup.string().trim().required('Project is required'),
+  contractor: yup.string().trim().required('Principal contractor is required'),
+  methodStatement: yup.string().trim().required('Method statement is required'),
+  description: yup.string().trim().required('Description is required'),
 });
 export default function StepGeneralInformation({ editingMode }: { editingMode: boolean }) {
   const { setAssessment, assessment: { completedSteps, generalInfo } } = useAssessmentContext();

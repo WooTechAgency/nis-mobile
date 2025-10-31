@@ -35,7 +35,7 @@ export async function getSitesApi(): Promise<ISite[]> {
     console.log('response', response.data.data)
     return response.data.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch sites' });
+    // showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch sites' });
     throw e;
   }
 }

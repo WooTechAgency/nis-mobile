@@ -7,6 +7,8 @@ import { useFocusEffect } from '@react-navigation/native'
 import { useQuery } from '@realm/react'
 import { navigate } from '@routes/navigationRef'
 import { RouteName } from '@routes/types'
+import { getCurrentUserApi } from '@services/authentication.service'
+import { showErrorMessage } from '@utils/functions.util'
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 
@@ -32,8 +34,21 @@ export default function InprogressIncidents() {
       generalInfo: JSON.parse(incident.generalInfo || '{}'),
     }))
 
-  const onContinue = (item: any) => {
-    navigate(RouteName.CreateIncident, { incidentId: item.id })
+  console.log('inprogressIncidents', inprogressIncidents)
+
+  const checkPermissionAndRedirect = async (item: any) => {
+    try {
+      const user = await getCurrentUserApi()
+      const permission = user?.role?.permissions?.incident_reports?.find((permission) => permission.action === 'create')
+      if (permission) {
+        navigate(RouteName.CreateIncident, { incidentId: item.id })
+
+      } else {
+        showErrorMessage({ message: 'You do not have permission to perform this action' })
+      }
+    } catch (error) {
+      showErrorMessage({ message: 'You do not have permission to perform this action' })
+    }
   }
 
   useFocusEffect(
@@ -54,19 +69,19 @@ export default function InprogressIncidents() {
             >
               <View className='flex-1'>
                 <View className='flex-row  items-center gap-x-3 mb-4'>
-                  <Text className='text-base font-semibold'>{item.generalInfo.siteLocation.site_code}</Text>
+                  <Text className='text-base font-semibold'>{item.generalInfo?.siteLocation?.site_code}</Text>
                   <View className={`px-[10px] h-[24px] center rounded-full bg-orange10 `}>
                     <Text className='text-xs font-medium'>{'IN PROGRESS'}</Text>
                   </View>
                 </View>
                 <View className='flex-row  items-center gap-x-1 '>
                   <Image source={images.location} className='w-8 h-8' />
-                  <Text className='text-base shrink' numberOfLines={1}>{item.generalInfo.siteLocation.site_name}</Text>
+                  <Text className='text-base shrink' numberOfLines={1}>{item?.generalInfo?.siteLocation?.site_name}</Text>
                 </View>
               </View>
               <Button
                 label='Continue'
-                onPress={() => onContinue(item)}
+                onPress={() => checkPermissionAndRedirect(item)}
                 className='h-[56px] w-[204px]'
                 classNameLabel='font-regular'
               />

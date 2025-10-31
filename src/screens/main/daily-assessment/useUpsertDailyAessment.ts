@@ -8,9 +8,9 @@ export const useUpsertDailyAssessment = () => {
   const {  assessment: { id } } = useAssessmentContext();
   const { userInfo } = useAppSelector((state) => state.authentication)
 
+
   const upsertDailyAssessment = ( payload: Partial<DailyAssessment>  ) => {
     const { generalInfo, hazard, firstAid, singing, checkList, completedSteps} = payload;
-
     try {
      realm.write(() => {
         realm.create(

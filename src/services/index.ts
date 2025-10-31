@@ -10,7 +10,7 @@ export const api = axios.create({
   baseURL: Config.BASE_URL,
   headers: {
     'Content-type': 'application/json',
-    'deviceType': 'tablet'
+    'deviceType': 'mobile'
   },
 });
 

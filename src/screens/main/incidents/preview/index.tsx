@@ -50,7 +50,6 @@ export default function IncidentPreview() {
       site_id: generalInfo?.siteLocation?.id || 0,
       date_of_report: dayjs(new Date()).format('YYYY-MM-DD'),
       date_time_of_incident: `${dayjs(generalInfo?.dateOfIncident).format('YYYY-MM-DD')} ${dayjs(generalInfo?.timeOfIncident).format('HH:mm:ss')}`,
-      // date_time_of_incident: generalInfo?.timeOfIncident.toString() || '',
       supervisor_on_site: generalInfo?.supervisor.id,
       incident_types: incident?.incidentTypes
         .filter((item) => !!item.description)
@@ -95,7 +94,7 @@ export default function IncidentPreview() {
         realm.delete(realm.objectForPrimaryKey(IncidentModel, id || 0));
       });
       setIncident(initialIncident)
-      navigation.dispatch(StackActions.popToTop());
+      navigation.dispatch(StackActions.popTo(RouteName.Incidents));
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.INCIDENT_REPORT] })
     } finally {
       setLoading(false)

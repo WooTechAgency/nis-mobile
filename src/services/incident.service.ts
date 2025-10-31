@@ -17,7 +17,7 @@ export async function getTakenActionsApi(): Promise<IAction[]> {
     const response = await baseApi.get(`${BASE}/actions`);
     return response.data.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch taken actions' });
     throw e;
   }
 }
@@ -28,7 +28,7 @@ export async function getIncidentTypesApi(): Promise<ICheckBoxDescription[]> {
     const response = await baseApi.get(`${BASE}/types`);
     return response.data.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch incident types' });
     throw e;
   }
 }
@@ -72,7 +72,7 @@ export async function createIncidentApi(request: CreateIncidentRequest): Promise
     const response = await baseApi.post(`api/incident-reports`,request);
     return response.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    showErrorMessage({ message: e?.response?.data?.message || 'Failed to create incident' });
     throw e;
   }
 }

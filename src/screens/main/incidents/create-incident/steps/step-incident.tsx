@@ -35,15 +35,6 @@ export interface IncidentForm {
   incidentSelected?: boolean
 }
 
-const mapIncidentTypes = (incidentTypes: IncidentType[], selectedIncidentTypes: IncidentType[]) => {
-  return incidentTypes.map((item) => {
-    return {
-      ...item,
-      selected: selectedIncidentTypes?.find((incidentType) => incidentType.id === item.id)?.selected || false,
-      description: selectedIncidentTypes?.find((incidentType) => incidentType.id === item.id)?.description || '',
-    }
-  })
-}
 
 const formSchema = yup.object().shape({
   involvedPersons: yup
@@ -51,15 +42,15 @@ const formSchema = yup.object().shape({
     .notRequired()
     .of(
       yup.object({
-        name: yup.string().required('Name is required!'),
-        role: yup.string().required('Role is required!'),
+        name: yup.string().trim().required('Name is required!'),
+        role: yup.string().trim().required('Role is required!'),
         thirdParty: yup.boolean().notRequired(),
-        email: yup.string().when('thirdParty', {
+        email: yup.string().trim().when('thirdParty', {
           is: true,
           then: (schema) => schema.required('Email is required').email('Invalid Email format'),
           otherwise: (schema) => schema.strip()
         }),
-        phoneNumber: yup.string().when('thirdParty', {
+        phoneNumber: yup.string().trim().when('thirdParty', {
           is: true,
           then: (schema) => schema
             .required('Phone number is required')
@@ -73,7 +64,7 @@ const formSchema = yup.object().shape({
           otherwise: (schema) => schema.strip()
         }),
         injured: yup.boolean().notRequired(),
-        treatment: yup.string().when('injured', {
+        treatment: yup.string().trim().when('injured', {
           is: true,
           then: (schema) => schema.required('Treatment is required'),
           otherwise: (schema) => schema.strip()
@@ -89,7 +80,7 @@ const formSchema = yup.object().shape({
         selected: yup.boolean(),
         description: yup.string().when("selected", {
           is: true,
-          then: (schema) => schema.required("Description is required"),
+          then: (schema) => schema.trim().required("Description is required").min(10, "Description must be at least 10 characters."),
           otherwise: (schema) => schema.notRequired(),
         }),
       })
@@ -111,11 +102,12 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
     setValue,
     watch,
     trigger,
+    getValues,
     formState: { errors, },
   } = useForm({
     defaultValues: {
       ...incident,
-      incidentTypes: incident?.incidentTypes,
+      incidentTypes: incidentTypes,
       involvedPersons: incident?.involvedPersons || [{}],
       incidentSelected: incident?.incidentSelected || false,
     },

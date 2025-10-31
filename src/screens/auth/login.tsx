@@ -21,8 +21,8 @@ import * as yup from 'yup';
 import Logo from './components/logo';
 
 const formSchema = yup.object().shape({
-  email: yup.string().required('Email address is required').email('Invalid Email format'),
-  password: yup.string().required('Password is required')
+  email: yup.string().trim().required('Email address is required').email('Invalid Email format'),
+  password: yup.string().trim().required('Password is required')
 });
 export const AuthWrapCls = `px-5 sm:w-[416px] sm:px-0`
 export default function Login() {

@@ -72,6 +72,10 @@ export default function CreateDailyAssessment() {
   }, [assessmentId])
 
   useEffect(() => {
+    if (!assessmentId) {
+      setAssessment({ ...initialAssessment, id: `${new Date().getTime()}` })
+    }
+
     return () => {
       setAssessment(initialAssessment)
     }

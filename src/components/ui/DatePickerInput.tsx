@@ -129,6 +129,7 @@ export function DatePickerInput(props: Props) {
         onConfirm={onConfirm}
         onCancel={toggleOpen}
         maximumDate={mode === 'time' || notCheckMaxDate ? undefined : new Date()}
+
       />
       {messageError && <Text className="text-red mt-[6] text-[11px]">{messageError}</Text>}
     </View>

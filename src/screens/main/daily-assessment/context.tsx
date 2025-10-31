@@ -1,10 +1,10 @@
 // UserContext.tsx
 import React, { ReactNode, createContext, useContext, useState } from 'react';
-import { CheckListForm } from './create-daily-assessment/steps/step-checklist';
-import { FirstAidForm } from './create-daily-assessment/steps/step-first-aid';
-import { GeneralForm } from './create-daily-assessment/steps/step-general-info';
-import { HazardsForm } from './create-daily-assessment/steps/step-hazards';
-import { SigningForm } from './create-daily-assessment/steps/step-sign-off';
+import { GeneralForm } from './screens/create-daily-assessment/steps/step-general-info';
+import { HazardsForm } from './screens/create-daily-assessment/steps/step-hazards';
+import { FirstAidForm } from './screens/create-daily-assessment/steps/step-first-aid';
+import { CheckListForm } from './screens/create-daily-assessment/steps/step-checklist';
+import { SigningForm } from './screens/create-daily-assessment/steps/step-sign-off';
 
 export enum DailyAssessmentSteps {
   General = 1,
@@ -34,7 +34,7 @@ type DailyAssessmentContextType = {
 const DailyAssessmentContext = createContext<DailyAssessmentContextType | undefined>(undefined);
 
 export const initialAssessment: DailyAssessment = {
-  id: `${new Date().getTime()}`,
+  id: undefined,
   generalInfo: undefined,
   hazard: undefined,
   firstAid: undefined,

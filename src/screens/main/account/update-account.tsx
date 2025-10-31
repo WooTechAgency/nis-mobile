@@ -27,8 +27,8 @@ interface Form {
   phone?: string;
 }
 const formSchema = yup.object().shape({
-  firstName: yup.string().required('First name is required'),
-  lastName: yup.string().required('Last name is required'),
+  firstName: yup.string().trim().required('First name is required'),
+  lastName: yup.string().trim().required('Last name is required'),
   company: yup.string().notRequired(),
   role: yup.string().notRequired(),
   phone: yup.string()

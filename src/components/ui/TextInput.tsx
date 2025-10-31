@@ -111,7 +111,7 @@ export function TextInput(props: Props) {
   const onEnhanceAI = async () => {
     try {
       setPromptLoading(true);
-      const result = await askModel(value)
+      const result = await askModel(value?.trim())
       setValue && setValue(name, result?.trim() || '', { shouldValidate: true })
     }
     finally {
@@ -218,7 +218,7 @@ export function TextInput(props: Props) {
             <Button
               className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] disabled:opacity-50'
               onPress={onEnhanceAI}
-              disabled={isListening || !llmContext || !value}
+              disabled={isListening || !llmContext || !value?.trim()}
             >
               {promptLoading ? <ActivityIndicator size={'small'} /> : <Image source={images.ai} className='w-8 h-8' />}
               <Text className='text-[12px] font-medium '>AI enhance</Text>

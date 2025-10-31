@@ -52,13 +52,13 @@ const formSchema = yup.object().shape({
     .notRequired()
     .of(
       yup.object({
-        description: yup.string().required('Description is required!'),
+        description: yup.string().trim().required('Description is required!'),
         medias: yup.mixed().notRequired(),
         likelihood: yup.object().required('Likelihood is required!'),
         consequence: yup.object().required('Consequence is required!'),
-        consequenceDes: yup.string().required('Consequence is required!'),
+        consequenceDes: yup.string().trim().required('Consequence is required!'),
         initialRiskRating: yup.object().required('Initial risk rating is required!'),
-        controlMeasure: yup.string().required('Control measure is required!'),
+        controlMeasure: yup.string().trim().required('Control measure is required!'),
         residualRiskRating: yup.object().required('Residual rating is required!')
       })
     ).nullable(),

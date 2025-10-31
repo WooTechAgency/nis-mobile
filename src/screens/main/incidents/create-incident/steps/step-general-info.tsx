@@ -11,17 +11,17 @@ import { useGetSites } from '@services/hooks/useGetSites';
 import { useGetUsers } from '@services/hooks/useGetUsers';
 import { ISite } from '@services/site.service';
 import { IUser } from '@services/user.service';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { useUpsertIncident } from '../../useUpsertIncident';
 export interface GeneralForm {
-  company: string
-  dateOfReport: Date
-  completedBy: string
-  role: string
+  company?: string | null
+  dateOfReport?: Date | null
+  completedBy?: string | null
+  role?: string | null
   dateOfIncident: Date
   timeOfIncident: Date
   siteLocation: ISite
@@ -34,9 +34,28 @@ const formSchema = yup.object().shape({
   completedBy: yup.string().notRequired(),
   role: yup.string().notRequired(),
   dateOfIncident: yup.date().required('Date of Incident is required'),
-  timeOfIncident: yup.date().required('Time of Incident is required'),
-  siteLocation: yup.object().required('Site Location is required'),
-  supervisor: yup.object().required('Supervisor on Site is required'),
+  timeOfIncident: yup.date()
+    .required('Time of Incident is required')
+    .test('not-future-time', 'Time of Incident cannot be in the future', function (value) {
+      const { dateOfIncident } = this.parent;
+      if (!value || !dateOfIncident) return true;
+
+      const selectedDate = new Date(dateOfIncident);
+      const selectedTime = new Date(value);
+      const now = new Date();
+
+      // Check if the selected date is today
+      const isToday = selectedDate.toDateString() === now.toDateString();
+
+      if (isToday) {
+        // If date is today, time cannot be greater than current time
+        return selectedTime <= now;
+      }
+
+      return true;
+    }),
+  siteLocation: yup.mixed<ISite>().required('Site Location is required'),
+  supervisor: yup.mixed<IUser>().required('Supervisor on Site is required'),
 });
 export default function StepGeneralInformation({ editingMode }: { editingMode: boolean }) {
   const { setIncident, incident: { completedSteps, generalInfo } } = useIncidentContext();
@@ -49,6 +68,8 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     control,
     handleSubmit,
     setValue,
+    watch,
+    trigger,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -61,6 +82,16 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
     mode: 'onSubmit',
     resolver: yupResolver(formSchema),
   });
+
+  const dateOfIncident = watch('dateOfIncident');
+  const timeOfIncident = watch('timeOfIncident');
+
+  // Re-validate timeOfIncident when dateOfIncident changes (only if timeOfIncident has value)
+  useEffect(() => {
+    if (dateOfIncident && timeOfIncident) {
+      trigger('timeOfIncident');
+    }
+  }, [dateOfIncident, trigger, timeOfIncident]);
 
   const onSubmit = (form: GeneralForm) => {
     const newCompletedSteps = new Set<number>([IncidentSteps.General, ...(completedSteps || [])]);

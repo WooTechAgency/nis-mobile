@@ -67,7 +67,7 @@ export async function getUsersApi(): Promise<IUser[]> {
     const response = await baseApi.get(`${BASE_SERVICE}/basic?per_page=100`);
     return response?.data?.data || [];
   } catch (error: any) {
-    showErrorMessage({ message: error.message });
+    // showErrorMessage({ message: error.message });
     throw error;
   }
 }
@@ -85,7 +85,7 @@ export async function getUsersByRoleApi(roleId: number): Promise<IUser[]> {
 export async function getUsersByPermission(): Promise<IUser[]> {
   try {
     const response = await baseApi.get(`${BASE_SERVICE}/device-access`,
-      {device_type: 'tablet',});
+      {device_type: 'mobile',});
     return response?.data?.data || [];
   } catch (error: any) {
     showErrorMessage({ message: error.message });

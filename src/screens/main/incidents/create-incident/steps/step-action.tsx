@@ -36,7 +36,7 @@ const formSchema = yup.object().shape({
         selected: yup.boolean(),
         description: yup.string().when("selected", {
           is: true,
-          then: (schema) => schema.required("Description is required"),
+          then: (schema) => schema.trim().required("Description is required").min(10, "Description must be at least 10 characters."),
           otherwise: (schema) => schema.notRequired(),
         }),
       })
@@ -60,7 +60,7 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
     formState: { errors, },
   } = useForm({
     defaultValues: {
-      actions: action?.actions,
+      actions: actions || [],
       actionSelected: action?.actionSelected || false,
     },
     mode: 'onSubmit',

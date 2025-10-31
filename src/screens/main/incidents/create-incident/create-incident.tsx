@@ -46,7 +46,6 @@ export default function CreateIncident() {
         return <View />
     }
   }
-
   const loadIncident = async (incidentId: string) => {
     setLoading(true);
     const incidentInDB = realm.objectForPrimaryKey(IncidentModel, incidentId)
@@ -67,6 +66,9 @@ export default function CreateIncident() {
   }, [incidentId])
 
   useEffect(() => {
+    if (!incidentId) {
+      setIncident({ ...initialIncident, id: `${new Date().getTime()}` })
+    }
     return () => {
       setIncident(initialIncident)
     }

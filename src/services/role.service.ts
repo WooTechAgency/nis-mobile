@@ -14,7 +14,7 @@ export async function getRolesApi(): Promise<IRole[]> {
     const response = await baseApi.get(`${BASE}/basic?per_page=100`);
     return response.data.data
   } catch (e: any) {
-    showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
+    // showErrorMessage({ message: e?.response?.data?.message || 'Failed to fetch roles' });
     throw e;
   }
 }

@@ -30,8 +30,8 @@ const formSchema = yup.object().shape(
       .notRequired()
       .of(
         yup.object({
-          name: yup.string().required('Name is required'),
-          phone: yup.string()
+          name: yup.string().trim().required('Name is required'),
+          phone: yup.string().trim()
             .required('Phone is required')
             .test('phone-format', 'Only digits and at most one +', function (value) {
               if (!value) return true; // Allow empty values since it's not required
@@ -40,7 +40,7 @@ const formSchema = yup.object().shape(
               return phoneRegex.test(value) && plusCount <= 1;
             })
           ,
-          email: yup.string().required('Email is required').email('Invalid Email format'),
+          email: yup.string().trim().required('Email is required').email('Invalid Email format'),
           documents: yup.array().notRequired(),
         }))
   },

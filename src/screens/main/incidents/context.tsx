@@ -34,7 +34,7 @@ type IncidentContextType = {
 const IncidentContext = createContext<IncidentContextType | undefined>(undefined);
 
 export const initialIncident: Incident = {
-  id: `${new Date().getTime()}`,
+  id: undefined,
   generalInfo: undefined,
   incident: undefined,
   action: undefined,

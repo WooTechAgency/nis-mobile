@@ -42,7 +42,7 @@ export default function DailyAssessmentsList() {
   const debouncedSearch = useDebounce(search, 500)
   const { data: dsra, isLoading, fetchNextPage, hasNextPage, isFetching, refetch } = useGetDsras({
     search: debouncedSearch && debouncedSearch?.length > 1 ? debouncedSearch : undefined,
-    search_types: 'tablet',
+    search_types: 'mobile',
     site_id: site?.id,
     sort_by: sort_by,
     sort_direction: sort_direction || SortDirection.ASC,

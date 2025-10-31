@@ -128,8 +128,6 @@ export async function logoutApi(): Promise<any> {
     const response = await baseApi.post(ApiName.Logout);
     return response.data;
   } catch (error: any) {
-    showErrorMessage({message: error.message})
-    throw error;
   }
 }
 

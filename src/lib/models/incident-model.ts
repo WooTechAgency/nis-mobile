@@ -4,14 +4,14 @@ import { Realm,  } from '@realm/react'
 export class IncidentModel extends Realm.Object {
   public id!: string;
   public generalInfo!: string;
-  public incident!: string;
-  public action!: string;
-  public witness!: string;
-  public singing!: string;
-  public completedSteps!: string;
-  public creatorId!: number;
+  public incident: string | undefined;
+  public action: string | undefined;
+  public witness: string | undefined;
+  public singing: string | undefined;
+  public completedSteps: string | undefined;
+  public creatorId!: number;  
   public createdAt!: number;
-  public updatedAt!: number;
+  public updatedAt: number  | undefined;
 
   static schema: ObjectSchema = {
     name: 'FieldNote',

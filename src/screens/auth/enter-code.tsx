@@ -14,7 +14,7 @@ import Logo from './components/logo';
 import { AuthWrapCls } from './login';
 
 const formSchema = yup.object().shape({
-  code: yup.string().required('Code is required!').length(6, 'Invalid code'),
+  code: yup.string().trim().required('Code is required!').length(6, 'Invalid code'),
 });
 
 interface Form {

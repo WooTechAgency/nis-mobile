@@ -14,7 +14,7 @@ import { AuthWrapCls } from './login';
 import { forgotPasswordApi } from '@services/authentication.service';
 
 const formSchema = yup.object().shape({
-  email: yup.string().required('Email address is required!').email('Invalid Email format'),
+  email: yup.string().trim().required('Email address is required!').email('Invalid Email format'),
 });
 
 export default function ForgotPassword({ navigation }: ForgotPasswordProps) {
