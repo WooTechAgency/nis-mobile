@@ -17,6 +17,7 @@ import { View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { useUpsertIncident } from '../../useUpsertIncident';
+import { rowClsIncident } from '../../config.incident';
 export interface GeneralForm {
   company?: string | null
   dateOfReport?: Date | null
@@ -108,7 +109,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
   return (
     <Wrapper>
       <Title label='General' className='text-base' />
-      <View className='flex-row items-start mt-6 gap-x-4'>
+      <View className={rowClsIncident}>
         <TextInput
           classNameWrap='flex-1'
           errors={errors}
@@ -130,7 +131,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
           disabled
         />
       </View>
-      <View className='flex-row items-start mt-6 gap-x-4'>
+      <View className={rowClsIncident}>
         <TextInput
           classNameWrap='flex-1'
           errors={errors}
@@ -152,7 +153,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
       </View>
       {/* incident detail */}
       <Title label='Incident Detail' className='text-base mt-8' />
-      <View className='flex-row items-start mt-6 gap-x-6'>
+      <View className={rowClsIncident}>
         <DatePickerInput
           label='Date of Incident * '
           wrapCls="flex-1"
@@ -174,7 +175,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
           errors={errors}
         />
       </View>
-      <View className='flex-row items-start mt-6 gap-x-6'>
+      <View className={rowClsIncident}>
         <DropdownPicker
           classNameWrap='flex-1'
           setValue={setValue}

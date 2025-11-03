@@ -7,6 +7,7 @@ import { useToggle } from '@hooks/useToggle';
 import React from 'react';
 import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue } from 'react-hook-form';
 import { View } from 'react-native';
+import { rowClsIncident } from '../../config.incident';
 
 interface Props {
   index: number
@@ -26,7 +27,7 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
   }
 
   return (
-    <Wrapper className='mt-8'>
+    <Wrapper className='mt-6 sm:mt-8'>
       <View className='row-center justify-between'>
         <Title label={`Witness ${index + 1}`} />
         <Button
@@ -45,7 +46,7 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
         label='Name'
         placeholder='Enter name'
       />
-      <View className='flex-row items-start gap-x-4 mt-6'>
+      <View className={rowClsIncident}>
         <TextInput
           classNameWrap='flex-1'
           errors={errors}
@@ -65,7 +66,7 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
           placeholder='Enter email'
         />
       </View>
-      <Title label='Statement' className='text-base mt-4 mb-2' />
+      <Title label='Statement' className='text-base mt-6 sm:mt-4 mb-2' />
       <DocumentForm
         name={`${name}.documents`}
         setValue={setValue}

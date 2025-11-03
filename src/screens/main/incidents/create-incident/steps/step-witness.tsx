@@ -46,7 +46,7 @@ const formSchema = yup.object().shape(
   },
 );
 
-export default function StepWitness({ editingMode }: { editingMode: boolean }) {
+export function StepWitness({ editingMode }: { editingMode: boolean }) {
   const { upsertIncident } = useUpsertIncident()
   const { setIncident, incident: { completedSteps, witness } } = useIncidentContext()
   const {
@@ -91,7 +91,7 @@ export default function StepWitness({ editingMode }: { editingMode: boolean }) {
 
   return (
     <View className=''>
-      <Title label='Are there any witnesses?' className='mt-8' />
+      <Title label='Are there any witnesses?' className='mt-6 sm:mt-8' />
       {fields.length > 0 ? fields.map((item, index) => {
         return (
           <View key={item.id} style={{ zIndex: 50 - index }}>
@@ -107,8 +107,8 @@ export default function StepWitness({ editingMode }: { editingMode: boolean }) {
           </View>
         );
       }) :
-        <View className='border border-neutral40 p-7 rounded-[20px] mt-8 '>
-          <Text className='text-neutral60'>No known witnesses</Text>
+        <View className='border border-neutral40 p-5 sm:p-7 rounded-[14px] sm:rounded-[20px] mt-6 sm:mt-8 '>
+          <Text className='text-[16px] sm:text-[14px] text-neutral60'>No known witnesses</Text>
         </View>
       }
       {/* end */}

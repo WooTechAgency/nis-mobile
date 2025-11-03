@@ -17,24 +17,24 @@ import "../global.css";
 import { store } from './store';
 import * as Sentry from '@sentry/react-native';
 
-Sentry.init({
-  dsn: 'https://50612f8932251d36185fc34bd850eaba@o4508839267008512.ingest.us.sentry.io/4510163831291904',
+// Only initialize Sentry in release/production environment
+if (!__DEV__) {
+  Sentry.init({
+    dsn: 'https://50612f8932251d36185fc34bd850eaba@o4508839267008512.ingest.us.sentry.io/4510163831291904',
 
-  // Adds more context data to events (IP address, cookies, user, etc.)
-  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
-  sendDefaultPii: true,
+    // Adds more context data to events (IP address, cookies, user, etc.)
+    // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
+    sendDefaultPii: true,
 
-  // Enable Logs
-  enableLogs: true,
+    // Enable Logs
+    enableLogs: true,
 
-  // Configure Session Replay
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1,
-  integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
-
-  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-  // spotlight: __DEV__,
-});
+    // Configure Session Replay
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1,
+    integrations: [Sentry.mobileReplayIntegration(), Sentry.feedbackIntegration()],
+  });
+}
 
 const realmConfig: Realm.Configuration = {
   schema: [IncidentModel, DailyAssessmentModel],
@@ -103,4 +103,5 @@ function App() {
   );
 }
 
-export default Sentry.wrap(App);
+// Only wrap with Sentry in release/production environment
+export default __DEV__ ? App : Sentry.wrap(App);

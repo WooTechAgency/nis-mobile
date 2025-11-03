@@ -120,10 +120,10 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
   });
 
   useEffect(() => {
-    if (!incident?.incidentTypes && !!incidentTypes) {
+    if (!!incidentTypes) {
       setValue('incidentTypes', incidentTypes)
     }
-  }, [incident?.incidentTypes, incidentTypes])
+  }, [incidentTypes])
 
   const onBack = () => {
     setIncident((prev) => ({ ...prev, selectedIndex: 1 }))
@@ -169,14 +169,14 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
       }
       <Button
         onPress={addField}
-        className='bg-teal20 rounded-[8px] h-9 flex-row items-center self-start px-2'
+        className='bg-teal20 rounded-[8px] h-9 flex-row items-center self-end sm:self-start px-2'
       >
         <Image source={images.plus} className='w-8 h-8' />
         <Text className='text-[12px] font-medium'>Add person</Text>
       </Button>
       <Wrapper className='mt-[0px]'>
         <View className='gap-y-4'>
-          <Title label='Incident Type' className='text-base mt-8' />
+          <Title label='Incident Type' className='text-base sm:mt-8' />
           <Text>Select all that apply</Text>
           {incidentTypes?.map((type, index) => {
             return (

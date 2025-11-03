@@ -47,7 +47,7 @@ export function CommonModal(props: Props) {
           <TouchableOpacity className='absolute left-0 right-0 top-0 bottom-0' onPress={toggleModal} />
         )}
 
-        <View className={`bg-white p-6 rounded-[20px] gap-y-8 min-w-[562px]`}>
+        <View className={`bg-white p-6 rounded-[20px] gap-y-6 sm:gap-y-8 sm:min-w-[562px]`}>
           <Text className={`text-[20px] font-semibold text-center`}>{title || 'Notification'}</Text>
           {des && <Text className={`text-center text-primary2`}> {des}</Text>}
           <View className='flex-row items-center justify-center gap-x-4'>

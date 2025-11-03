@@ -13,7 +13,7 @@ import StepAction from './steps/step-action'
 import StepGeneralInformation from './steps/step-general-info'
 import StepIncident from './steps/step-incident'
 import StepSignOff from './steps/step-sign-off'
-import StepWitness from './steps/step-witness'
+import { StepWitness } from './steps/step-witness'
 
 const steps = {
   [IncidentSteps.General]: 'General',

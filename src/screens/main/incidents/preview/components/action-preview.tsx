@@ -36,7 +36,7 @@ export default function ActionPreview({ allowEdit, incident }: PreviewProps) {
           <View className='w-full h-[1px] bg-neutral20 ' />
           <View className='p-6 pt-5 gap-y-4'>
             {actions?.map((item, index) => (
-              <View className={`flex-row gap-x-4 ${index + 1 !== actions?.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={index}>
+              <View className={`sm:flex-row gap-4 ${index + 1 !== actions?.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={index}>
                 <ValueItem label='Immediate Action Taken' value={item.name} classNameWrap={`${width}`} />
                 <ValueItem label='Action Description' value={item.description} classNameWrap={`${width}`} />
               </View>

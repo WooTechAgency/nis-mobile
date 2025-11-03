@@ -92,7 +92,7 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
   };
 
   return (
-    <View className=' mt-6'>
+    <View className='mt-6'>
       <Title label='Sign off' />
       {fields.map((item, index) => {
         return (
@@ -113,7 +113,7 @@ export default function StepSignOff({ editingMode }: { editingMode: boolean }) {
       <Button
         onPress={addField}
         label='Add signee'
-        className='mt-6 '
+        className='mt-6 self-end sm:self-start '
         type='small'
         iconButton={<Image source={images.plus} className='w-8 h-8' />}
       />

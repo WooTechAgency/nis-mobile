@@ -22,7 +22,7 @@ export default function HeaderPreview({ onEdit, label, collapsed, toggleCollapse
             iconButton={<Image source={images.edit} />}
             label='Edit'
             type='outlined-small'
-            className='w-[135px]'
+            className='sm:w-[135px]'
           />
         }
         <Image

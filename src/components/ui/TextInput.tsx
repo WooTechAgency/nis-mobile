@@ -1,5 +1,5 @@
 import { images } from '@assets/images';
-import { isAndroid, isIOS } from '@constants/app.constants';
+import { isAndroid, isIOS, isIpad } from '@constants/app.constants';
 import { useLLM } from '@hooks/useLLM';
 import { useVoice } from '@hooks/useVoice';
 import { getMessageError } from '@utils/common.util';
@@ -164,8 +164,8 @@ export function TextInput(props: Props) {
           multiline={multiline}
           style={isAndroid && multiline && { textAlignVertical: 'top' }}
           {...props}
-          className={`text-black h-[56] border font-regular px-4 py-0 rounded-[14px] text-[16px] border-border w-full
-           ${multiline && 'h-[112] sm:h-[144] py-4'}
+          className={`text-black border font-regular px-4 py-0 rounded-[14px] text-[16px] border-border w-full
+           ${multiline ? 'h-[208px] sm:h-[144px] py-4' : 'h-[56]'}
             ${isAndroid && 'pt-1'}
             ${disabled && 'text-neutral40 border-neutral20'} 
             ${iconRight || isShowClose && 'pr-10'} 
@@ -182,18 +182,18 @@ export function TextInput(props: Props) {
             {isStopped
               ?
               <Button
-                className={`flex-row  w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] ${isAnyVoiceActive ? 'opacity-50' : ''}`}
+                className={`flex-row  w-[48px] sm:w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] ${isAnyVoiceActive ? 'opacity-50' : ''}`}
                 onPress={onUseVoice}
                 disabled={isAnyVoiceActive}
               >
                 <Image source={images.voice} className='w-8 h-8' />
-                <Text className='text-[12px] font-medium '>Use Voice</Text>
+                {isIpad && <Text className='text-[12px] font-medium '>Use Voice</Text>}
               </Button>
               :
               <View className='row-center border border-primary rounded-[8px] p-2 h-[36px]'>
                 <Image source={images.voice} className='w-8 h-8' />
                 <Text className='text-sm font-medium'>{formatSecondsToMMSS(seconds)}</Text>
-                <View className='w-[125px] h-[1px] bg-neutral40 mx-[10px]' />
+                <View className='w-[50px] sm:w-[125px] h-[1px] bg-neutral40 mx-[10px]' />
                 <Image source={images.trash}
                   className='w-8 h-8'
                   onPress={() => {
@@ -216,12 +216,12 @@ export function TextInput(props: Props) {
               </View>
             }
             <Button
-              className='flex-row w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] disabled:opacity-50'
+              className='flex-row w-[48px] sm:w-[135] h-[36] border border-primary center  gap-x-2 rounded-[8px] disabled:opacity-50'
               onPress={onEnhanceAI}
               disabled={isListening || !llmContext || !value?.trim()}
             >
               {promptLoading ? <ActivityIndicator size={'small'} /> : <Image source={images.ai} className='w-8 h-8' />}
-              <Text className='text-[12px] font-medium '>AI enhance</Text>
+              {isIpad && <Text className='text-[12px] font-medium '>AI enhance</Text>}
             </Button>
           </View>
         }

@@ -79,7 +79,7 @@ export default function InprogressIncidents() {
                 </View>
                 <View className='flex-row  items-center gap-x-1 '>
                   <Image source={images.location} className='w-8 h-8' />
-                  <Text className='text-base shrink sm:mr-4' numberOfLines={1}>{item?.generalInfo?.siteLocation?.site_name}</Text>
+                  <Text className='text-base shrink sm:mr-4 flex-1' numberOfLines={1}>{item?.generalInfo?.siteLocation?.site_name}</Text>
                   {isIphone && <Image source={images.arrowRight} className='w-8 h-8' />}
                 </View>
               </View>

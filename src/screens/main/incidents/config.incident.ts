@@ -5,7 +5,8 @@ export const flatListClassName = 'm-6 mt-5 py-2 border border-neutral20 rounded-
 export const headerClassName = 'row-center border-b pb-2 border-neutral20 px-4'
 export const itemClassName = 'row-center px-4 py-4 border-neutral30'
 export const labelClassName = 'text-neutral70'
-
+export const rowClsIncident = 'sm:flex-row sm:items-start mt-6 gap-6 sm:gap-4'
+export const rowValueCls = 'sm:flex-row gap-4'
 export interface PreviewProps {
   allowEdit: boolean
   incident?: IncidentReport

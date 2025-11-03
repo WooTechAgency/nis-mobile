@@ -1,3 +1,4 @@
+import { CommonModal } from '@components/modal';
 import Title from '@components/title';
 import { Button, Wrapper, YesNoForm } from '@components/ui';
 import { TextInput } from '@components/ui/TextInput';
@@ -5,8 +6,7 @@ import { useToggle } from '@hooks/useToggle';
 import React from 'react';
 import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
-import { useIncidentContext } from '../../context';
-import { CommonModal } from '@components/modal';
+import { rowClsIncident } from '../../config.incident';
 
 interface Props {
   index: number
@@ -40,8 +40,7 @@ export function InvolvedPersonItem({ control, errors, setValue, index, name, rem
           onPress={toggleConfirmRemove}
         />
       </View>
-
-      <View className='flex-row items-start gap-x-4  '>
+      <View className={rowClsIncident}>
         <TextInput
           control={control}
           setValue={setValue}
@@ -68,7 +67,7 @@ export function InvolvedPersonItem({ control, errors, setValue, index, name, rem
         label='Third-party?*'
       />
       {thirdParty &&
-        <View className='flex-row items-start gap-x-4  '>
+        <View className={`${rowClsIncident} mt-[0px]`}>
           <TextInput
             control={control}
             setValue={setValue}

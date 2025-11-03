@@ -10,6 +10,7 @@ import React from 'react';
 import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import { View } from 'react-native';
 import { useIncidentContext } from '../../context';
+import { rowClsIncident } from '../../config.incident';
 
 interface Props {
   index: number
@@ -53,7 +54,7 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
           onPress={toggleConfirmRemove}
         />
       </View>
-      <View className='flex-row items-start gap-x-4 mt-6'>
+      <View className={rowClsIncident}>
         <TextInput
           classNameWrap='flex-1'
           errors={errors}
