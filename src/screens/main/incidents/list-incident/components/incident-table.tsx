@@ -1,8 +1,10 @@
 import { images } from '@assets/images';
 import SelectedFilter from '@components/common/selected-filter';
+import Title from '@components/title';
 import { Button, FlatList, Image, Text, View } from '@components/ui';
 import CalendarPicker from '@components/ui/CalendarPicker';
 import DropdownMenu from '@components/ui/DropdownMenu';
+import { isIpad, isIphone } from '@constants/app.constants';
 import { SortBy, SortDirection } from '@constants/interface';
 import { useToggle } from '@hooks/useToggle';
 import { navigate } from '@routes/navigationRef';
@@ -22,6 +24,7 @@ const percent = {
 }
 const headerCls = 'text-[12px] font-medium text-neutral50'
 const rowCls = 'text-[16px] text-neutral70'
+const filterBtnCls = 'row-center justify-center sm:w-[135px] pl-1 pr-2 sm:px-0 h-8 border border-primary rounded-lg'
 
 interface Props {
   control: Control<any, any>,
@@ -53,18 +56,20 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
 
   return (
     <View>
-      <View className='bg-white mt-6 rounded-[20px] p-6 '>
-        <View className='flex-row items-center justify-between flex-wrap gap-4'>
-          <View className='flex-row items-center justify-between flex-wrap gap-4'>
+      {isIphone && <Title label='All' className='mt-6 ' />}
+      <View className='bg-white mt-4 sm:mt-6  rounded-[20px] p-4 sm:p-6 '>
+        <View className='flex-row items-center sm:justify-between flex-wrap gap-y-4'>
+          {(type || site || date) ? (
             <View className='flex-row gap-x-4 flex-wrap gap-4'>
               {type && <SelectedFilter label={type?.label} name='type' setValue={setValue} />}
               {site && <SelectedFilter label={site?.label} name='site' setValue={setValue} />}
               {date && <SelectedFilter label={formatStartDateEndDate(date)} name='date' setValue={setValue} />}
             </View>
-          </View>
-          <View className='flex-row gap-x-4 self-end'>
+          ) : <View className='' />
+          }
+          <View className='flex-row gap-x-4 '>
             <Button
-              className='row-center justify-center w-[135px] h-8 border border-primary rounded-lg '
+              className={filterBtnCls}
               onPress={toggleVisibleCalendar}
             >
               <Image source={images.date32} className='w-8 h-8' />
@@ -81,7 +86,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
                 name={filter.name}
               >
                 <Button
-                  className='row-center justify-center w-[135px] h-8 border border-primary rounded-lg '
+                  className={filterBtnCls}
                   key={filter.title}
                   onPress={filter.toggleVisible}
                 >
@@ -92,49 +97,66 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
             ))}
           </View>
         </View>
+        {/* custom for Iphone and Ipad  */}
         <FlatList
-          className='mt-4'
+          className={`mt-4 ${isIphone && ' border border-neutral40 rounded-[12px] px-4'}`}
           scrollEnabled={false}
           data={incidents}
           keyExtractor={(item) => item.id}
           isFetching={isFetching}
           ListEmptyComponent={<Text className='text-neutral40'>{'No incidents found'}</Text>}
           ListHeaderComponent={
-            <View className='flex-row h-10 items-center border-t border-neutral20 gap-x-2'>
-              <TouchableOpacity
-                className={`flex-row items-center gap-x-2 ${percent.id}`}
-                onPress={() => {
-                  setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
-                  setValue('sort_by', SortBy.ID)
-                }}
-              >
-                <Text className={`${headerCls} ${sortBy === SortBy.ID && 'text-neutral80'}`}>{'Incident ID'}</Text>
-                {sortBy === SortBy.ID && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
-              </TouchableOpacity>
-              <TouchableOpacity
-                className={`flex-row items-center gap-x-2 ${percent.date} ${headerCls} ${sortBy === SortBy.DATE_OF_REPORT && 'text-neutral80'}`}
-                onPress={() => {
-                  setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
-                  setValue('sort_by', SortBy.DATE_OF_REPORT)
-                }}
-              >
-                <Text className={`${headerCls} ${sortBy === SortBy.DATE_OF_REPORT && 'text-neutral80'}`}>{"Date of Incident"}</Text>
-                {sortBy === SortBy.DATE_OF_REPORT && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
-              </TouchableOpacity>
-              <Text className={`${percent.type}  ${headerCls}`}>{'Incident Type'}</Text>
-              <Text className={`flex-grow ${headerCls}`}>{'Site'}</Text>
-            </View>
+            isIpad ?
+              <View className='flex-row h-10 items-center border-t border-neutral20 gap-x-2'>
+                <TouchableOpacity
+                  className={`flex-row items-center gap-x-2 ${percent.id}`}
+                  onPress={() => {
+                    setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
+                    setValue('sort_by', SortBy.ID)
+                  }}
+                >
+                  <Text className={`${headerCls} ${sortBy === SortBy.ID && 'text-neutral80'}`}>{'Incident ID'}</Text>
+                  {sortBy === SortBy.ID && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  className={`flex-row items-center gap-x-2 ${percent.date} ${headerCls} ${sortBy === SortBy.DATE_OF_REPORT && 'text-neutral80'}`}
+                  onPress={() => {
+                    setValue('sort_direction', isASC ? SortDirection.DESC : SortDirection.ASC)
+                    setValue('sort_by', SortBy.DATE_OF_REPORT)
+                  }}
+                >
+                  <Text className={`${headerCls} ${sortBy === SortBy.DATE_OF_REPORT && 'text-neutral80'}`}>{"Date of Incident"}</Text>
+                  {sortBy === SortBy.DATE_OF_REPORT && <Image source={images.arrowDown} className={`w-4 h-4 ${!isASC && '-rotate-180'}`} />}
+                </TouchableOpacity>
+                <Text className={`${percent.type}  ${headerCls}`}>{'Incident Type'}</Text>
+                <Text className={`flex-grow ${headerCls}`}>{'Site'}</Text>
+              </View>
+              : <View className='' />
           }
-          renderItem={({ item }: { item: IncidentReport }) => (
-            <Button
-              className='flex-row min-h-[56px] items-center border-t border-neutral20 gap-x-2'
-              onPress={() => onGoToDetail(item.id)}
-            >
-              <Text className={`${percent.id} ${rowCls}`}>{item.code}</Text>
-              <Text className={`${percent.date} ${rowCls}`}>{convertDDMMYYYY(item.date_time_of_incident)}</Text>
-              <Text className={`${percent.type}  ${rowCls} `}>{item.incident_types.map((item => item.name)).join(" / ")}</Text>
-              <Text className={`flex-grow ${rowCls} flex-1`} numberOfLines={1}>{item.site.site_name}</Text>
-            </Button>
+          renderItem={({ item, index }: { item: IncidentReport, index: number }) => (
+            isIpad
+              ?
+              <Button
+                className='flex-row min-h-[56px] items-center border-t border-neutral20 gap-x-2'
+                onPress={() => onGoToDetail(item.id)}
+              >
+                <Text className={`${percent.id} ${rowCls}`}>{item.code}</Text>
+                <Text className={`${percent.date} ${rowCls}`}>{convertDDMMYYYY(item.date_time_of_incident)}</Text>
+                <Text className={`${percent.type}  ${rowCls} `}>{item.incident_types.map((item => item.name)).join(" / ")}</Text>
+                <Text className={`flex-grow ${rowCls} flex-1`} numberOfLines={1}>{item.site.site_name}</Text>
+              </Button>
+              : <Button
+                className={`gap-y-2 py-4 ${index !== (incidents?.length || 0) - 1 && 'border-b border-neutral20'}`}
+                onPress={() => onGoToDetail(item.id)}
+              >
+                <View className='flex-row items-center justify-between'>
+                  <Text className={`${rowCls}  font-semibold `}>{item.code}</Text>
+                  <Text className={`text-[12px]`}>{convertDDMMYYYY(item.date_time_of_incident)}</Text>
+                </View>
+                <Text className={`${rowCls} text-[12px]`} numberOfLines={1}>{item.site.site_name}</Text>
+                <Text className={`${rowCls} text-[12px]`} numberOfLines={1}>{'Property damage'}</Text>
+              </Button>
+
           )}
         />
       </View>

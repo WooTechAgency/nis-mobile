@@ -1,4 +1,5 @@
 export const images = {
+  arrowRight: require('./sources/arrowRight.png'),
   arrowLeft: require('./sources/arrowLeft.png'),
   arrowLeft2: require('./sources/arrowLeft2.png'),
   arrowLeft3: require('./sources/arrowLeft3.png'),

@@ -2,6 +2,7 @@ import { Dimensions, Platform } from 'react-native';
 
 const { width } = Dimensions.get('window');
 export const isIpad = width > 640;
+export const isIphone = width <= 640;
 export const isAndroid = Platform.OS === 'android';
 export const isIOS = Platform.OS === 'ios';
 

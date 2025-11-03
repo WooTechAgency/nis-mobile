@@ -5,7 +5,6 @@ import { useAppSelector } from '@hooks/common';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { StackActions } from '@react-navigation/native';
 import { RouteName } from '@routes/types';
-import { getCurrentUserApi } from '@services/authentication.service';
 import { useGetCurrentUser } from '@services/hooks/useGetCurrentUser';
 import { toggleCollapseDrawer } from '@store/slices/commonSlice';
 import React, { useEffect, useMemo } from 'react';

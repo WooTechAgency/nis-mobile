@@ -1,6 +1,7 @@
 import { images } from '@assets/images'
 import Title from '@components/title'
-import { Button, Image } from '@components/ui'
+import { Button, Image, Text } from '@components/ui'
+import { isIpad, isIphone } from '@constants/app.constants'
 import { useAppSelector } from '@hooks/common'
 import { IncidentModel } from '@lib/models/incident-model'
 import { useFocusEffect } from '@react-navigation/native'
@@ -10,7 +11,7 @@ import { RouteName } from '@routes/types'
 import { getCurrentUserApi } from '@services/authentication.service'
 import { showErrorMessage } from '@utils/functions.util'
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 export default function InprogressIncidents() {
   const { userInfo } = useAppSelector((state) => state.authentication)
@@ -61,14 +62,16 @@ export default function InprogressIncidents() {
     <View className='mt-2'>
       {inprogressIncidents?.length > 0 &&
         <>
-          <Title label='Today' className='mt-4 mb-2' />
-          {inprogressIncidents.map((item, index) => (
-            <View
-              className='flex-row items-end  bg-white justify-between rounded-[20px] p-6 mt-4 '
+          <Title label='Today' className='mt-4 sm:mb-2' />
+          {inprogressIncidents.map((item) => (
+            <Button
+              className='flex-row items-end  bg-white justify-between rounded-[20px] p-4 sm:p-6 mt-4 '
               key={item.id}
+              disabled={isIpad}
+              onPress={() => checkPermissionAndRedirect(item)}
             >
-              <View className='flex-1'>
-                <View className='flex-row  items-center gap-x-3 mb-4'>
+              <View className='flex-1 gap-y-4 '>
+                <View className={`flex-row  items-center gap-x-3 ${isIphone && 'justify-between'}`}>
                   <Text className='text-base font-semibold'>{item.generalInfo?.siteLocation?.site_code}</Text>
                   <View className={`px-[10px] h-[24px] center rounded-full bg-orange10 `}>
                     <Text className='text-xs font-medium'>{'IN PROGRESS'}</Text>
@@ -76,16 +79,19 @@ export default function InprogressIncidents() {
                 </View>
                 <View className='flex-row  items-center gap-x-1 '>
                   <Image source={images.location} className='w-8 h-8' />
-                  <Text className='text-base shrink' numberOfLines={1}>{item?.generalInfo?.siteLocation?.site_name}</Text>
+                  <Text className='text-base shrink sm:mr-4' numberOfLines={1}>{item?.generalInfo?.siteLocation?.site_name}</Text>
+                  {isIphone && <Image source={images.arrowRight} className='w-8 h-8' />}
                 </View>
               </View>
-              <Button
-                label='Continue'
-                onPress={() => checkPermissionAndRedirect(item)}
-                className='h-[56px] w-[204px]'
-                classNameLabel='font-regular'
-              />
-            </View>
+              {isIpad && (
+                <Button
+                  label='Continue'
+                  onPress={() => checkPermissionAndRedirect(item)}
+                  className='h-[56px] w-[204px]'
+                  classNameLabel='font-regular'
+                />
+              )}
+            </Button>
           ))}
         </>
       }

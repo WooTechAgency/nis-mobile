@@ -10,9 +10,13 @@ import { DashboardNavigator } from './dashboard-navigator';
 import { IncidentsNavigator } from './incidents-navigator';
 import { JobsNavigator } from './jobs-navigator';
 import { RouteName } from './types';
+import MyBottomTab from '@components/bottom-tab';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const DrawerNavigator = createDrawerNavigator();
-const Parent = isIpad ? DrawerNavigator : DrawerNavigator;
+const Tab = createBottomTabNavigator();
+
+const Parent = isIpad ? DrawerNavigator : Tab;
 
 export function MainNavigator() {
   const collapsedDrawer = useAppSelector((state) => state.common.collapsedDrawer);
@@ -24,7 +28,7 @@ export function MainNavigator() {
 
   return (
     <Parent.Navigator
-      // tabBar={(props) => <MyBottomTab {...props} countUnreadNoti={data?.unread_notification || 0} />}
+      tabBar={(props) => <MyBottomTab {...props} />}
       screenOptions={
         isIpad
           ? {
@@ -69,13 +73,6 @@ export function MainNavigator() {
         component={AccountNavigator}
         options={{ headerShown: false, title: 'Account' }}
       />
-      {/* {isIpad && (
-        <Parent.Screen
-          name='LogoutStack'
-          component={AccountNavigator}
-          options={{ headerShown: false, title: 'Dashboard' }}
-        />
-      )} */}
     </Parent.Navigator>
   );
 }

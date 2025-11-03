@@ -85,7 +85,7 @@ export default function Incidents() {
           title='Incident'
           isBack={false}
         />
-        <View className='flex-row center gap-x-6 mt-6  '>
+        <View className='sm:flex-row gap-y-4 gap-x-6 mt-6  '>
           <TextInput
             classNameWrap='flex-1'
             control={control}
@@ -96,7 +96,7 @@ export default function Incidents() {
           />
           <Button
             label='Report Incident'
-            className='flex-row h-[56px] w-[197px] bg-primary rounded-[14px] center'
+            className='flex-row h-[56px] w-full sm:w-[197px] bg-primary rounded-[14px] center'
             onPress={checkPermissionAndRedirect}
           />
         </View>
