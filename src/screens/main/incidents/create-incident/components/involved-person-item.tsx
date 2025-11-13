@@ -7,6 +7,7 @@ import React from 'react';
 import { Control, FieldErrors, UseFieldArrayRemove, UseFormSetValue, useWatch } from 'react-hook-form';
 import { View } from 'react-native';
 import { rowClsIncident } from '../../config.incident';
+import { isIphone } from '@constants/app.constants';
 
 interface Props {
   index: number
@@ -104,6 +105,10 @@ export function InvolvedPersonItem({ control, errors, setValue, index, name, rem
           name={`${name}.treatment`}
           label='Treatment required'
           placeholder='Enter treatment'
+          {...isIphone && {
+            multiline: true,
+            className: 'h-[100px]'
+          }}
         />
       }
       <CommonModal

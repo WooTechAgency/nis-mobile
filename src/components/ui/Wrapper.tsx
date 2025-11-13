@@ -9,7 +9,7 @@ interface Props {
 export function Wrapper({ children, className, pointerEvents }: Props) {
   return (
     <View
-      className={`mt-8 bg-white px-6 pb-6 pt-5 rounded-[20px] ${className}`}
+      className={`mt-8 bg-white p-4 sm:px-6 sm:pb-6 sm:pt-5 rounded-[20px] ${className}`}
       style={shadowStyle}
       pointerEvents={pointerEvents}
     >

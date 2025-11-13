@@ -43,7 +43,7 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
   // const isOwnerSubmitted = (signee.name === userInfo?.full_name) && (signee.role.id === userInfo?.role.id) && !!signee.signature
 
   return (
-    <Wrapper className='mt-8'>
+    <Wrapper className='mt-[16px] sm:mt-8'>
       <View className='row-center justify-between'>
         <Title label={`Signee ${index + 1}`} />
         <Button
@@ -60,7 +60,7 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
           errors={errors}
           control={control}
           name={`${name}.name`}
-          label='Name'
+          label='Name*'
           placeholder='Enter name'
         />
         <DropdownPicker
@@ -68,7 +68,7 @@ export function SigneeItem({ control, trigger, errors, setValue, index, name, re
           setValue={setValue}
           control={control}
           name={`${name}.role`}
-          label='Role'
+          label='Role*'
           placeholder="Select role"
           listValue={roles}
           errors={errors}

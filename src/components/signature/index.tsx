@@ -78,7 +78,7 @@ export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap
     <View className={` ${classNameWrap}`}>
       {signatureBase64 ? (
         <View className={`border   rounded-[10px] ${disabled ? 'border-neutral20' : 'border-border'}`} >
-          <Text className={`absolute left-4 -top-2 bg-white z-10 text-[12px]  ${disabled ? 'text-border' : 'text-neutral70'} `}>Add signature</Text>
+          <Text className={`absolute left-4 -top-2 bg-white z-10 text-[12px]  ${disabled ? 'text-border' : 'text-neutral70'} `}>Add signature*</Text>
           <Image source={{ uri: signatureBase64 }} className="w-full h-[144]" />
           {!disabled &&
             <Button className="absolute right-2 top-2" onPress={onDeleteSignature}>
@@ -89,7 +89,7 @@ export function Signature({ onBegin, onEnd, control, name, errors, classNameWrap
         </View>
       ) : (
         <>
-          <Text className={`absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 ${messageError && ''}`}>Add signature</Text>
+          <Text className={`absolute left-4 -top-2 bg-white z-10 text-[12px] text-neutral70 ${messageError && ''}`}>Add signature*</Text>
           <SignatureScreen
             style={{ height: 144 }}
             ref={refSignature}

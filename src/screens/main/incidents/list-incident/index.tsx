@@ -85,7 +85,7 @@ export default function Incidents() {
           title='Incident'
           isBack={false}
         />
-        <View className='sm:flex-row gap-y-4 gap-x-6 mt-6  '>
+        <View className='sm:flex-row gap-y-4 gap-x-6 sm:mt-6  '>
           <TextInput
             classNameWrap='flex-1'
             control={control}

@@ -25,8 +25,9 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
 
   const incidentTypes = incident?.incidentTypes.filter((item) => !!item.description) || data?.incident_types
 
+
   return (
-    <View className='mt-8 bg-white rounded-[20px]'>
+    <View className='mt-4 sm:mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
         label='Incident'
         onEdit={onEdit}
@@ -39,7 +40,7 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
           {/* Person(s) Involved */}
           <View className='w-full h-[1px] bg-neutral20 ' />
           <View className='px-6 pt-5 gap-y-4'>
-            <Title label='Person(s) Involved' className='text-base' />
+            <Title label='Person(s) Involved' className='text-base mb-2 sm:mb-0' />
             <FlatList
               className={`${isIpad && flatListClassName} mx-0 `}
               scrollEnabled={false}
@@ -77,7 +78,7 @@ export default function IncidentPreview({ allowEdit, incident: data }: PreviewPr
           {/* Incident Type */}
           {isIphone && <View className='mx-6 h-[1px] bg-neutral20 mt-6' />}
           <View className='p-6 pt-5 gap-y-4 '>
-            <Title label='Incident Type' className='text-base' />
+            <Title label='Incident Type' className='text-base mb-2 sm:mb-0' />
             {incidentTypes?.map((item, index) => (
               <View className={`sm:flex-row gap-4 ${index + 1 !== incidentTypes.length ? 'border-b border-neutral30 pb-8' : 'pb-4'}`} key={index}>
                 <ValueItem label='Incident Type' value={item.name} classNameWrap={`${width}`} />

@@ -11,6 +11,7 @@ import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { useUpsertIncident } from '../../useUpsertIncident';
+import { isIphone } from '@constants/app.constants';
 
 
 export interface Action {
@@ -24,7 +25,6 @@ export interface ActionForm {
   actions: Action[]
   actionSelected: boolean
 }
-
 
 const formSchema = yup.object().shape({
   actions: yup
@@ -95,34 +95,37 @@ export default function StepAction({ editingMode }: { editingMode: boolean }) {
   const actionsSelectedError = getMessageError(errors, 'actionSelected')
 
   return (
-    <Wrapper className=''>
-      <View className='gap-y-4'>
-        <Title label='Immediate Action Taken' className='text-base' />
-        {actions?.map((action, index) => {
-          return (
-            <View key={index}>
-              <CheckboxDescriptionForm
-                watch={watch}
-                setValue={setValue}
-                errors={errors}
-                control={control}
-                checkboxName={`actions.${index}.selected`}
-                label={action.name}
-                descriptionName={`actions.${index}.description`}
-                placeholderDescription='Please describe the action taken'
-                trigger={trigger}
-                selectedName='actionSelected'
-                rootName='actions'
-              />
-            </View>
-          )
-        })}
-        {actionsSelectedError && <Text className='text-red text-[12px] ml-4'>{actionsSelectedError}</Text>}
-      </View>
-      <View className='mt-6 flex-row gap-x-6'>
-        <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
-        <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
-      </View>
-    </Wrapper>
+    <>
+      {isIphone && <Title label='What action was taken?' className='my-6' />}
+      <Wrapper className='mt-[0px] sm:mt-[32px]'>
+        <View className='gap-y-4'>
+          <Title label='Immediate Action Taken' className='text-base' />
+          {actions?.map((action, index) => {
+            return (
+              <View key={index}>
+                <CheckboxDescriptionForm
+                  watch={watch}
+                  setValue={setValue}
+                  errors={errors}
+                  control={control}
+                  checkboxName={`actions.${index}.selected`}
+                  label={action.name}
+                  descriptionName={`actions.${index}.description`}
+                  placeholderDescription='Please describe the action taken'
+                  trigger={trigger}
+                  selectedName='actionSelected'
+                  rootName='actions'
+                />
+              </View>
+            )
+          })}
+          {actionsSelectedError && <Text className='text-red text-[12px] ml-4'>{actionsSelectedError}</Text>}
+        </View>
+        <View className='mt-6 flex-row gap-x-6'>
+          <Button label='Back' onPress={onBack} type='outlined' className='flex-1' />
+          <Button label={editingMode ? 'Save' : 'Next'} onPress={handleSubmit(onSubmit)} className='flex-1' />
+        </View>
+      </Wrapper>
+    </>
   )
 }

@@ -63,7 +63,7 @@ function MyBottomTab({ state, descriptors, navigation }: Props) {
 
   return (
     <View
-      className='flex-row bg-white border-t border-neutral5 justify-evenly pt-[20px]'
+      className='flex-row bg-white border-t border-neutral5 justify-evenly pt-3'
       style={{ paddingBottom: insets.bottom }}
     >
       <Animated.View className='absolute top-0 h-[1] w-[65] bg-violet mt-[-1]' style={btnSelectedStyled} />
@@ -85,24 +85,23 @@ function MyBottomTab({ state, descriptors, navigation }: Props) {
             onLayout={onChangeLayout(`${index}`)}
             key={label}
             onPress={onPress}
-            className={`flex-row items-center ${isFocused && 'bg-teal20 rounded-[12px] px-[2px] pr-[8px]'}`}
+            className={`items-center `}
           >
-            <Image
-              source={buttonImages[index]}
-              className={'w-[32] h-[32]'}
-              resizeMode="contain"
-              tintColor={colors.neutral80}
-            />
-            {isFocused &&
-              <Text
-                className={`text-[10px] font-medium text-neutral80 `}
-                adjustsFontSizeToFit
-                numberOfLines={1}
-              >
-                {label}
-              </Text>
-            }
-
+            <View className={`${isFocused && 'bg-teal20 rounded-[12px]'}`}>
+              <Image
+                source={buttonImages[index]}
+                className={`w-[32] h-[32] `}
+                resizeMode="contain"
+                tintColor={colors.neutral80}
+              />
+            </View>
+            <Text
+              className={`text-[10px] font-medium text-neutral80 mt-1 `}
+              adjustsFontSizeToFit
+              numberOfLines={1}
+            >
+              {label}
+            </Text>
           </Button>
         );
       })}

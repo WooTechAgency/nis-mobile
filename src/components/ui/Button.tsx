@@ -25,7 +25,7 @@ const MappingLabel = {
   default: 'text-black',
   outlined: 'text-black',
   'outlined-small': 'text-black',
-  small: 'text-black font-medium',
+  small: 'text-black font-medium text-sm sm:text-base',
   action: 'text-black',
   delete: 'text-red',
 }

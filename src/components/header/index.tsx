@@ -13,7 +13,7 @@ interface Props {
 }
 export default function Header({ title, onCustomBack, isBack, rightComponent, leftComponent }: Props) {
   return (
-    <View className='flex-row items-center justify-between h-[50px] mb-[14px]'>
+    <View className='flex-row items-start sm:items-center justify-between h-[50px] mb-6 sm:mb-[14px]  border-b border-neutral40 sm:border-b-0'>
       {leftComponent ? leftComponent : <Text className='text-[23px] sm:text-[35px] font-medium flex-1' numberOfLines={1}>{title}</Text>}
       {isBack &&
         <View className='flex-row items-center'>

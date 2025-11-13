@@ -115,7 +115,7 @@ export function DatePickerInput(props: Props) {
         )}
         <View className='flex-1' />
         <Image
-          source={images.date}
+          source={mode === 'time' ? images.clock : images.date}
           className='w-4 h-4'
           tintColor={disabled ? colors.border :
             messageError ? colors.red : colors.gray}

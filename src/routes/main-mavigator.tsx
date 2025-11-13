@@ -59,11 +59,13 @@ export function MainNavigator() {
         component={JobsNavigator}
         options={{ headerShown: false, title: 'Jobs' }}
       />
-      <Parent.Screen
-        name={RouteName.DailyAssessmentNavigator}
-        component={DailyAssessmentNavigator}
-        options={{ headerShown: false, title: 'Daily assessment' }}
-      />
+      {isIpad &&
+        <Parent.Screen
+          name={RouteName.DailyAssessmentNavigator}
+          component={DailyAssessmentNavigator}
+          options={{ headerShown: false, title: 'Daily assessment' }}
+        />
+      }
       <Parent.Screen
         name={RouteName.IncidentsNavigator}
         component={IncidentsNavigator}

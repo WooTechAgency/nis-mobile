@@ -23,7 +23,7 @@ export default function WitnessPreview({ allowEdit, incident }: PreviewProps) {
   }
 
   return (
-    <View className='mt-8 bg-white rounded-[20px]'>
+    <View className='mt-4 sm:mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
         allowEdit={allowEdit}
         label='Witnesses'

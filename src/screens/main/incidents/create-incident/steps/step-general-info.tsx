@@ -146,7 +146,7 @@ export default function StepGeneralInformation({ editingMode }: { editingMode: b
           errors={errors}
           control={control}
           name='role'
-          label='Role /  Position'
+          label='Role / Position'
           placeholder='Enter role / position'
           disabled
         />

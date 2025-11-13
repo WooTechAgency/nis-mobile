@@ -24,7 +24,7 @@ const percent = {
 }
 const headerCls = 'text-[12px] font-medium text-neutral50'
 const rowCls = 'text-[16px] text-neutral70'
-const filterBtnCls = 'row-center justify-center sm:w-[135px] pl-1 pr-2 sm:px-0 h-8 border border-primary rounded-lg'
+const filterBtnCls = 'row-center justify-center sm:w-[135px] px-3 sm:px-0 h-8 border border-primary rounded-lg'
 
 interface Props {
   control: Control<any, any>,

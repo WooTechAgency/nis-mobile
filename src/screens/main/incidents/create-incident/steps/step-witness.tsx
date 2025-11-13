@@ -114,7 +114,7 @@ export function StepWitness({ editingMode }: { editingMode: boolean }) {
       {/* end */}
       <Button
         onPress={addField}
-        className='w-[130px] h-[36px] flex-row center self-start bg-teal20 rounded-[8px] mt-8'
+        className='w-[130px] h-[36px] flex-row center  bg-teal20 rounded-[8px] mt-6 sm:mt-8 self-end sm:self-start'
       >
         <Image source={images.plus} className='w-8 h-8' />
         <Text className='text-[12px] font-medium'>Add witness</Text>

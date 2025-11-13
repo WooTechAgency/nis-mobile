@@ -22,7 +22,7 @@ export default function ActionPreview({ allowEdit, incident }: PreviewProps) {
   const actions = action?.actions?.filter((item) => !!item.description) || incident?.immediate_actions
 
   return (
-    <View className='mt-8 bg-white rounded-[20px]'>
+    <View className='mt-4 sm:mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
         allowEdit={allowEdit}
         label='Action'

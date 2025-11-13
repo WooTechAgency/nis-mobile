@@ -42,4 +42,5 @@ export const images = {
   done: require('./sources/done.png'),
   pauseActive: require('./sources/pauseActive.png'),
   pauseInactive: require('./sources/pauseInactive.png'),
+  clock: require('./sources/clock.png'),
 };

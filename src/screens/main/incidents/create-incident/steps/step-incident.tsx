@@ -13,6 +13,7 @@ import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
 import { InvolvedPersonItem } from '../components/involved-person-item';
 import { useUpsertIncident } from '../../useUpsertIncident';
+import { isIphone } from '@constants/app.constants';
 
 export interface IncidentType {
   id: number,
@@ -151,6 +152,7 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
 
   return (
     <View className='gap-6 mt-8'>
+      {isIphone && <Title label='Who was involved and what happened?' />}
       {
         fields.length > 0 && fields.map((item, index) => {
           return (

@@ -21,9 +21,8 @@ export default function GeneralPreview({ allowEdit, incident }: PreviewProps) {
     setIncident((prev) => ({ ...prev, selectedIndex: IncidentSteps.General }))
   }
 
-
   return (
-    <View className='mt-8 bg-white rounded-[20px]'>
+    <View className='sm:mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
         label='Overview'
         onEdit={onEdit}

@@ -12,6 +12,7 @@ import { IncidentSteps, useIncidentContext } from '../../context'
 import { Signee } from '../../create-incident/steps/step-sign-off.tsx'
 import { isIpad } from '@constants/app.constants.ts'
 import { ValueItem } from '@components/common/value-item.tsx'
+import Title from '@components/title/index.tsx'
 
 
 export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
@@ -24,7 +25,7 @@ export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
   }
 
   return (
-    <View className='mt-8 bg-white rounded-[20px]'>
+    <View className='mt-4 sm:mt-8 bg-white rounded-[20px]'>
       <HeaderPreview
         allowEdit={allowEdit}
         label='Sign off'
@@ -35,6 +36,7 @@ export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
       {!collapsed &&
         <>
           <View className='w-full h-[1px] bg-neutral20 ' />
+
           <FlatList
             className={`${isIpad ? flatListClassName : 'px-6 py-5 gap-y-4'}`}
             scrollEnabled={false}
@@ -50,7 +52,7 @@ export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
                   <Text className={`${labelClassName} w-[25%]`}>{'Time & Date'}</Text>
                   <Text className={`${labelClassName} w-[25%] `}>{'Signature'}</Text>
                 </View>
-              ) : null
+              ) : <Title label='Signee(s)' />
             }
             renderItem={({ item, index }: { item: Signee, index: number }) => (
               isIpad ? (
@@ -62,7 +64,7 @@ export default function SignOffPreview({ allowEdit, incident }: PreviewProps) {
                 </View>
               ) : (
                 <View className={`gap-y-4 pt-4 ${index + 1 !== (singing?.signees?.length || incident?.signatures?.length || 0) && 'border-b border-neutral30 pb-4'}`}>
-                  <ValueItem label='Name' value={item?.name} />
+                  <ValueItem label={isIpad ? 'Name' : `Signee ${index + 1}`} value={item?.name} />
                   <ValueItem label='Role' value={item?.role?.name || item?.role} />
                   <ValueItem label='Time & Date' value={convertHHMMSSDDMMYYYY(item?.timestamp || item.created_at)} />
                   <ValueItem label='Signature' />

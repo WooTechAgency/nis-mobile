@@ -79,7 +79,7 @@ export default function CreateIncident() {
       <ScrollView scrollEnabled={enableScroll}>
         <Header title={generalInfo?.siteLocation.site_code || 'New Incident'} isBack />
         <Steps
-          classNameWrap='mt-4'
+          classNameWrap='sm:mt-4'
           steps={steps}
           selectedIndex={selectedIndex}
           completedSteps={completedSteps}
