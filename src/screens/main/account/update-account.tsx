@@ -15,7 +15,10 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import AccountLogo from './components/account-logo';
+import UpdateAccountViewIpad from './components/ipad/update-account-view';
+import UpdateAccountViewIphone from './components/iphone/update-account-view';
 import { isIpad } from '@constants/app.constants';
+
 
 interface Form {
   firstName: string;
@@ -41,7 +44,7 @@ const formSchema = yup.object().shape({
   email: yup.string().notRequired(),
 });
 
-const ParentView = isIpad ? Wrapper : View;
+const ParentView = isIpad ? UpdateAccountViewIpad : UpdateAccountViewIphone;
 
 export default function UpdateAccount() {
   const { userInfo: cachedUser } = useAppSelector((state) => state.authentication)
@@ -85,77 +88,8 @@ export default function UpdateAccount() {
   }
 
   return (
-    <SafeAreaView className='bg-white sm:bg-transparent px-5 sm:px-6'>
-      <ScrollView>
-        <Header title='Account details' />
-        <ParentView className={isIpad ? 'flex-row items-start gap-x-12 mt-[0px]' : 'gap-4'} >
-          <AccountLogo name={userInfo?.full_name || ''} />
-          <View className='sm:flex-1'>
-            <View className='sm:flex-row mt-6 gap-6'>
-              <TextInput
-                classNameWrap='sm:flex-1'
-                control={control}
-                name='firstName'
-                label='First name'
-                errors={errors}
-                formatName={true}
-                maxLength={50}
-              />
-              <TextInput
-                classNameWrap='flex-1'
-                control={control}
-                name='lastName'
-                label='Last name'
-                errors={errors}
-                formatName={true}
-                maxLength={50}
-              />
-            </View>
-            <TextInput
-              classNameWrap='mt-6'
-              control={control}
-              name='company'
-              label='Company'
-              labelOverlap
-              disabled
-            />
-            <TextInput
-              classNameWrap='mt-6'
-              control={control}
-              name='role'
-              label='Role'
-              labelOverlap
-              disabled
-            />
-            <TextInput
-              classNameWrap='mt-6'
-              control={control}
-              name='email'
-              label='Email Address'
-              labelOverlap
-              disabled
-            />
-            <TextInput
-              classNameWrap='mt-6'
-              control={control}
-              name='phone'
-              label='Phone Number'
-              labelOverlap
-              keyboardType='phone-pad'
-              formatPhone={true}
-              errors={errors}
-            />
-            <View className='mt-6 sm:flex-row gap-4'>
-              <Button label='Cancel' onPress={goBack} type='outlined' className='flex-1' classNameLabel='' />
-              <Button
-                label='Save'
-                onPress={handleSubmit(onUpdateProfile)}
-                className='flex-1'
-              />
-            </View>
-          </View>
-        </ParentView>
-      </ScrollView>
+    <SafeAreaView className='bg-neutral15  sm:bg-transparent px-5 sm:px-6'>
+      <ParentView userInfo={userInfo} control={control} errors={errors} handleSubmit={handleSubmit(onUpdateProfile)} />
       <Loading loading={loading} />
     </SafeAreaView>
   )

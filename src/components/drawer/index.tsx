@@ -131,6 +131,7 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
       { title: 'Jobs', url: images.job, routeIndex: 1 },
       { title: 'Daily assessment', url: images.dailyAssessment, routeIndex: 2 },
       { title: 'Incidents', url: images.incident, routeIndex: 3 },
+      { title: 'Certificate', url: images.incident, routeIndex: 4 },
     ]
     if (currentUser) {
       const viewIncidentReportsPermission = currentUser?.role?.permissions?.incident_reports?.find((permission) => permission.action === 'view')
@@ -178,8 +179,8 @@ export default function Drawer({ navigation, state, collapsedDrawer, }: DrawerPr
               <Item
                 title={'Account'}
                 url={images.setting}
-                onPress={() => onPress(4)}
-                selected={state.index === 4}
+                onPress={() => onPress(5)}
+                selected={state.index === 5}
                 collapsedDrawer={collapsedDrawer}
                 opacity={opacity}
               />

@@ -12,6 +12,7 @@ import { JobsNavigator } from './jobs-navigator';
 import { RouteName } from './types';
 import MyBottomTab from '@components/bottom-tab';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { CertificateNavigator } from './certificate-navigator';
 
 const DrawerNavigator = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
@@ -67,6 +68,11 @@ export function MainNavigator() {
         name={RouteName.IncidentsNavigator}
         component={IncidentsNavigator}
         options={{ headerShown: false, title: 'Incidents' }}
+      />
+      <Parent.Screen
+        name={RouteName.CertificateNavigator}
+        component={CertificateNavigator}
+        options={{ headerShown: false, title: 'Certificate' }}
       />
       <Parent.Screen
         name={RouteName.AccountNavigator}

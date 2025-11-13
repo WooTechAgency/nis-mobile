@@ -5,15 +5,16 @@ import React from 'react'
 import { Text, View } from 'react-native'
 
 interface Props {
-  title: string
+  title?: string
   onCustomBack?: () => void
   isBack?: boolean
   rightComponent?: React.ReactNode
+  leftComponent?: React.ReactNode
 }
-export default function Header({ title, onCustomBack, isBack, rightComponent }: Props) {
+export default function Header({ title, onCustomBack, isBack, rightComponent, leftComponent }: Props) {
   return (
     <View className='flex-row items-center justify-between h-[50px] mb-[14px]'>
-      <Text className='text-[23px] sm:text-[35px] font-medium flex-1' numberOfLines={1}>{title}</Text>
+      {leftComponent ? leftComponent : <Text className='text-[23px] sm:text-[35px] font-medium flex-1' numberOfLines={1}>{title}</Text>}
       {isBack &&
         <View className='flex-row items-center'>
           {rightComponent && rightComponent}
@@ -22,8 +23,8 @@ export default function Header({ title, onCustomBack, isBack, rightComponent }: 
             <Text>Back</Text>
           </Button>
         </View>
-
       }
+      {rightComponent && rightComponent}
     </View>
   )
 }

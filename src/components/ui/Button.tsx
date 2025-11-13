@@ -8,13 +8,14 @@ interface Props extends TouchableOpacityProps {
   label?: string;
   classNameLabel?: string;
   iconButton?: ReactNode;
-  type?: 'default' | 'outlined' | 'outlined-small' | 'small' | 'action' | 'delete'
+  type?: 'default' | 'outlined' | 'outlined-small' | 'small' | 'action' | 'delete' | 'outlinedTransparent'
 
 }
 
 const MappingBtn = {
   default: 'h-[56px] bg-primary',
   outlined: 'h-[56px] border border-primary bg-white',
+  outlinedTransparent: 'h-[56px] border border-primary bg-transparent',
   'outlined-small': 'h-[36px] border border-primary bg-white',
   small: 'h-[36px] bg-teal20 rounded-[8px] self-start',
   action: 'h-[56px] bg-teal10 border border-primary',

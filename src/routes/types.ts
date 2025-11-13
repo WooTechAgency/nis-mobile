@@ -20,12 +20,19 @@ export enum RouteName{
   // job
   JobsNavigator = 'JobsNavigator',
   Jobs = 'Jobs',
+  UpdateJob = 'UpdateJob',
 
   // Incidents
   IncidentsNavigator = 'IncidentsNavigator',
   Incidents = 'Incidents',
   CreateIncident = 'CreateIncident',
   PreviewIncident = 'PreviewIncident',
+
+  // Certificate
+  CertificateNavigator = 'CertificateNavigator',
+  Certificates = 'Certificates',
+  UpdateCertificate = 'UpdateCertificate',
+
   // account
   AccountNavigator = 'AccountNavigator',
   Account = 'Account',
