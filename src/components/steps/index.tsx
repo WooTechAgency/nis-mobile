@@ -10,9 +10,18 @@ interface Props {
   completedSteps: number[] | undefined,
   lastItemKey: number
 }
+
+const MAP_KEY = {
+  '1': '-left-0.5',
+  '2': '-left-1',
+  '3': 'left-0.5',
+  '4': '-left-1',
+  '5': '-left-0.5',
+}
+
 export default function Steps({ steps, selectedIndex, completedSteps, lastItemKey, classNameWrap }: Props) {
   return (
-    <View className={`flex-row bg-white p-4 sm:p-6 rounded-[14px] sm:rounded-[20px] ${classNameWrap}`} style={shadowStyle}>
+    <View className={`flex-row bg-white px-7 pt-5 pb-10 sm:px-6 sm:pt-6 sm:pb-6 rounded-[14px] sm:rounded-[20px] ${classNameWrap}`} style={shadowStyle}>
       {Object.entries(steps).map(([key, value]) => {
         const selected = key === String(selectedIndex)
         const lastItem = key === String(lastItemKey)
@@ -24,11 +33,17 @@ export default function Steps({ steps, selectedIndex, completedSteps, lastItemKe
                 ${completed && 'border border-primary'}
                 ${selected && 'bg-primary border-0'}`}
               >
-                <Text className={`font-medium `}>{key}</Text>
+                <Text className={`font-medium  `}>{key}</Text>
               </View>
-              <Text className='mt-1'>{isIpad ? value : (selected ? value : '')}</Text>
+              {isIpad && <Text className='mt-2'>{value}</Text>}
             </View>
-            {!lastItem && <View className='h-[1px] flex-1  bg-neutral50 mx-4 -mt-5' />}
+            {isIpad && !lastItem && <View className='h-[1px] flex-1 bg-neutral50 mx-4 -mt-5' />}
+            {isIphone && (
+              <>
+                {!lastItem && <View className='h-[1px] flex-1  bg-neutral50 mx-4' />}
+                {selected && <Text className={`mt-1 absolute top-10 text-[10px] text-neutral70 ${MAP_KEY[key]}`}>{value}</Text>}
+              </>
+            )}
           </View>
         )
       })}

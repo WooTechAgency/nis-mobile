@@ -36,7 +36,6 @@ export interface IncidentForm {
   incidentSelected?: boolean
 }
 
-
 const formSchema = yup.object().shape({
   involvedPersons: yup
     .array()

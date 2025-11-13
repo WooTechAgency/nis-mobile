@@ -72,7 +72,7 @@ export default function CreateIncident() {
     return () => {
       setIncident(initialIncident)
     }
-  }, [])
+  }, [incidentId, setIncident])
 
   return (
     <SafeAreaView>
