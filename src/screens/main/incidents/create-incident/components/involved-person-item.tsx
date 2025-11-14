@@ -41,7 +41,7 @@ export function InvolvedPersonItem({ control, errors, setValue, index, name, rem
           onPress={toggleConfirmRemove}
         />
       </View>
-      <View className={rowClsIncident}>
+      <View className={`${rowClsIncident} mt-[0px]`}>
         <TextInput
           control={control}
           setValue={setValue}

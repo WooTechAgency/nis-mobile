@@ -228,7 +228,6 @@ export function TextInput(props: Props) {
 
       </View>
       {isShowError && messageError && <Text className='text-red text-[12px] mt-2 ml-4'>{messageError}</Text>}
-
     </View>
   );
 }

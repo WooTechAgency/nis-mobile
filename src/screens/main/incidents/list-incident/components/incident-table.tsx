@@ -99,7 +99,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
         </View>
         {/* custom for Iphone and Ipad  */}
         <FlatList
-          className={`mt-4 ${isIphone && ' border border-neutral40 rounded-[12px] px-4'}`}
+          className={`mt-4 ${isIphone && ' border border-neutral40 rounded-[12px] px-4 mt-6'}`}
           scrollEnabled={false}
           data={incidents}
           keyExtractor={(item) => item.id}
@@ -154,7 +154,7 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
                   <Text className={`text-[12px]`}>{convertDDMMYYYY(item.date_time_of_incident)}</Text>
                 </View>
                 <Text className={`${rowCls} text-[12px]`} numberOfLines={1}>{item.site.site_name}</Text>
-                <Text className={`${rowCls} text-[12px]`} numberOfLines={1}>{'Property damage'}</Text>
+                <Text className={`${rowCls} text-[12px]`} numberOfLines={1}>{item.incident_types.map((item => item.name)).join(" / ")}</Text>
               </Button>
 
           )}

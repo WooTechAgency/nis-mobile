@@ -20,9 +20,8 @@ export default function AccountDetailViewIphone({ name, control, checkPermission
         title='Account details'
         rightComponent={<AccountLogo name={name} />}
       />
-      <View className='w-full bg-neutral40 h-[1px] -mt-3' />
       <View className=''>
-        <Wrapper >
+        <Wrapper className='mt-[0px] sm:mt-8' >
           <View className='flex-row items-center justify-between'>
             <Text className='font-semibold text-[16px]'>Profile</Text>
             <Button

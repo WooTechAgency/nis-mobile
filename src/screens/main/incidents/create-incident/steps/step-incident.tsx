@@ -1,6 +1,7 @@
 import { images } from '@assets/images';
 import Title from '@components/title';
 import { Button, CheckboxDescriptionForm, Image, Text, Wrapper } from '@components/ui';
+import { isIphone } from '@constants/app.constants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { navigate } from '@routes/navigationRef';
 import { RouteName } from '@routes/types';
@@ -11,9 +12,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { Keyboard, View } from 'react-native';
 import * as yup from 'yup';
 import { IncidentSteps, useIncidentContext } from '../../context';
-import { InvolvedPersonItem } from '../components/involved-person-item';
 import { useUpsertIncident } from '../../useUpsertIncident';
-import { isIphone } from '@constants/app.constants';
+import { InvolvedPersonItem } from '../components/involved-person-item';
 
 export interface IncidentType {
   id: number,
@@ -102,7 +102,6 @@ export default function StepIncident({ editingMode }: { editingMode: boolean }) 
     setValue,
     watch,
     trigger,
-    getValues,
     formState: { errors, },
   } = useForm({
     defaultValues: {

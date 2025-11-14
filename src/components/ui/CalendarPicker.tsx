@@ -182,7 +182,7 @@ export default function CalendarPicker(props: Props) {
   return (
     <Modal visible={visible} animationType='fade' transparent={true} supportedOrientations={supportedOrientations}>
       <View className='px-5 sm:items-center justify-center flex-1 bg-dropBack '>
-        <View className={`bg-white rounded-[20px] p`}>
+        <View className={`bg-white rounded-[20px] `}>
           <View className='flex-row gap-x-4 px-6 '>
             <View className='pt-6'>
               {options.map((option) => {
