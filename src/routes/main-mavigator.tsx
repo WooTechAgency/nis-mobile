@@ -54,11 +54,11 @@ export function MainNavigator() {
         component={DashboardNavigator}
         options={{ headerShown: false, title: 'Dashboard' }}
       />
-      <Parent.Screen
+      {/* <Parent.Screen
         name={RouteName.JobsNavigator}
         component={JobsNavigator}
         options={{ headerShown: false, title: 'Jobs' }}
-      />
+      /> */}
       {isIpad &&
         <Parent.Screen
           name={RouteName.DailyAssessmentNavigator}
@@ -71,11 +71,11 @@ export function MainNavigator() {
         component={IncidentsNavigator}
         options={{ headerShown: false, title: 'Incidents' }}
       />
-      <Parent.Screen
+      {/* <Parent.Screen
         name={RouteName.CertificateNavigator}
         component={CertificateNavigator}
         options={{ headerShown: false, title: 'Certificate' }}
-      />
+      /> */}
       <Parent.Screen
         name={RouteName.AccountNavigator}
         component={AccountNavigator}

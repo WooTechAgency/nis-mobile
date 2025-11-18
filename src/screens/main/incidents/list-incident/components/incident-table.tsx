@@ -68,13 +68,13 @@ export default function IncidentTable({ control, setValue, incidents, isFetching
           ) : <View className='' />
           }
           <View className='flex-row gap-x-4 '>
-            <Button
+            {isIpad && <Button
               className={filterBtnCls}
               onPress={toggleVisibleCalendar}
             >
               <Image source={images.date32} className='w-8 h-8' />
               <Text className='text-[12px] font-medium'>{'Date'}</Text>
-            </Button>
+            </Button>}
             {filters.map((filter, index) => (
               <DropdownMenu
                 key={index}

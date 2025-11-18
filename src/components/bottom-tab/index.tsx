@@ -14,10 +14,14 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const buttonImages: Record<number, ImageSourcePropType> = {
   0: images.dashboard,
-  1: images.job,
-  2: images.dailyAssessment,
-  3: images.incident,
-  4: images.setting,
+  1: images.incident,
+  2: images.setting,
+
+  // 0: images.dashboard,
+  // 1: images.job,
+  // 2: images.dailyAssessment,
+  // 3: images.incident,
+  // 4: images.setting,
 };
 
 interface Props extends BottomTabBarProps {
