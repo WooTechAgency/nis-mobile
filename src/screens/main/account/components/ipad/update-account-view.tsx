@@ -73,6 +73,7 @@ export default function UpdateAccountViewIpad({ userInfo, control, errors, handl
             keyboardType='phone-pad'
             formatPhone={true}
             errors={errors}
+
           />
           <View className='mt-6 sm:flex-row gap-4'>
             <Button label='Cancel' onPress={goBack} type='outlined' className='flex-1' classNameLabel='' />

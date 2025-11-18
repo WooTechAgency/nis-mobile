@@ -79,6 +79,8 @@ export default function AccountDetailViewIpad({ name, control, checkPermissionAn
             disabled
             labelCls='text-neutral70'
             className='text-neutral80'
+            formatPhone={true}
+            keyboardType='phone-pad'
           />
           <View className='mt-6 sm:flex-row gap-4 sm:gap-6'>
             <Button label='Change Password' onPress={onChangePassword} type='outlined' className='sm:flex-1' classNameLabel='' />

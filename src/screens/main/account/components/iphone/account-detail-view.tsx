@@ -84,6 +84,8 @@ export default function AccountDetailViewIphone({ name, control, checkPermission
             disabled
             labelCls='text-neutral70'
             className='text-neutral80'
+            formatPhone={true}
+            keyboardType='phone-pad'
           />
         </Wrapper>
         <View className='mt-6 sm:flex-row gap-4 sm:gap-6'>

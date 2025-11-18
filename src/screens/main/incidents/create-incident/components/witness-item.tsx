@@ -54,6 +54,8 @@ export function WitnessItem({ control, errors, setValue, index, name, remove }: 
           name={`${name}.phone`}
           label='Phone'
           placeholder='Enter phone'
+          formatPhone={true}
+          keyboardType='phone-pad'
         />
         <TextInput
           classNameWrap='flex-1'
